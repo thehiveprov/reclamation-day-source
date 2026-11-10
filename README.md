@@ -19,7 +19,7 @@ The plugins, models, animations, textures and sounds aren't in this repository. 
 
 ## Building
 
-Step-by-step instructions are in [`BUILDING.md`](./BUILDING.md).
+Step-by-step instructions are in [`BUILDING.txt`](./BUILDING.txt).
 
 ## Credits
 
