@@ -19,27 +19,7 @@ The plugins, models, animations, textures and sounds aren't in this repository. 
 
 ## Building
 
-You need Windows, Visual Studio 2022, xmake, Node.js and pnpm. From the repository root:
-
-```
-xmake config -c -p windows -a x64 -m release --vs=2022 -y
-xmake build FalloutImmersiveLauncher
-xmake build FalloutServerRunner
-xmake build FalloutTogetherServer
-xmake build TPProcess
-xmake build ReclamationDayStarter
-```
-
-Then the overlay's UI, in `Code\skyrim_ui`:
-
-```
-pnpm install
-pnpm deploy:develop
-```
-
-The tests are the `TPTests` target.
-
-The version number comes from git tags, and this repository has none. A build from here calls itself "none", so its server and game only match each other.
+Step-by-step instructions are in [`BUILDING.md`](./BUILDING.md).
 
 ## Credits
 

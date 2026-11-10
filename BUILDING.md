@@ -1,0 +1,118 @@
+# Building Fallout 4: Reclamation Day
+
+These steps build every Reclamation Day program from this repository. They were tested from a fresh clone of this repository with an empty xmake package cache. All targets built and all tests passed. The whole build took about 10 minutes on an 8-core PC.
+
+## What you get
+
+| Build target | Output file | Where it goes in the mod |
+| --- | --- | --- |
+| `ReclamationDayStarter` | `ReclamationDayStarter.exe` | `Launch Reclamation Day.exe` (renamed) |
+| `FalloutImmersiveLauncher` | `ReclamationDay.exe`, `EarlyLoad.dll` | `Reclamation Day\` |
+| `FalloutServerRunner` | `ReclamationDayServer.exe` | `Reclamation Day\` |
+| `FalloutTogetherServer` | `RDServer.dll` | `Reclamation Day\` |
+| `TPProcess` | `TPProcess.exe` | `Reclamation Day\` |
+| `TPTests` | `TPTests.exe` | Not shipped. These are the unit tests |
+| `Code\skyrim_ui` (pnpm) | `dist\UI\` | `Reclamation Day\UI\` |
+
+The game client is compiled into `ReclamationDay.exe`.
+
+## Requirements
+
+Windows 10 or 11, 64-bit, with an internet connection for the first build. It needs about 5 GB of free disk space.
+
+| Tool | Tested version | Notes |
+| --- | --- | --- |
+| Visual Studio 2022 or its Build Tools | MSVC 14.44.35207 | Install the "Desktop development with C++" workload |
+| Windows SDK | 10.0.26100.0 | Included in that workload |
+| [xmake](https://xmake.io) | 3.1.1 | |
+| [Git](https://git-scm.com) | any recent version | |
+| [Node.js](https://nodejs.org) | 26.5.0 | |
+| [pnpm](https://pnpm.io) | 9.15.9 | `npm install -g pnpm@9.15.9` |
+
+You don't need to install CMake, Ninja, Perl or NASM. xmake downloads and builds the C++ libraries itself, at the versions pinned in `xmake.lua`.
+
+## Build
+
+Run every command in **PowerShell**. Don't use Git Bash, because xmake picks the wrong compiler (MinGW) there. Use a short folder path with no spaces.
+
+1. Get the source:
+
+   ```powershell
+   git clone https://github.com/thehiveprov/reclamation-day-source.git C:\rd
+   cd C:\rd
+   ```
+
+2. Configure a release build. The first run downloads and builds the libraries, which takes about 5 minutes:
+
+   ```powershell
+   xmake config -c -p windows -a x64 -m release --vs=2022 -y
+   ```
+
+3. Build the programs:
+
+   ```powershell
+   xmake build FalloutImmersiveLauncher
+   xmake build FalloutServerRunner
+   xmake build FalloutTogetherServer
+   xmake build TPProcess
+   xmake build ReclamationDayStarter
+   xmake build TPTests
+   ```
+
+   The files are in `build\windows\x64\release`.
+
+4. Run the tests:
+
+   ```powershell
+   .\build\windows\x64\release\TPTests.exe
+   ```
+
+   The expected result is `All tests passed (4393 assertions in 29 test cases)`.
+
+5. Build the overlay's UI:
+
+   ```powershell
+   cd Code\skyrim_ui
+   pnpm install
+   pnpm deploy:develop
+   cd ..\..
+   ```
+
+   The files are in `Code\skyrim_ui\dist\UI`. `pnpm install` may rewrite `pnpm-lock.yaml`, which doesn't affect the build.
+
+## Put the build into the mod
+
+This repository doesn't contain the mod's plugins, models, animations, textures or sounds. To get a complete install, download the mod from its [Nexus page](https://www.nexusmods.com/fallout4/mods/110854), extract it, and copy your build over it. Set `$mod` to the extracted folder, the one holding `Launch Reclamation Day.exe`:
+
+```powershell
+$mod = 'C:\path\to\ReclamationDay-v1.6.7-308'
+$build = 'build\windows\x64\release'
+Copy-Item "$build\ReclamationDayStarter.exe" "$mod\Launch Reclamation Day.exe" -Force
+foreach ($file in 'ReclamationDay.exe', 'ReclamationDayServer.exe', 'RDServer.dll', 'TPProcess.exe', 'EarlyLoad.dll') {
+    Copy-Item "$build\$file" "$mod\Reclamation Day\$file" -Force
+}
+Remove-Item "$mod\Reclamation Day\UI" -Recurse -Force
+Copy-Item 'Code\skyrim_ui\dist\UI' "$mod\Reclamation Day\UI" -Recurse
+```
+
+## Third-party runtime files
+
+The other files in `Reclamation Day\` aren't built from this repository. They are the overlay's browser runtime (Chromium Embedded Framework 100.0.24) and the Discord Game SDK 3.2.1. xmake downloads both, and you can produce them yourself to compare with the release:
+
+```powershell
+xmake install -o distrib FalloutTogetherClient
+```
+
+That puts the browser runtime in `distrib\bin`. These files are byte-identical to the ones in the release. `discord_game_sdk.dll` is in xmake's package cache, at `%LOCALAPPDATA%\.xmake\packages\d\discord\3.2.1\<hash>\bin`, and is also byte-identical. `steam_appid.txt` is a text file containing Fallout 4's Steam app ID, `377160`.
+
+## What won't match the release
+
+- **The version number.** It comes from git tags, and this repository has none, so a build from here calls itself `none` instead of `v1.6.7-308`. Its game and server only match each other, so it can't join servers running the release.
+- **Exact bytes.** The programs you build won't be byte-identical to the release, because the version number and build paths are compiled into them.
+- **`RDVehicles.dll`.** The motorcycles' F4SE plugin, `Game Files\F4SE\Plugins\RDVehicles.dll`, is a separate project and isn't built from this repository.
+
+## Troubleshooting
+
+- **xmake picks MinGW or can't find the compiler:** run it from PowerShell, and check that the C++ workload is installed.
+- **A package fails at `CompileShaders.cmd` (directxtk):** the environment variable `NoDefaultCurrentDirectoryInExePath` is set. Clear it with `Remove-Item Env:NoDefaultCurrentDirectoryInExePath` and run the step again.
+- **Stale configuration after changing tools:** run step 2 again. The `-c` flag clears the old settings.
