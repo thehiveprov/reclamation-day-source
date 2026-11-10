@@ -1,0 +1,280 @@
+@import 'functions/mod';
+@import 'functions/rem';
+
+@import 'env';
+
+@font-face {
+  font-family: 'futura-condensed-medium';
+  src: url(assets/fonts/futura-condensed/futura-condensed-medium.otf);
+}
+
+// Fallout 4's menu font
+@font-face {
+  font-family: 'roboto-condensed';
+  font-weight: 400;
+  src: url(assets/fonts/roboto-condensed/regular-normal.ttf);
+}
+
+@font-face {
+  font-family: 'roboto-condensed';
+  font-weight: 700;
+  src: url(assets/fonts/roboto-condensed/bold-normal.ttf);
+}
+
+// Fallout 4's look, shared by the main menu and the in-game overlay: Pip-Boy green on dark panels. The colour is the
+// game's HUD colour (Settings, Display: HUD Color), which ThemeService sets on the root as the sliders move: --pip, and
+// the panels' dark tints worked out from it. These are what shows until the game's colour comes.
+:root {
+  font-size: 16px;
+  --pip: 26, 255, 128;
+  --pip-color: rgb(var(--pip));
+  // The panels: the colour darkened, from the faintest to the deepest
+  --tint-light: 11, 26, 15;
+  --tint: 4, 18, 10;
+  --tint-mid: 3, 13, 7;
+  --tint-deep: 2, 9, 5;
+  --ink: rgb(var(--tint));
+  --danger: 255, 96, 64;
+  --danger-text: rgb(255, 180, 163);
+  --panel: rgba(var(--tint), 0.86);
+  --panel-solid: rgb(var(--tint-light));
+  --line: rgba(var(--pip), 0.35);
+  --scrollbar-thickness: 0.4rem;
+}
+
+* {
+  font-family: $-font-default;
+}
+
+::selection {
+  color: var(--ink);
+  background: var(--pip-color);
+}
+
+*,
+*::before,
+*::after {
+  outline: 0;
+  user-select: none;
+  color: inherit;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after,
+button,
+input,
+textarea,
+optgroup,
+select {
+  line-height: 1em;
+}
+
+// Text fields, buttons, check boxes and sliders. :where() keeps these defaults below any component's own styles (the
+// main menu's, for one).
+
+:where(input:not([type='checkbox']):not([type='range']), textarea, select) {
+  display: block;
+  padding: 0.5em 0.7em;
+  font-size: inherit;
+  color: var(--pip-color);
+  caret-color: var(--pip-color);
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(var(--pip), 0.6);
+  border-radius: 0;
+  user-select: text;
+}
+
+:where(input, textarea, select):where(:focus) {
+  border-color: var(--pip-color);
+  box-shadow: 0 0 0.6rem rgba(var(--pip), 0.4);
+}
+
+:where(input, textarea)::placeholder {
+  color: rgba(var(--pip), 0.4);
+}
+
+:where(input, textarea, select):where([disabled]) {
+  opacity: 0.4;
+}
+
+:where(option) {
+  color: var(--pip-color);
+  background: var(--ink);
+}
+
+// Buttons: outlined, filled while hovered or active (tabs)
+:where(button) {
+  padding: 0.45em 1em;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--pip-color);
+  text-transform: uppercase;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid rgba(var(--pip), 0.55);
+  border-radius: 0;
+}
+
+:where(button:hover:not([disabled]), button[data-style-active='true']) {
+  color: var(--ink);
+  background: var(--pip-color);
+  border-color: var(--pip-color);
+}
+
+:where(button[disabled]) {
+  cursor: default;
+  opacity: 0.35;
+}
+
+:where(button[data-style-ornament]) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:where(button[data-style-align='left']) {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+:where(button[data-style-align='right']) {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+// Check boxes: a square, filled when checked
+:where(input[type='checkbox']) {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  cursor: pointer;
+  appearance: none;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(var(--pip), 0.7);
+}
+
+:where(input[type='checkbox']:hover:not([disabled])) {
+  border-color: var(--pip-color);
+}
+
+:where(input[type='checkbox']:checked) {
+  background: var(--pip-color);
+  box-shadow: inset 0 0 0 0.18rem var(--ink);
+}
+
+:where(input[type='checkbox'][disabled]) {
+  cursor: default;
+}
+
+:where(label[for]) {
+  cursor: pointer;
+}
+
+// Sliders: a line with a block on it
+
+:where(input[type='range']) {
+  height: 1rem;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  -webkit-appearance: none;
+}
+
+::-webkit-slider-runnable-track {
+  height: 2px;
+  background: rgba(var(--pip), 0.5);
+}
+
+::-webkit-slider-thumb {
+  width: 0.6rem;
+  height: 1rem;
+  margin-top: calc(1px - 0.5rem);
+  background: var(--pip-color);
+  -webkit-appearance: none;
+}
+
+// Scroll bars
+
+::-webkit-scrollbar {
+  width: var(--scrollbar-thickness);
+  height: var(--scrollbar-thickness);
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(var(--pip), 0.08);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(var(--pip), 0.55);
+
+  &:hover {
+    background: var(--pip-color);
+  }
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+body {
+  margin: 0;
+  cursor: default;
+  overflow: hidden;
+  color: var(--pip-color);
+  background: transparent;
+}
+
+app-root {
+  height: 100vh;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+:where(hr) {
+  height: 1px;
+  margin: 0.5rem 0;
+  background: var(--line);
+  border: 0;
+}
+
+:where(h2) {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+// A line with a label in its middle
+.separator {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  margin: 0;
+  padding: 0;
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border: 0;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1 1 auto;
+    height: 1px;
+    background: var(--line);
+  }
+}

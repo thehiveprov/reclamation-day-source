@@ -1,0 +1,354 @@
+<ng-container *ngIf="state$ | async as state">
+  <div class="sm" [attr.data-menu]="state.menu">
+    <!-- MCM's pages (MOD CONFIG), in place of the pause menu while they're open -->
+    <ng-container *ngIf="modConfig$ | async as mc; else gameMenu">
+      <div class="sm-frame">
+        <!-- The left column: the mods with settings, the open one's pages under it -->
+        <aside class="sm-side">
+          <div class="sm-logo">
+            <div class="sm-logo-top">FALLOUT 4</div>
+            <div class="sm-logo-bottom">RECLAMATION DAY</div>
+          </div>
+
+          <div class="sm-side-title">MOD CONFIG</div>
+          <nav class="sm-menu sm-menu-small sm-scroll">
+            <ng-container *ngFor="let mod of mc.mods; let m = index; trackBy: trackRow">
+              <button class="sm-menu-item" [class.selected]="m === mc.mod" (click)="openPage(m, 0)">{{ mod.name }}</button>
+              <ng-container *ngIf="m === mc.mod">
+                <ng-container *ngFor="let page of mod.pages; let p = index; trackBy: trackRow">
+                  <button *ngIf="page" class="sm-menu-item sm-menu-sub" [class.selected]="p === mc.page" (click)="openPage(m, p)">
+                    {{ page }}
+                  </button>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </nav>
+          <div class="sm-side-hint" *ngIf="!mc.mods.length">No mods with settings.</div>
+        </aside>
+
+        <!-- The page: MCM's entries, each as config.json has it -->
+        <section class="sm-panel">
+          <header class="sm-panel-title">{{ pageTitle(mc) }}</header>
+
+          <div class="sm-note" *ngIf="mc.mods[mc.mod]?.error as error">{{ error }}</div>
+
+          <div class="sm-rows sm-scroll">
+            <ng-container *ngFor="let item of mc.items; trackBy: trackItem" [ngSwitch]="item.type">
+              <div *ngSwitchCase="'section'" class="sm-section" [class.centered]="item.centered">{{ item.text }}</div>
+
+              <div *ngSwitchCase="'text'" class="sm-text" [class.centered]="item.centered" [class.big]="item.big" (mouseenter)="showHelp(item)">
+                {{ item.text }}
+              </div>
+
+              <div *ngSwitchCase="'spacer'" class="sm-spacer"></div>
+
+              <div *ngSwitchCase="'switcher'" class="sm-row" (mouseenter)="showHelp(item)" (click)="toggleItem(item)">
+                <span class="sm-row-label">{{ item.text }}</span>
+                <span class="sm-row-control">
+                  <span class="sm-check" [class.on]="item.value"><span></span></span>
+                </span>
+              </div>
+
+              <div *ngSwitchCase="'stepper'" class="sm-row" (mouseenter)="showHelp(item)">
+                <span class="sm-row-label">{{ item.text }}</span>
+                <span class="sm-row-control">
+                  <span class="sm-stepper">
+                    <button (click)="stepItem(item, -1)" [disabled]="item.value <= 0">&lsaquo;</button>
+                    <span class="sm-stepper-value">{{ item.options[item.value] ?? item.value }}</span>
+                    <button (click)="stepItem(item, 1)" [disabled]="item.value >= item.options.length - 1">&rsaquo;</button>
+                  </span>
+                </span>
+              </div>
+
+              <div *ngSwitchCase="'dropdown'" class="sm-row" (mouseenter)="showHelp(item)">
+                <span class="sm-row-label">{{ item.text }}</span>
+                <span class="sm-row-control">
+                  <span class="sm-stepper">
+                    <button (click)="stepItem(item, -1)" [disabled]="item.value <= 0">&lsaquo;</button>
+                    <span class="sm-stepper-value">{{ item.options[item.value] ?? item.value }}</span>
+                    <button (click)="stepItem(item, 1)" [disabled]="item.value >= item.options.length - 1">&rsaquo;</button>
+                  </span>
+                </span>
+              </div>
+
+              <div *ngSwitchCase="'slider'" class="sm-row" (mouseenter)="showHelp(item)">
+                <span class="sm-row-label">{{ item.text }}</span>
+                <span class="sm-row-control sm-slider-control">
+                  <span class="sm-slider">
+                    <span class="sm-slider-fill" [style.width.%]="itemShare(item)"></span>
+                    <input type="range" [min]="item.min" [max]="item.max" [step]="item.step" [value]="item.value" (change)="slideItem(item, $event)" />
+                  </span>
+                  <span class="sm-slider-value">{{ sliderText(item) }}</span>
+                </span>
+              </div>
+
+              <div *ngSwitchCase="'hotkey'" class="sm-row" (mouseenter)="showHelp(item)">
+                <span class="sm-row-label">{{ item.text }}</span>
+                <span class="sm-row-control sm-hotkey">
+                  <button class="sm-key-button" [class.sm-blink]="capturing === item.i" (click)="captureKey(item)">
+                    {{ capturing === item.i ? 'PRESS A KEY' : keyText(item.keycode, item.modifiers) || 'NONE' }}
+                  </button>
+                  <button class="sm-key-clear" *ngIf="item.keycode && capturing !== item.i" (click)="clearKey(item)">&times;</button>
+                </span>
+              </div>
+
+              <button *ngSwitchCase="'button'" class="sm-row sm-row-button" (mouseenter)="showHelp(item)" (click)="pressItem(item)">
+                <span class="sm-row-label">{{ item.text }}</span>
+                <span class="sm-row-control sm-dim">RUN</span>
+              </button>
+
+              <div *ngSwitchCase="'textinput'" class="sm-row" (mouseenter)="showHelp(item)">
+                <span class="sm-row-label">{{ item.text }}</span>
+                <span class="sm-row-control">
+                  <input class="sm-input" type="text" [value]="item.valueString" (change)="enterText(item, $event)" />
+                </span>
+              </div>
+
+              <div *ngSwitchCase="'textinputInt'" class="sm-row" (mouseenter)="showHelp(item)">
+                <span class="sm-row-label">{{ item.text }}</span>
+                <span class="sm-row-control">
+                  <input class="sm-input" type="text" inputmode="numeric" [value]="item.value" (change)="enterText(item, $event)" />
+                </span>
+              </div>
+
+              <div *ngSwitchCase="'textinputFloat'" class="sm-row" (mouseenter)="showHelp(item)">
+                <span class="sm-row-label">{{ item.text }}</span>
+                <span class="sm-row-control">
+                  <input class="sm-input" type="text" inputmode="decimal" [value]="item.value" (change)="enterText(item, $event)" />
+                </span>
+              </div>
+            </ng-container>
+          </div>
+
+          <div class="sm-guide" *ngIf="help">{{ help }}</div>
+
+          <footer class="sm-footer">
+            <button class="sm-button" (click)="closeModConfig()"><span class="sm-key-hint">ESC</span> BACK</button>
+          </footer>
+        </section>
+      </div>
+
+      <!-- A key another mod's keybind has -->
+      <div class="sm-confirm" *ngIf="mc.conflict as conflict">
+        <div class="sm-confirm-box">
+          <div class="sm-confirm-message">
+            {{ keyText(conflict.keycode, conflict.modifiers) }} is already {{ conflict.with }}. Use it here instead?
+          </div>
+          <div class="sm-confirm-buttons">
+            <button class="sm-button sm-button-primary" (click)="takeKey(mc)"><span class="sm-key-hint">ENTER</span> YES</button>
+            <button class="sm-button" (click)="keepKey()"><span class="sm-key-hint">ESC</span> NO</button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #gameMenu>
+    <div class="sm-frame">
+      <!-- The left column: the brand, then the screen's own list (the pause list, the categories, help topics) -->
+      <aside class="sm-side">
+        <div class="sm-logo">
+          <div class="sm-logo-top">FALLOUT 4</div>
+          <div class="sm-logo-bottom">RECLAMATION DAY</div>
+        </div>
+
+        <nav class="sm-menu" *ngIf="state.main as main">
+          <button class="sm-menu-item" *ngIf="state.menu === 'pause'" (click)="back()">RESUME</button>
+          <button class="sm-menu-item" *ngIf="state.menu === 'pause'" (click)="openSocial()">SOCIAL</button>
+          <button
+            *ngFor="let entry of main.entries; let i = index; trackBy: trackRow"
+            class="sm-menu-item"
+            [class.selected]="i === main.selected"
+            [disabled]="entry.disabled"
+            (click)="pressMain(entry, i)"
+          >
+            {{ entryText(entry) }}
+          </button>
+        </nav>
+        <div class="sm-side-hint" *ngIf="state.main && state.menu === 'pause'">
+          <span class="sm-key-hint">ESC</span> RESUME
+        </div>
+
+        <nav class="sm-menu sm-menu-small" *ngIf="!state.main && state.categories as categories">
+          <button
+            *ngFor="let entry of categories.entries; let i = index; trackBy: trackRow"
+            class="sm-menu-item"
+            [class.selected]="i === categories.selected && state.state !== 'SETTINGS_CATEGORY_STATE'"
+            (click)="press('category', i)"
+          >
+            {{ entry.text }}
+          </button>
+        </nav>
+
+        <nav class="sm-menu sm-menu-small sm-scroll" *ngIf="state.help as help">
+          <button
+            *ngFor="let entry of help.entries; let i = index; trackBy: trackRow"
+            class="sm-menu-item"
+            [class.selected]="i === help.selected"
+            (click)="hover('help', i, help.selected)"
+          >
+            {{ entry.text }}
+          </button>
+        </nav>
+      </aside>
+
+      <!-- The screen -->
+      <section class="sm-panel" *ngIf="title(state) as title">
+        <header class="sm-panel-title">{{ title }}</header>
+
+        <ng-container [ngSwitch]="state.state">
+          <div *ngSwitchCase="'SETTINGS_CATEGORY_STATE'" class="sm-note">Choose what to change.</div>
+
+          <!-- Options: a slider, a stepper or a checkbox each; the game's guide for the one under the mouse -->
+          <ng-container *ngIf="state.options as options">
+            <div class="sm-rows sm-scroll">
+              <div
+                *ngFor="let option of options.entries; let i = index; trackBy: trackRow"
+                class="sm-row"
+                [class.selected]="i === options.selected"
+                (mouseenter)="hover('option', i, options.selected)"
+              >
+                <span class="sm-row-label">{{ option.text }}</span>
+                <span class="sm-row-control" [ngSwitch]="option.type">
+                  <span *ngSwitchCase="0" class="sm-slider">
+                    <span class="sm-slider-fill" [style.width.%]="sliderShare(option)"></span>
+                    <input
+                      type="range"
+                      [min]="option.min"
+                      [max]="option.max"
+                      [step]="option.step"
+                      [value]="option.value"
+                      (input)="slide(i, $event)"
+                      (change)="slide(i, $event)"
+                    />
+                  </span>
+                  <span *ngSwitchCase="1" class="sm-stepper">
+                    <button (click)="step(i, option, -1)" [disabled]="option.value <= 0">&lsaquo;</button>
+                    <span class="sm-stepper-value">{{ option.options[option.value] ?? option.value }}</span>
+                    <button (click)="step(i, option, 1)" [disabled]="option.value >= option.options.length - 1">&rsaquo;</button>
+                  </span>
+                  <button *ngSwitchCase="2" class="sm-check" [class.on]="option.value" (click)="toggle(i, option)">
+                    <span></span>
+                  </button>
+                </span>
+              </div>
+            </div>
+            <div class="sm-guide" *ngIf="state.guide">{{ state.guide }}</div>
+          </ng-container>
+
+          <!-- Controls: the action, its key, its button; a click maps it anew -->
+          <ng-container *ngIf="state.controls as controls">
+            <div class="sm-rows sm-scroll">
+              <div class="sm-row sm-row-head">
+                <span class="sm-row-label">ACTION</span>
+                <span class="sm-cell">KEY</span>
+                <span class="sm-cell">CONTROLLER</span>
+              </div>
+              <button
+                *ngFor="let control of controls.entries; let i = index; trackBy: trackRow"
+                class="sm-row"
+                [class.selected]="i === controls.selected"
+                (mouseenter)="hover('control', i, controls.selected)"
+                (click)="press('control', i)"
+              >
+                <span class="sm-row-label">{{ control.text }}</span>
+                <span class="sm-cell sm-key">{{ control.key || '—' }}</span>
+                <span class="sm-cell sm-dim">{{ control.button || '—' }}</span>
+              </button>
+            </div>
+            <div class="sm-prompt sm-blink" *ngIf="state.remapping">PRESS THE NEW KEY</div>
+            <div class="sm-prompt" *ngIf="!state.remapping && state.remapMessage">{{ state.remapMessage }}</div>
+          </ng-container>
+
+          <!-- Help: the topic's text -->
+          <div *ngSwitchCase="'HELP_STATE'" class="sm-help sm-scroll">
+            <h2>{{ state.helpTitle }}</h2>
+            <p>{{ state.helpText }}</p>
+          </div>
+
+          <!-- Saves: the game's list and the one selected -->
+          <ng-container *ngIf="state.saves as saves">
+            <div class="sm-saves">
+              <div class="sm-rows sm-scroll">
+                <button
+                  *ngFor="let save of saves.entries; let i = index; trackBy: trackRow"
+                  class="sm-row"
+                  [class.selected]="i === saves.selected"
+                  (mouseenter)="hover('save', i, saves.selected)"
+                  (click)="press('save', i)"
+                >
+                  <span class="sm-row-label">{{ save.text }}</span>
+                  <span class="sm-cell sm-dim">{{ save.playTime }}</span>
+                </button>
+              </div>
+              <div class="sm-save-info" *ngIf="state.saveInfo as info">
+                <div class="sm-save-player">{{ info.player }}</div>
+                <div>{{ info.level }}</div>
+                <div>{{ info.location }}</div>
+                <div class="sm-dim">{{ info.time }}</div>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="state.characters as characters">
+            <div class="sm-rows sm-scroll">
+              <button
+                *ngFor="let character of characters.entries; let i = index; trackBy: trackRow"
+                class="sm-row"
+                [class.selected]="i === characters.selected"
+                (mouseenter)="hover('character', i, characters.selected)"
+                (click)="press('character', i)"
+              >
+                <span class="sm-row-label">{{ character.text }}</span>
+              </button>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <div class="sm-note" *ngIf="state.savingSettings">Saving...</div>
+        <footer class="sm-footer">
+          <button class="sm-button" (click)="back()" [disabled]="state.savingSettings">
+            <span class="sm-key-hint">ESC</span> {{ state.state === 'MAIN_STATE' && state.menu === 'pause' ? 'RESUME' : 'BACK' }}
+          </button>
+          <button
+            class="sm-button"
+            *ngIf="(state.options || state.controls || state.categories) && state.settingsChanged && !state.savingSettings"
+            (click)="save()"
+          >
+            <span class="sm-key-hint">S</span> SAVE
+          </button>
+          <button class="sm-button" *ngIf="state.options || state.controls" (click)="defaults()">
+            <span class="sm-key-hint">T</span> DEFAULTS
+          </button>
+          <button class="sm-button" *ngIf="state.saves && !state.saving" (click)="deleteSave()">
+            <span class="sm-key-hint">X</span> DELETE
+          </button>
+        </footer>
+      </section>
+    </div>
+
+    <!-- The game's own "are you sure?" -->
+    <div class="sm-confirm" *ngIf="isConfirm(state)">
+      <div class="sm-confirm-box">
+        <div class="sm-confirm-message">{{ state.confirm || 'Are you sure?' }}</div>
+        <!-- The game's own answers (MAIN MENU / DESKTOP when quitting) -->
+        <div class="sm-confirm-buttons" *ngIf="state.buttons as buttons; else yesNo">
+          <button
+            *ngFor="let button of buttons; let first = first"
+            class="sm-button"
+            [class.sm-button-primary]="first"
+            (click)="answer(button.id)"
+          >
+            <span class="sm-key-hint">{{ answerKey(button.id) }}</span> {{ button.text }}
+          </button>
+        </div>
+        <ng-template #yesNo>
+          <div class="sm-confirm-buttons">
+            <button class="sm-button sm-button-primary" (click)="accept()"><span class="sm-key-hint">ENTER</span> YES</button>
+            <button class="sm-button" (click)="back()"><span class="sm-key-hint">ESC</span> NO</button>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+    </ng-template>
+  </div>
+</ng-container>

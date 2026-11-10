@@ -1,0 +1,139 @@
+<!-- Two guns out: the crosshair (the game's is hidden), kicked out by each shot, the left gun's rounds beside it; shown
+     whether or not the rest of the HUD is the overlay's -->
+<div *ngIf="crosshair?.on" class="crosshair" [class.kick-a]="kick === 0" [class.kick-b]="kick === 1">
+  <span class="arm up"></span>
+  <span class="arm down"></span>
+  <span class="arm left"></span>
+  <span class="arm right"></span>
+  <span class="dot"></span>
+  <span *ngIf="crosshair?.left as left" class="left-ammo">
+    <span class="clip">{{ left.clip }}</span>
+    <span class="reserve">{{ left.reserve }}</span>
+  </span>
+</div>
+
+<!-- On the motorcycle: its two gauges, as a car's dash has them, over the AP bar and ammo; shown whether or not the rest of the
+     HUD is the overlay's -->
+<div *ngIf="bike as gauges" class="bike-gauges" [class.dry]="!gauges.on">
+  <svg class="gauge fuel-gauge" viewBox="0 0 100 100" aria-hidden="true">
+    <circle class="bezel" cx="50" cy="50" r="48" />
+    <circle class="face" cx="50" cy="50" r="45.5" />
+    <path class="redline" d="M 11.0 27.5 A 45 45 0 0 1 20.9 15.6" />
+    <ng-container *ngFor="let tick of fuelTicks">
+      <line class="tick" [class.major]="tick.major" [attr.x1]="tick.x1" [attr.y1]="tick.y1" [attr.x2]="tick.x2" [attr.y2]="tick.y2" />
+      <text *ngIf="tick.label" class="number" [attr.x]="tick.lx" [attr.y]="tick.ly">{{ tick.label }}</text>
+    </ng-container>
+    <text class="caption" x="50" y="78">FUEL</text>
+    <circle class="lamp low" [class.lit]="gauges.fuel < 0.125" cx="50" cy="67" r="3.2" />
+    <g [attr.transform]="'rotate(' + fuelNeedle(gauges.fuel) + ' 50 50)'">
+      <line class="needle" x1="50" y1="56" x2="50" y2="11" />
+    </g>
+    <circle class="hub" cx="50" cy="50" r="4.5" />
+  </svg>
+  <svg class="gauge speed-gauge" viewBox="0 0 100 100" aria-hidden="true">
+    <circle class="bezel" cx="50" cy="50" r="48" />
+    <circle class="face" cx="50" cy="50" r="45.5" />
+    <ng-container *ngFor="let tick of speedTicks">
+      <line class="tick" [class.major]="tick.major" [attr.x1]="tick.x1" [attr.y1]="tick.y1" [attr.x2]="tick.x2" [attr.y2]="tick.y2" />
+      <text *ngIf="tick.label" class="number" [attr.x]="tick.lx" [attr.y]="tick.ly">{{ tick.label }}</text>
+    </ng-container>
+    <text class="caption" x="50" y="33">MPH</text>
+    <rect class="readout-box" x="38" y="66" width="24" height="11" rx="1" />
+    <text class="readout" x="50" y="74.5">{{ speedMph(gauges.kmh) }}</text>
+    <circle class="lamp beam" [class.lit]="gauges.lamp" cx="50" cy="85" r="2.6" />
+    <g [attr.transform]="'rotate(' + speedNeedle(gauges.kmh) + ' 50 50)'">
+      <line class="needle" x1="50" y1="58" x2="50" y2="9" />
+    </g>
+    <circle class="hub" cx="50" cy="50" r="5" />
+  </svg>
+</div>
+
+<ng-container *ngIf="state">
+  <!-- The compass and the enemy's bar, top middle -->
+  <div class="top">
+    <div *ngIf="state.compass" class="compass">
+      <div class="strip">
+        <span
+          *ngFor="let tick of ticks; trackBy: trackTick"
+          class="tick"
+          [class.major]="tick.major"
+          [class.named]="tick.label"
+          [style.left.%]="tick.x"
+        >
+          <span *ngIf="tick.label" class="direction">{{ tick.label }}</span>
+        </span>
+        <span
+          *ngFor="let marker of markers; trackBy: trackMarker"
+          class="marker"
+          [attr.data-shape]="marker.shape"
+          [class.targeted]="marker.targeted"
+          [class.undiscovered]="marker.undiscovered"
+          [class.edge]="marker.edge"
+          [style.left.%]="marker.x"
+        >
+          <!-- The game's own icon, remade in scan lines (hud-marker-icons.ts); a place on a chip with a ring -->
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <ng-container *ngIf="marker.chip">
+              <circle class="chip" cx="12" cy="12" r="11" />
+              <circle class="ring" cx="12" cy="12" r="11" />
+            </ng-container>
+            <path class="glyph" [attr.d]="marker.path" />
+          </svg>
+          <span *ngIf="marker.height" class="height" [attr.data-height]="marker.height"></span>
+        </span>
+      </div>
+      <span class="caret"></span>
+    </div>
+
+    <div *ngIf="state.enemy as enemy" class="enemy" [class.hostile]="enemy.hostile">
+      <div class="enemy-name">
+        <span *ngIf="enemy.legendary" class="legendary">&#9733;</span>
+        <span>{{ enemy.name }}</span>
+        <svg *ngIf="enemy.skull" class="skull" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M8 1.5c-3.6 0-6 2.4-6 5.6 0 2 1 3.4 2.4 4.2V14h2.1v-1.6h3V14h2.1v-2.7c1.4-.8 2.4-2.2 2.4-4.2 0-3.2-2.4-5.6-6-5.6ZM5.6 9.6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm4.8 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z" />
+        </svg>
+      </div>
+      <div class="bar">
+        <span class="fill" [style.width.%]="percent(enemy.value)"></span>
+      </div>
+      <div *ngIf="enemy.optional > 0" class="bar optional">
+        <span class="fill" [style.width.%]="percent(enemy.optional)"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Health and radiation, bottom left -->
+  <div *ngIf="state.health as health" class="corner left">
+    <div class="meter" [class.low]="health.value < 0.25">
+      <span class="label">{{ 'COMPONENT.HUD.HP' | transloco }}</span>
+      <div class="bar">
+        <span class="fill" [style.width.%]="percent(health.value)"></span>
+        <span *ngIf="health.rads > 0" class="rads" [style.width.%]="percent(health.rads)"></span>
+      </div>
+      <span *ngIf="state.radiation" class="radiation">{{ 'COMPONENT.HUD.RADS' | transloco }}</span>
+    </div>
+  </div>
+
+  <!-- The drawn weapon's name, ammo, grenades and AP, bottom right -->
+  <div *ngIf="state.ap || state.weapon || state.ammo || state.explosives" class="corner right">
+    <div *ngIf="state.weapon" class="weapon-name">{{ state.weapon }}</div>
+    <div *ngIf="state.ammo || state.explosives" class="counts">
+      <span *ngIf="state.explosives as explosives" class="explosives">
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M6 1h4v2H6zM8 4a5 5 0 1 1 0 10A5 5 0 0 1 8 4Z" />
+        </svg>
+        {{ explosives.first }}
+      </span>
+      <span *ngIf="state.ammo as ammo" class="ammo">
+        <span class="clip">{{ ammo.first }}</span>
+        <span class="reserve">{{ ammo.second }}</span>
+      </span>
+    </div>
+    <div *ngIf="state.ap as ap" class="meter mirrored">
+      <div class="bar">
+        <span class="fill" [style.width.%]="percent(ap.value)"></span>
+      </div>
+      <span class="label">{{ 'COMPONENT.HUD.AP' | transloco }}</span>
+    </div>
+  </div>
+</ng-container>

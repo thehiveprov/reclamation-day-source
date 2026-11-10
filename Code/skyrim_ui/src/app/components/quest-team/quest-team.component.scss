@@ -1,0 +1,94 @@
+:host {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.5rem;
+}
+
+.optional-info {
+  line-height: 1.3;
+  margin-top: 0;
+}
+
+.separator {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.empty {
+  margin: 3%;
+  display: flex;
+  justify-content: center;
+  opacity: 0.75;
+  text-align: center;
+}
+
+button.small {
+  padding: 0.15em 0.6em;
+}
+
+.invite {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  .invite-text {
+    flex: 1;
+    line-height: 1.3;
+  }
+}
+
+.quest-list {
+  overflow: auto;
+  max-height: 50vh;
+}
+
+.quest {
+  padding: 0.4rem 0;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid rgba(var(--pip), 0.2);
+  }
+
+  .quest-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .quest-name {
+    flex: 1;
+    letter-spacing: 0.04em;
+  }
+
+  .tracked {
+    margin-right: 0.25rem;
+  }
+
+  .quest-actions {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .quest-team {
+    margin-top: 0.2rem;
+    font-size: 0.85em;
+    opacity: 0.75;
+
+    span:not(:last-child)::after {
+      content: ' \00B7 ';
+    }
+  }
+
+  &.teamed .quest-team {
+    opacity: 1;
+  }
+
+  .invite-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+  }
+}

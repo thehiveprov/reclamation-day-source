@@ -1,0 +1,110 @@
+<ng-container *ngIf="view$ | async as view">
+  <p class="optional-info">
+    {{ 'COMPONENT.QUEST_TEAM.INFO' | transloco }}
+  </p>
+  <p *ngIf="view.state?.mainQuestSync" class="optional-info">
+    {{ 'COMPONENT.QUEST_TEAM.MAIN_QUEST_SYNC_ON' | transloco }}
+  </p>
+
+  <div *ngIf="!view.state?.connected; else connected" class="empty">
+    {{ 'COMPONENT.QUEST_TEAM.NOT_CONNECTED' | transloco }}
+  </div>
+
+  <ng-template #connected>
+    <ng-container *ngIf="view.state!.invites.length > 0">
+      <div class="separator">
+        {{ 'COMPONENT.QUEST_TEAM.INVITES' | transloco }}
+      </div>
+      <div *ngFor="let invite of view.state!.invites" class="invite">
+        <span class="invite-text">{{
+          'COMPONENT.QUEST_TEAM.INVITE_FROM'
+            | transloco
+              : {
+                  name: questTeamService.playerName(invite.inviterId),
+                  quest: invite.questName
+                }
+        }}</span>
+        <button class="small" (click)="accept(invite)">
+          {{ 'COMPONENT.NOTIFICATIONS.ACCEPT' | transloco }}
+        </button>
+        <button class="small" (click)="decline(invite)" data-sound="cancel">
+          {{ 'COMPONENT.NOTIFICATIONS.DECLINE' | transloco }}
+        </button>
+      </div>
+    </ng-container>
+
+    <div class="separator">
+      {{ 'COMPONENT.QUEST_TEAM.YOUR_QUESTS' | transloco }}
+    </div>
+
+    <div *ngIf="view.state!.quests.length === 0" class="empty">
+      {{ 'COMPONENT.QUEST_TEAM.NO_QUESTS' | transloco }}
+    </div>
+
+    <div class="quest-list">
+      <div
+        *ngFor="let quest of view.state!.quests; trackBy: trackQuest"
+        class="quest"
+        [class.teamed]="!!quest.team"
+      >
+        <div class="quest-row">
+          <div class="quest-name">
+            <span *ngIf="quest.active" class="tracked">&#9656;</span>
+            {{ quest.name }}
+          </div>
+          <div class="quest-actions">
+            <button
+              class="small"
+              [disabled]="invitable(quest, view.others).length === 0"
+              (click)="toggleInvite(quest)"
+            >
+              {{ 'COMPONENT.QUEST_TEAM.INVITE' | transloco }}
+            </button>
+            <button *ngIf="quest.team" class="small" (click)="leave(quest)">
+              {{ 'COMPONENT.QUEST_TEAM.LEAVE' | transloco }}
+            </button>
+          </div>
+        </div>
+
+        <div class="quest-team">
+          <ng-container *ngIf="!quest.team">
+            {{ 'COMPONENT.QUEST_TEAM.ALONE' | transloco }}
+          </ng-container>
+          <ng-container *ngIf="quest.team">
+            <span *ngIf="quest.role === 'helper'">
+              {{ 'COMPONENT.QUEST_TEAM.YOU_HELP' | transloco }}
+            </span>
+            <span *ngIf="teammates(quest, view.state!.localPlayerId, false)">
+              {{
+                'COMPONENT.QUEST_TEAM.TOGETHER_WITH'
+                  | transloco
+                    : {
+                        names: teammates(quest, view.state!.localPlayerId, false)
+                      }
+              }}
+            </span>
+            <span *ngIf="teammates(quest, view.state!.localPlayerId, true)">
+              {{
+                'COMPONENT.QUEST_TEAM.HELPED_BY'
+                  | transloco
+                    : {
+                        names: teammates(quest, view.state!.localPlayerId, true)
+                      }
+              }}
+            </span>
+          </ng-container>
+        </div>
+
+        <div *ngIf="inviting === quest.id" class="invite-list">
+          <button
+            *ngFor="let player of invitable(quest, view.others)"
+            class="small"
+            (click)="invite(quest, player.id)"
+          >
+            {{ player.name }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</ng-container>

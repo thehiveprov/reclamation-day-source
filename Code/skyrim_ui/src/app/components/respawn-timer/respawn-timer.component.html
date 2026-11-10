@@ -1,0 +1,6 @@
+<ng-container *ngIf="secondsLeft$ | async as secondsLeft">
+  <div class="respawn-timer">
+    <div class="title">{{ 'COMPONENT.RESPAWN_TIMER.TITLE' | transloco }}</div>
+    <div class="seconds">{{ secondsLeft }}</div>
+  </div>
+</ng-container>

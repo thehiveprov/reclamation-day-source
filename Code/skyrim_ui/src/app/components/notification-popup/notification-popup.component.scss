@@ -1,0 +1,54 @@
+@import 'env';
+
+:host {
+  display: block;
+  margin-right: 2em;
+  margin-bottom: 0.5em;
+  color: var(--pip-color);
+  font-size: 1.3rem;
+
+  &:last-child {
+    margin-bottom: 1em;
+  }
+}
+
+// Like the main menu's status lines: a panel with a bright edge
+.notification-popup {
+  display: flex;
+  align-items: center;
+  padding: 0.5em 0.5em 0.5em 1em;
+  background-color: rgba(var(--tint), 0.92);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--pip-color);
+  box-shadow: 0 0 1rem rgba(var(--pip), 0.2);
+}
+
+.notification-popup > * {
+  margin-right: 1em;
+}
+
+img,
+.icon {
+  width: 2em;
+  height: 2em;
+  background-size: contain;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon > * {
+  font-size: 1.5em;
+}
+
+p {
+  max-width: 25em;
+  line-height: 1.3;
+}
+
+button {
+  font-size: 1em;
+}

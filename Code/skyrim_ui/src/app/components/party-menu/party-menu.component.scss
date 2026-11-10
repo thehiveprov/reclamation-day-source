@@ -1,0 +1,95 @@
+:host {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.5rem;
+}
+
+.separator,
+hr {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.optional-info {
+  line-height: 1.3;
+  margin-top: 0;
+}
+
+.no-players {
+  overflow: hidden;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.no-invites {
+  margin: 3%;
+  display: flex;
+  justify-content: center;
+  opacity: 0.75;
+}
+
+.hidden {
+  display: none;
+}
+
+.setting {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem 0 0.25rem;
+}
+
+.setting-info {
+  font-size: 0.85em;
+  opacity: 0.75;
+}
+
+.party-menu-button {
+  width: 100%;
+  margin-bottom: 0.5rem;
+
+  &:first-of-type {
+    margin-top: 0.5rem;
+  }
+}
+
+.member-list {
+  overflow: auto;
+  max-height: 60vh;
+  margin-bottom: 1rem;
+
+  .player-list-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    .list-header {
+      position: sticky;
+      top: 0;
+      background-color: var(--ink);
+      z-index: 1;
+    }
+
+    th {
+      text-align: left;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(var(--pip), 0.6);
+      border-collapse: separate;
+
+      button {
+        padding: 0 0.5rem;
+      }
+    }
+
+    tr:not(:last-child) {
+      border-bottom: 1px solid rgba(var(--pip), 0.2);
+      padding: 15px;
+    }
+
+    .user-action-button {
+      padding: 0.15em 0.6em;
+      margin-left: 5%;
+    }
+  }
+}

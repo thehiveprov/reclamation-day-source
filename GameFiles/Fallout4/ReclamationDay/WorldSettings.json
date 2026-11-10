@@ -1,0 +1,281 @@
+{
+  "_about": "The F2 overlay's WORLD SETTINGS (Code/client/Games/Fallout4/Interface/WorldSettings.cpp, docs/MENUS.md): NAC X's holotape settings and the host's weather. An entry's source is a global (\"global\": \"Plugin|local id\") or one of the page's own values (\"own\", kept in config\\WorldSettings.ini, defaults below). \"values\": a dropdown's options are these values of its source. \"stepper\": a slider moved one step at a time by that quest function (never written). \"call\": a function after a change or on a press; a quest's when it names one, else the script's global one; params \"{value}\" (the entry's value) and \"{name}\" (an own value). \"show\": host (not a guest on someone else's server), guest, 2287 (not in Winter of Atom), prequel; joined by +.",
+  "requires": "NAC.esp",
+  "own": { "fov": 0, "dofMode": 0, "dofAperture": 3, "weather": 1, "winterWeather": 36, "weatherKind": 0 },
+  "pages": [
+    {
+      "name": "Weather",
+      "items": [
+        { "type": "text", "show": "guest", "text": "The host sets the world's weather, climate and time. Yours follow theirs." },
+        {
+          "type": "dropdown", "show": "host+2287", "own": "weather", "text": "Weather",
+          "help": "Pick a weather, then load it, fade into it, or ban it from the climate. Everyone on your server gets it.",
+          "options": [
+            "Sunny: Clear Sky", "Sunny: Clear", "Sunny: Half Clear", "Sunny: Cloudy", "Sunny: Very Cloudy", "Sunny: Clear Overcast",
+            "Overcast: Sunny", "Overcast: Bright", "Overcast: Half", "Overcast", "Overcast: Low Sky", "Overcast: Dark", "Overcast: Dark Sky",
+            "Overcast: Sunny Dark", "Overcast: Very Dark",
+            "Rain: Spring Rain", "Rain: Very Cloudy", "Rain: Misty", "Rain", "Rain: Heavy", "Rain: Thunder", "Rain: Dark", "Rain: Thunderstorm",
+            "Fog: Mist", "Fog: Mist Overcast", "Fog: Sunny", "Fog", "Fog: Dark",
+            "Snow: Misty", "Snow: Foggy", "Snow", "Snow: Snowstorm",
+            "Radstorm: Polluted", "Radstorm: Radiated Fog", "Radstorm: Acid Rain", "Radstorm", "Radstorm: Ultra", "Radstorm: Sulfur Storm",
+            "Radstorm: Time Warp", "Radstorm: Fallout", "Radstorm: Fire Storm", "Radstorm: Red Storm"
+          ],
+          "values": [1, 0, 30, 10, 20, 18, 17, 9, 31, 7, 15, 12, 13, 16, 23, 21, 40, 6, 8, 14, 19, 27, 28, 5, 22, 25, 2, 11, 41, 35, 36, 37, 32, 3, 24, 4, 34, 38, 39, 33, 29, 26]
+        },
+        {
+          "type": "button", "show": "host+2287", "text": "Load it now",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "LoadWeather", "params": ["{weather}", false] }
+        },
+        {
+          "type": "button", "show": "host+2287", "text": "Fade into it",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "LoadWeather", "params": ["{weather}", true] }
+        },
+        {
+          "type": "button", "show": "host+2287", "text": "Ban it from the climate",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "BanWeather", "params": ["{weather}", true] }
+        },
+        {
+          "type": "button", "show": "host+2287", "text": "Allow it again",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "BanWeather", "params": ["{weather}", false] }
+        },
+        {
+          "type": "button", "show": "host+2287", "text": "Load a random weather",
+          "call": { "quest": "NAC.esp|10338", "script": "NAC:ConfigScriptsLibrary", "function": "LoadRandomWeather", "params": [] }
+        },
+        {
+          "type": "dropdown", "show": "host+prequel", "own": "winterWeather", "text": "Weather",
+          "help": "Winter of Atom's weathers: clear, snow and radstorms (Blizzard is the prologue's). Everyone on your server gets it.",
+          "options": [
+            "Clear: Clear Sky", "Clear", "Clear: Half Clear",
+            "Snow: Blizzard", "Snow: Turbulent", "Snow: Medium", "Snow: Flurry", "Snow: Light",
+            "Snow: Misty", "Snow: Foggy", "Snow", "Snow: Snowstorm",
+            "Radstorm: Polluted", "Radstorm: Radiated Fog", "Radstorm: Acid Rain", "Radstorm", "Radstorm: Ultra", "Radstorm: Sulfur Storm",
+            "Radstorm: Fallout", "Radstorm: Red Storm"
+          ],
+          "values": [1, 0, 30, 100, 101, 102, 103, 104, 41, 35, 36, 37, 32, 3, 24, 4, 34, 38, 33, 26]
+        },
+        {
+          "type": "button", "show": "host+prequel", "text": "Load it now",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "LoadWeather", "params": ["{winterWeather}", false] }
+        },
+        {
+          "type": "button", "show": "host+prequel", "text": "Fade into it",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "LoadWeather", "params": ["{winterWeather}", true] }
+        },
+        {
+          "type": "button", "show": "host+prequel", "text": "Load a random winter weather",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "LoadRandomWinterWeather", "params": [] }
+        },
+        { "type": "section", "show": "host+2287", "text": "Kinds of weather" },
+        {
+          "type": "dropdown", "show": "host+2287", "own": "weatherKind", "text": "Kind of weather",
+          "help": "Ban a whole kind of weather from the climate, or allow it again.",
+          "options": ["Sunny", "Overcast", "Rain", "Fog", "Snow", "Radstorms"]
+        },
+        {
+          "type": "button", "show": "host+2287", "text": "Ban this kind",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "BanWeatherGroup", "params": ["{weatherKind}", true] }
+        },
+        {
+          "type": "button", "show": "host+2287", "text": "Allow this kind again",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "BanWeatherGroup", "params": ["{weatherKind}", false] }
+        },
+        { "type": "section", "show": "host+2287", "text": "Climate" },
+        {
+          "type": "dropdown", "show": "host+2287", "text": "Climate",
+          "help": "Takes effect over the next two game days.",
+          "options": ["Balanced (NAC's)", "Winter", "Spring", "Summer", "Fall", "Nuclear", "Seasons by the game's date"],
+          "global": "NAC.esp|3EE31",
+          "call": { "quest": "NAC.esp|10338", "script": "NAC:ConfigScriptsLibrary", "function": "RefreshClimate", "params": [] }
+        },
+        {
+          "type": "switcher", "show": "host+2287", "text": "Radstorms outside hazard regions", "global": "NAC.esp|24329",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "Refresh", "params": [false] }
+        },
+        {
+          "type": "switcher", "show": "host+2287", "text": "Radiated rain", "global": "NAC.esp|2F290",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "Refresh", "params": [false] }
+        },
+        { "type": "section", "show": "host", "text": "Time" },
+        {
+          "type": "dropdown", "show": "host", "text": "Timescale",
+          "help": "Game time to real time. 20:1, the game's own, is 20 seconds of game time each real second.",
+          "options": ["1:1 (real time)", "5:1", "8:1", "10:1", "12:1", "15:1", "20:1 (the game's)", "30:1", "60:1", "300:1", "600:1", "1200:1", "2400:1"],
+          "values": [1, 5, 8, 10, 12, 15, 20, 30, 60, 300, 600, 1200, 2400],
+          "global": "Fallout4.esm|3A"
+        }
+      ]
+    },
+    {
+      "name": "Look",
+      "items": [
+        { "type": "text", "text": "NAC's look, yours alone." },
+        { "type": "section", "text": "Effects" },
+        {
+          "type": "slider", "text": "Brightness", "help": "The colors' luminosity: higher brightens them, lower darkens them.",
+          "min": -10, "max": 10, "step": 1, "global": "NAC.esp|1062C5",
+          "stepper": { "quest": "NAC.esp|10338", "script": "NAC:ConfigScriptsLibrary", "function": "setBrightness", "up": 2, "down": 1 }
+        },
+        {
+          "type": "slider", "text": "Contrast", "help": "The difference between dark and bright.",
+          "min": -10, "max": 10, "step": 1, "global": "NAC.esp|1062CA",
+          "stepper": { "quest": "NAC.esp|10338", "script": "NAC:ConfigScriptsLibrary", "function": "setContrast", "up": 2, "down": 1 }
+        },
+        {
+          "type": "slider", "text": "HDR contrast", "help": "The range between the darkest and the brightest pixel as the exposure changes.",
+          "min": -10, "max": 10, "step": 1, "global": "NAC.esp|2FA5C",
+          "stepper": { "quest": "NAC.esp|10338", "script": "NAC:ConfigScriptsLibrary", "function": "setHdrContrast", "up": 2, "down": 1 }
+        },
+        {
+          "type": "slider", "text": "Saturation", "help": "How strong the colors are.",
+          "min": -10, "max": 10, "step": 1, "global": "NAC.esp|301F9",
+          "stepper": { "quest": "NAC.esp|10338", "script": "NAC:ConfigScriptsLibrary", "function": "setSaturation", "up": 2, "down": 1 }
+        },
+        {
+          "type": "slider", "text": "Gamma", "help": "The middle tones: lower brightens them, higher darkens them.",
+          "min": -10, "max": 10, "step": 1, "global": "NAC.esp|30995",
+          "stepper": { "quest": "NAC.esp|10338", "script": "NAC:ConfigScriptsLibrary", "function": "setGamma", "up": 2, "down": 1 }
+        },
+        {
+          "type": "slider", "text": "Exposure", "help": "How much the eye adapts: how far bright scenes dim and dark ones brighten.",
+          "min": -10, "max": 10, "step": 1, "global": "NAC.esp|309A7",
+          "stepper": { "quest": "NAC.esp|10338", "script": "NAC:ConfigScriptsLibrary", "function": "setExposureMin", "up": 2, "down": 1 }
+        },
+        {
+          "type": "slider", "text": "Sunlight", "help": "The sun's intensity.",
+          "min": -10, "max": 10, "step": 1, "global": "NAC.esp|309AD",
+          "stepper": { "quest": "NAC.esp|10338", "script": "NAC:ConfigScriptsLibrary", "function": "setSunlight", "up": 2, "down": 1 }
+        },
+        {
+          "type": "slider", "text": "Sky light", "help": "The sky's luminosity.",
+          "min": -10, "max": 10, "step": 1, "global": "NAC.esp|309B0",
+          "stepper": { "quest": "NAC.esp|10338", "script": "NAC:ConfigScriptsLibrary", "function": "setSkylight", "up": 2, "down": 1 }
+        },
+        {
+          "type": "button", "text": "Reset the effects", "help": "Every effect above back to 0.",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "ResetLook", "params": [] }
+        },
+        { "type": "section", "text": "Presets" },
+        { "type": "switcher", "text": "Ash & Rust", "global": "NAC.esp|33F22" },
+        { "type": "switcher", "text": "Bleached", "global": "NAC.esp|3376A" },
+        { "type": "switcher", "text": "Black & White", "global": "NAC.esp|3376B" },
+        { "type": "dropdown", "text": "Cinema", "options": ["Off", "I", "II"], "global": "NAC.esp|3376C" },
+        { "type": "switcher", "text": "Dark Shadows", "global": "NAC.esp|3376D" },
+        { "type": "switcher", "text": "Dead", "global": "NAC.esp|3376E" },
+        { "type": "switcher", "text": "Doomsday", "global": "NAC.esp|3376F" },
+        { "type": "dropdown", "text": "Gentle Boost", "options": ["Off", "I", "II"], "global": "NAC.esp|33F28" },
+        { "type": "switcher", "text": "Grim", "global": "NAC.esp|33F23" },
+        { "type": "switcher", "text": "High Key", "global": "NAC.esp|33770" },
+        { "type": "dropdown", "text": "Lo-Fi", "options": ["Off", "I", "II"], "global": "NAC.esp|33771" },
+        { "type": "switcher", "text": "Log", "global": "NAC.esp|33F1B" },
+        { "type": "switcher", "text": "Milky", "global": "NAC.esp|33772" },
+        { "type": "dropdown", "text": "PRC", "options": ["Off", "I", "II"], "global": "NAC.esp|33F1C" },
+        { "type": "dropdown", "text": "Psy-Fi", "options": ["Off", "I", "II"], "global": "NAC.esp|33F1D" },
+        { "type": "dropdown", "text": "Resident Evil", "options": ["Off", "I", "II"], "global": "NAC.esp|33F1E" },
+        { "type": "switcher", "text": "Sabbath", "global": "NAC.esp|33F1F" },
+        { "type": "dropdown", "text": "Vintage", "options": ["Off", "I", "II"], "global": "NAC.esp|33F20" },
+        { "type": "switcher", "text": "Vivid", "global": "NAC.esp|33F21" }
+      ]
+    },
+    {
+      "name": "Camera",
+      "items": [
+        {
+          "type": "dropdown", "text": "Vignette", "help": "Darkened screen corners.",
+          "options": ["Off", "Light", "Medium", "Strong"], "values": [0, 2, 1, 3], "global": "NAC.esp|FB9C",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "Refresh", "params": [false] }
+        },
+        {
+          "type": "dropdown", "text": "Film grain", "help": "NAC's camera noise.",
+          "options": ["Off", "Light", "Strong"], "values": [0, 2, 1], "global": "NAC.esp|FB9B",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "Refresh", "params": [false] }
+        },
+        { "type": "switcher", "text": "Lens distortion", "global": "NAC.esp|FB9D" },
+        { "type": "section", "text": "Depth of field" },
+        {
+          "type": "dropdown", "own": "dofMode", "text": "Depth of field",
+          "help": "Static: a fixed focus. Auto-focus: the focus follows what you look at.",
+          "options": ["Off", "Static", "Auto-focus"],
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "ApplyDof", "params": ["{dofMode}", "{dofAperture}"] }
+        },
+        {
+          "type": "dropdown", "own": "dofAperture", "text": "Aperture", "help": "The smaller the aperture, the blurrier the background.",
+          "options": ["Very small", "Small", "Balanced", "High", "Very high"],
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "ApplyDof", "params": ["{dofMode}", "{dofAperture}"] }
+        },
+        { "type": "section", "text": "View" },
+        {
+          "type": "dropdown", "own": "fov", "text": "Field of view",
+          "help": "NAC's FOV override (first person; third person and aiming follow). The view switches cameras once to apply it.",
+          "options": ["Game's own", "70", "80", "90", "100", "110", "120"],
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "SetFov", "params": ["{value}"] }
+        },
+        {
+          "type": "dropdown", "text": "Third person camera", "help": "Where the third person camera sits. The view switches cameras once to apply it.",
+          "options": ["Left (default)", "Centered", "Lower left", "Upper left", "Upper centered", "Far left", "Lower far left", "Upper far left", "Close, left"],
+          "values": [0, 1, 2, 4, 5, 6, 7, 8, 9], "global": "NAC.esp|27107",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "ApplyCameraPosition", "params": [] }
+        }
+      ]
+    },
+    {
+      "name": "Lighting",
+      "items": [
+        { "type": "switcher", "text": "Volumetric lighting", "global": "NAC.esp|22C37" },
+        { "type": "switcher", "text": "Eye adaptation", "help": "The view adjusting between bright and dark places.", "global": "NAC.esp|1D876" },
+        {
+          "type": "dropdown", "text": "Night brightness", "help": "From 22:30 to 5:30.",
+          "options": ["Much darker", "Darker", "NAC's", "Brighter", "Much brighter"], "values": [4, 3, 0, 1, 2], "global": "NAC.esp|1D87C",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "Refresh", "params": [false] }
+        },
+        { "type": "section", "text": "Interiors" },
+        {
+          "type": "switcher", "text": "Interior lighting override", "help": "NAC's own lighting for interiors.", "global": "NAC.esp|147B4",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "Refresh", "params": [false] }
+        },
+        {
+          "type": "dropdown", "text": "Interior brightness",
+          "options": ["Much darker", "Darker", "NAC's", "Brighter", "Much brighter"], "values": [4, 3, 0, 1, 2], "global": "NAC.esp|24332",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "Refresh", "params": [false] }
+        },
+        { "type": "section", "text": "ENB" },
+        {
+          "type": "switcher", "text": "NAC's patch for ENB",
+          "help": "With an ENB: the game's blur and NAC's camera effects off, NAC's lighting patch for ENB on.", "global": "NAC.esp|1E018",
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "Refresh", "params": [false] }
+        }
+      ]
+    },
+    {
+      "name": "Effects",
+      "items": [
+        { "type": "switcher", "text": "Chem effects", "help": "Chems and alcohol change what you see, each its own way.", "global": "NAC.esp|1B261" },
+        { "type": "switcher", "text": "Cloud shadows", "help": "Sunlight dims and returns on cloudy days, as clouds pass the sun.", "global": "NAC.esp|1387F" },
+        { "type": "switcher", "text": "Darker under roofs", "help": "Less light under a roof outdoors.", "global": "NAC.esp|18C40" },
+        { "type": "switcher", "text": "Hit effects", "help": "A shake, a flash and a color shift when you're hit.", "global": "NAC.esp|12948" },
+        {
+          "type": "dropdown", "text": "Sunglasses shade the view", "help": "Goggles and sunglasses tint what you see, each its own way.",
+          "options": ["Off", "On", "First person only"], "global": "NAC.esp|18C32"
+        },
+        { "type": "switcher", "text": "Weather effects", "help": "Extra fog and particles in the weathers.", "global": "NAC.esp|18C44" },
+        { "type": "switcher", "text": "Radiation effects", "help": "What you see when you take radiation.", "global": "NAC.esp|1B260" },
+        { "type": "switcher", "text": "Radstorm siren", "help": "A siren warns of a radstorm outside the radiated regions.", "global": "NAC.esp|51751" },
+        { "type": "switcher", "text": "NAC's Pip-Boy light", "global": "NAC.esp|5BEF6" }
+      ]
+    },
+    {
+      "name": "Reset",
+      "items": [
+        { "type": "text", "text": "For the Look, Camera, Lighting and Effects tabs. The Weather tab stays as it is." },
+        {
+          "type": "button", "text": "NAC's defaults", "help": "Everything back to NAC's own settings. The view switches cameras once.", "resetOwn": ["fov", "dofMode", "dofAperture"],
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "ResetNac", "params": [false] }
+        },
+        {
+          "type": "button", "text": "Turn everything off", "help": "NAC's camera effects, options and overrides off.", "resetOwn": ["fov", "dofMode", "dofAperture"],
+          "call": { "script": "ReclamationDay:WorldSettings", "function": "ResetNac", "params": [true] }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+<ng-container *ngIf="{ card: card$ | async, gunpoint: gunpoint$ | async } as view">
+  <!-- His bar: while the gun is on him, and over his card -->
+  <div *ngIf="view.card?.bar ?? view.gunpoint as bar" class="top">
+    <app-nemesis-bar [bar]="bar"></app-nemesis-bar>
+  </div>
+
+  <ng-container *ngIf="view.card as card">
+    <div class="box">
+      <div class="line">
+        <ng-container *ngIf="card.error; else said">{{ card.error }}</ng-container>
+        <ng-template #said>
+          <ng-container *ngIf="card.line; else waits">&ldquo;{{ card.line }}&rdquo;</ng-container>
+          <ng-template #waits>{{ 'COMPONENT.NEMESIS_CARD.WAITS' | transloco : words(card) }}</ng-template>
+        </ng-template>
+      </div>
+
+      <div class="body">
+        <ul class="choices">
+          <li
+            *ngFor="let choice of choices(card); let i = index"
+            [class.selected]="i === selected"
+            [class.bracketed]="choice.question === Question.Pay || choice.question === Question.Threaten"
+            (mouseenter)="hover(i)"
+            (click)="choose(card, choice)"
+          >
+            <span>{{ choice.key | transloco : choice.params }}</span>
+            <span *ngIf="choice.menu && choice.menu !== 'main'" class="more"></span>
+          </li>
+        </ul>
+
+        <div *ngIf="card.revealed.length" class="learned">
+          <div class="heading">{{ 'COMPONENT.NEMESIS_CARD.LEARNED' | transloco }}</div>
+          <div *ngFor="let item of card.revealed" class="item">{{ item.text }}</div>
+        </div>
+      </div>
+
+      <div class="hints">
+        <span><b>&uarr;</b><b>&darr;</b> {{ 'COMPONENT.NEMESIS_CARD.HINT_CHOOSE' | transloco }}</span>
+        <span><b>1-9</b><b>E</b> {{ 'COMPONENT.NEMESIS_CARD.HINT_SELECT' | transloco }}</span>
+        <span *ngIf="menu !== 'main'"><b>&larr;</b> {{ 'COMPONENT.NEMESIS_CARD.HINT_BACK' | transloco }}</span>
+        <span><b>ESC</b> {{ 'COMPONENT.NEMESIS_CARD.CLOSE' | transloco }}</span>
+      </div>
+    </div>
+
+    <button *ngIf="!card.done && !card.error" class="finish" data-sound="cancel" (click)="finish()">
+      <b>F</b>{{ 'COMPONENT.NEMESIS_CARD.FINISH' | transloco : words(card) }}
+    </button>
+  </ng-container>
+</ng-container>

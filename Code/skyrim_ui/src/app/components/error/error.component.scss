@@ -1,0 +1,32 @@
+.error-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// A div, not a p: the message can hold lists
+.error-text {
+  margin: 1em 0;
+
+  // A mods mismatch's plugins (ErrorService modList): one per line, scrolling when long
+  ::ng-deep .mod-list {
+    max-height: 30vh;
+    overflow-y: auto;
+    margin: 0.5em 0 0;
+    padding: 0.4em 0.8em 0.4em 2.4em;
+    text-align: left;
+    color: var(--pip-color);
+    text-shadow: 0 0 0.5rem rgba(var(--pip), 0.6);
+    border: 1px solid rgba(var(--pip), 0.4);
+    background: rgba(var(--pip), 0.06);
+    list-style: disc;
+
+    li + li {
+      margin-top: 0.2em;
+    }
+  }
+
+  ::ng-deep ol.mod-list {
+    list-style: decimal;
+  }
+}

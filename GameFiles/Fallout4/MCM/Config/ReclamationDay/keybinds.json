@@ -1,0 +1,13 @@
+{
+  "modName": "ReclamationDay",
+  "keybinds": [
+    {
+      "id": "armCritical",
+      "desc": "VATS 76': Critical Strike",
+      "action": {
+        "type": "SendEvent",
+        "form": "Fallout4.esm|1"
+      }
+    }
+  ]
+}

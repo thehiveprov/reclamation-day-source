@@ -1,0 +1,101 @@
+@import 'env';
+
+@import 'functions/rem';
+
+:host {
+  position: relative;
+  display: block;
+}
+
+// The settings popup's look (settings.component.scss), with tabs over the rows
+.container {
+  min-width: 34em;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  margin-bottom: 0.8em;
+  padding-bottom: 0.8em;
+  border-bottom: 1px solid var(--line);
+
+  .tab {
+    padding: 0.3em 0.9em;
+  }
+}
+
+.rows {
+  overflow: auto;
+  max-height: 55vh;
+  padding-right: 1rem;
+
+  h2 {
+    margin: 1.2em 0 0.4em;
+  }
+
+  h2:first-child {
+    margin-top: 0;
+  }
+}
+
+.setting {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.7em 0;
+
+  & > label {
+    width: 15em;
+  }
+
+  & > app-dropdown {
+    width: 14em;
+    max-width: 14em;
+    font-size: inherit;
+  }
+}
+
+.setting-button {
+  justify-content: flex-start;
+}
+
+.slider {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  width: 14em;
+
+  input {
+    flex: 1 1 auto;
+  }
+}
+
+.slider-value {
+  flex: none;
+  min-width: 2.5em;
+  text-align: right;
+}
+
+.note {
+  margin: 0.4em 0 0.8em;
+  opacity: 0.8;
+}
+
+.error {
+  color: var(--danger-text);
+}
+
+.help {
+  min-height: 2.6em;
+  margin: 0.8em 0 0;
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+
+.actions {
+  margin-top: 0.8rem;
+  display: flex;
+  justify-content: center;
+}

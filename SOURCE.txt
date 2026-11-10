@@ -1,0 +1,31 @@
+FALLOUT 4: RECLAMATION DAY v1.6.7-308 - SOURCE CODE
+====================================================
+
+Reclamation Day is built on TiltedEvolution by Tilted Phoques (github.com/tiltedphoques/TiltedEvolution) and carries it
+on under the same licence, the GPL-3.0. See LICENSE.
+
+Code        The client, launcher, server and overlay.
+Libraries   The Tilted libraries, at the versions this release was built with.
+Tools       The packaging scripts and the tools that write the plugins.
+GameFiles   The README, credits, Papyrus script sources and settings. The plugins, models, animations, textures and
+            sounds aren't in here: they come with the mod itself.
+
+
+BUILDING
+--------
+Windows, with Visual Studio 2022, xmake, Node.js and pnpm. From this folder:
+
+  xmake config -c -p windows -a x64 -m release --vs=2022 -y
+  xmake build FalloutImmersiveLauncher
+  xmake build FalloutServerRunner
+  xmake build FalloutTogetherServer
+  xmake build TPProcess
+  xmake build ReclamationDayStarter
+
+The overlay's UI, in Code\skyrim_ui:
+
+  pnpm install
+  pnpm deploy:develop
+
+The tests are the TPTests target. The version comes from git, so a build from this folder (which has no git history)
+calls itself "none", and its server and game only match each other.

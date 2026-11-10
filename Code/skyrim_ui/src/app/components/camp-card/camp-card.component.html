@@ -1,0 +1,33 @@
+<div *ngIf="request" class="camp-card">
+  <div class="title">{{ 'COMPONENT.CAMP_CARD.TITLE' | transloco }}</div>
+  <p class="body">{{ 'COMPONENT.CAMP_CARD.BODY' | transloco }}</p>
+  <div class="choices">
+    <button
+      class="choice"
+      (click)="move()"
+      [disabled]="moveBlocked !== null"
+      data-style-ornament="simple"
+    >
+      <span class="key">1</span>
+      <span class="label">{{
+        'COMPONENT.CAMP_CARD.MOVE' | transloco: { cost: request.cost }
+      }}</span>
+    </button>
+    <div *ngIf="moveBlocked as blocked" class="blocked">
+      {{ blocked.key | transloco: blocked.values }}
+    </div>
+    <button class="choice" (click)="pickUp()" data-style-ornament="simple">
+      <span class="key">2</span>
+      <span class="label">{{ 'COMPONENT.CAMP_CARD.PICK_UP' | transloco }}</span>
+    </button>
+    <button
+      class="choice"
+      (click)="cancel()"
+      data-sound="cancel"
+      data-style-ornament="simple"
+    >
+      <span class="key">3</span>
+      <span class="label">{{ 'COMPONENT.CAMP_CARD.NOT_NOW' | transloco }}</span>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+.app-debug {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 1.6vw;
+  padding: 1px;
+  color: rgba(var(--pip), 0.8);
+
+  b {
+    color: var(--pip-color);
+  }
+
+  fa-icon {
+    margin-right: 0.2vw;
+    margin-left: 0.15vw;
+    color: var(--pip-color);
+  }
+
+  span {
+    padding-top: 0.2vw;
+    padding-bottom: 0.2vw;
+    border: 1px solid var(--line);
+    background-color: var(--panel);
+  }
+}

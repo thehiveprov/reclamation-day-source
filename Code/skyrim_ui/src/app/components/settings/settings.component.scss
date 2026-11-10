@@ -1,0 +1,144 @@
+@import 'env';
+
+@import 'functions/rem';
+
+:host {
+  position: relative;
+  display: block;
+}
+
+.container {
+  overflow: auto;
+  max-height: 60vh;
+  padding-right: 1rem;
+
+  .settings {
+    display: flex;
+    margin-top: 1rem;
+    justify-content: space-between;
+    flex-direction: column;
+
+    section {
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--line);
+
+      &:last-child {
+        border-bottom: 0;
+      }
+
+      .version {
+        font-weight: 700;
+
+        &.outdated {
+          color: var(--danger-text);
+        }
+      }
+
+      .flex-item {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 1em 0;
+      }
+
+      & > div:not(:last-child) {
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    hr {
+      width: 100%;
+    }
+
+    h2:first-child {
+      margin-top: 0;
+    }
+  }
+}
+
+.setting {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1em 0;
+
+  & > label {
+    width: 15em;
+  }
+
+  & > input:not([type='checkbox']),
+  > app-dropdown {
+    width: 10em;
+    max-width: 10em;
+    font-size: inherit;
+  }
+}
+
+.actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+// Build tools: switches, then one row per action with its key
+.build-tools {
+  h3 {
+    margin: 1.2em 0 0.4em;
+    font-size: 0.95rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+}
+
+.build-note {
+  margin: 0 0 0.6em;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.build-key {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  padding: 0.2em 0;
+  border-bottom: 1px solid rgba(var(--pip), 0.12);
+}
+
+.build-key-action {
+  flex: 1 1 auto;
+}
+
+.build-key-button {
+  flex: none;
+  min-width: 8em;
+  padding: 0.3em 0.6em;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  text-transform: none;
+
+  // A key moved off its default
+  &.changed {
+    border-color: var(--pip-color);
+  }
+
+  // Waiting for a key press
+  &.capturing {
+    color: var(--ink);
+    background: var(--pip-color);
+  }
+}
+
+.build-error {
+  margin: 0.6em 0 0;
+  color: var(--danger-text);
+}
+
+.build-reset {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0.8em 0 1em;
+}

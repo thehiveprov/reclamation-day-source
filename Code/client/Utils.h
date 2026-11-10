@@ -1,0 +1,91 @@
+#pragma once
+
+#include <optional>
+#include "VersionDb.h"
+#include "World.h"
+
+#if defined(TP_SKYRIM) && TP_PLATFORM_64
+#define POINTER_SKYRIMSE(className, variableName, ...) static VersionDbPtr<className> variableName(__VA_ARGS__)
+#define POINTER_SKYRIMSE_LEGACY(className, variableName, ...) static AutoPtr<decltype()> variableName(__VA_ARGS__)
+
+// #define POINTER_SKYRIMSE_V2(variableName, ...) static AutoPtr<decltype()> variableName(__VA_ARGS__)
+#else
+#define POINTER_SKYRIMSE(className, variableName, ...) ;
+#endif
+
+#if defined(TP_FALLOUT) && TP_PLATFORM_64
+#define POINTER_FALLOUT4(className, variableName, ...) static VersionDbPtr<className> variableName(__VA_ARGS__)
+#define POINTER_FALLOUT4_LEGACY(className, variableName, ...) static AutoPtr<className> variableName(__VA_ARGS__)
+#else
+#define POINTER_FALLOUT4(className, variableName, ...) ;
+#endif
+
+// TODO: should this be debug only? I removed the check since debug is broken, can only use releasedbg
+#define TP_ASSERT(Expr, Msg, ...)                                    \
+    if (!(Expr))                                                     \
+    {                                                                \
+        Utils::Assert(#Expr, fmt::format(Msg, __VA_ARGS__).c_str()); \
+    }
+
+struct TESForm;
+
+namespace Utils
+{
+
+struct ActorOwnershipToken
+{
+    uint32_t ServerId{};
+    uint32_t OwnershipEpoch{};
+};
+
+static void Assert(const char* apExpression, const char* apMessage)
+{
+    spdlog::critical("Assertion failed ({}): {}", apExpression, apMessage);
+
+    if (IsDebuggerPresent())
+        __debugbreak();
+}
+
+std::optional<uint32_t> GetServerId(entt::entity aEntity) noexcept;
+std::optional<entt::entity> FindEntityByServerId(uint32_t aServerId) noexcept;
+std::optional<ActorOwnershipToken> GetLocalOwnershipToken(uint32_t aFormId) noexcept;
+std::optional<ActorOwnershipToken> GetRemoteOwnershipToken(uint32_t aFormId) noexcept;
+
+template <class T> T* GetByServerId(const uint32_t acServerId) noexcept
+{
+    if (const auto entity = FindEntityByServerId(acServerId))
+    {
+        if (const auto* pFormIdComponent = World::Get().try_get<FormIdComponent>(*entity))
+        {
+            TESForm* pForm = TESForm::GetById(pFormIdComponent->Id);
+
+            if (pForm)
+                return Cast<T>(pForm);
+        }
+    }
+
+    // Callers say what they needed it for (upstream #802: this alone filled logs)
+    spdlog::debug("Form not found for server id {:X}", acServerId);
+    return nullptr;
+}
+
+void ShowHudMessage(const TiltedPhoques::String& acMessage);
+} // namespace Utils
+
+namespace TiltedPhoques
+{
+template <class TFunc, class TThis, class... TArgs> constexpr decltype(auto) ThisCall(TFunc* aFunction, VersionDbPtr<TThis>& aThis, TArgs&&... args) noexcept
+{
+    return ThisCall(aFunction, aThis.Get(), args...);
+}
+
+template <class TFunc, class TThis, class... TArgs> constexpr decltype(auto) ThisCall(VersionDbPtr<TFunc>& aFunction, VersionDbPtr<TThis>& aThis, TArgs&&... args) noexcept
+{
+    return ThisCall(aFunction.Get(), aThis.Get(), args...);
+}
+
+template <class TFunc, class TThis, class... TArgs> constexpr decltype(auto) ThisCall(VersionDbPtr<TFunc>& aFunction, TThis* apThis, TArgs&&... args) noexcept
+{
+    return ThisCall(aFunction.Get(), apThis, args...);
+}
+} // namespace TiltedPhoques

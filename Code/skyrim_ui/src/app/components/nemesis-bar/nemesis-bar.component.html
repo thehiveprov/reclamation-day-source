@@ -1,0 +1,16 @@
+<div class="nemesis-bar" [attr.data-tone]="bar.tone">
+  <div class="top">
+    <span class="name">{{ bar.name }}</span>
+    <span class="gang">{{ bar.gang }}</span>
+    <span class="fear">
+      <span class="label">{{ 'COMPONENT.NEMESIS_BAR.FEAR' | transloco }}</span>
+      <span class="meter">
+        <span class="fill" [style.width.%]="bar.fear"></span>
+        <span class="mark" [style.left.%]="bar.fear"></span>
+      </span>
+    </span>
+  </div>
+  <div *ngIf="bar.chips.length" class="chips">
+    <span *ngFor="let chip of bar.chips" class="chip" [attr.data-tone]="chip.tone">{{ chip.text }}</span>
+  </div>
+</div>

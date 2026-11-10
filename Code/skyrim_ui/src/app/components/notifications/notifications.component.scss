@@ -1,0 +1,34 @@
+@import 'env';
+
+@import 'mixins/gapped-vertical';
+
+:host {
+  @include gapped-vertical($-size-gap);
+}
+
+// Shown over the game while the overlay is closed, so they keep a shadow to stay readable
+p {
+  color: var(--pip-color);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  text-shadow: 0 0 3px #000000, 1px 1px 2px #000000;
+}
+
+// A small triangle pointing right
+.app-notifications-icon {
+  flex: none;
+  width: 0;
+  height: 0;
+  margin-right: $-size-gap * 0.5;
+  border-top: 0.35rem solid transparent;
+  border-bottom: 0.35rem solid transparent;
+  border-left: 0.45rem solid currentColor;
+}
+
+.app-notifications-content {
+  flex: 1 1 auto;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

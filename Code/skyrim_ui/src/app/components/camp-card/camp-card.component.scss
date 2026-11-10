@@ -1,0 +1,72 @@
+:host {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 28%;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.camp-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+  width: 26rem;
+  max-width: calc(100vw - 2rem);
+  padding: 1rem 2rem 1.25rem;
+  color: var(--pip-color);
+  text-shadow: 0 0 0.6rem rgba(var(--pip), 0.5);
+  background: var(--panel);
+  border-top: 2px solid rgba(var(--pip), 0.6);
+  border-bottom: 2px solid rgba(var(--pip), 0.6);
+  pointer-events: auto;
+}
+
+.title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.body {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.35;
+  opacity: 0.85;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: left;
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+}
+
+.key {
+  min-width: 1.4rem;
+  font-weight: 700;
+  text-align: center;
+  border: 1px solid rgba(var(--pip), 0.5);
+}
+
+.blocked {
+  margin: -0.2rem 0 0.2rem 2.15rem;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}

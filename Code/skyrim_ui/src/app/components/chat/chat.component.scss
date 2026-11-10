@@ -1,0 +1,85 @@
+@import 'env';
+
+@import 'functions/rem';
+
+:host {
+  display: contents;
+  flex-direction: column;
+}
+
+.app-chat-messages {
+  flex: 1 1 auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  overflow-wrap: break-word;
+  padding-right: 0.1rem;
+  font-size: 1rem;
+
+  p {
+    margin: 0;
+    line-height: $-size-line;
+    padding: ($-size-gap * 0.2) ($-size-gap * 0.5);
+    text-align: left;
+
+    &:nth-child(odd) {
+      background: rgba(var(--pip), 0.04);
+    }
+
+    // Channels keep their own colors, toned to sit beside the Pip-Boy green
+    &.system {
+      .app-chat-date,
+      .app-chat-message {
+        color: rgb(255, 196, 92);
+      }
+    }
+    &.dialogue {
+      .app-chat-message {
+        color: rgb(170, 255, 200);
+      }
+    }
+    &.party {
+      .app-chat-message {
+        color: rgb(110, 225, 255);
+      }
+    }
+    &.local {
+      .app-chat-message {
+        color: rgb(225, 255, 110);
+      }
+    }
+  }
+}
+
+.app-chat-date {
+  opacity: 0.55;
+}
+
+.app-chat-name {
+  font-weight: 700;
+  color: var(--pip-color);
+}
+
+.app-chat-message {
+  color: rgba(var(--pip), 0.85);
+  user-select: text;
+}
+
+.app-chat-input {
+  display: flex;
+  flex: 0 0 (1rem + $-size-gap);
+  margin-top: 0.25rem;
+  border-top: 1px solid var(--line);
+
+  input {
+    flex: 1 1 auto;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  button {
+    flex: 0 0 auto;
+    border-width: 0 0 0 1px;
+    border-color: var(--line);
+  }
+}

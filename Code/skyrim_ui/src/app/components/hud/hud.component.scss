@@ -1,0 +1,616 @@
+// The overlay's look on the HUD: Pip-Boy green on dark strips, ruled lines, a soft glow; the game's warning red for
+// radiation and hostiles
+:host {
+  position: fixed;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+  color: var(--pip-color);
+  text-shadow: 0 0 0.5rem rgba(var(--pip), 0.45);
+}
+
+.top {
+  position: absolute;
+  top: 1.6rem;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  transform: translateX(-50%);
+}
+
+// The compass: a strip faded at its ends, ticks every 15 degrees, letters for the directions, the game's markers
+.compass {
+  position: relative;
+  width: min(40rem, 70vw);
+  padding: 0.25rem 0;
+  background: linear-gradient(90deg, transparent, var(--panel) 14%, var(--panel) 86%, transparent);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+
+.strip {
+  position: relative;
+  height: 2.3rem;
+}
+
+.tick {
+  position: absolute;
+  bottom: 0;
+  width: 1px;
+  height: 0.35rem;
+  background: rgba(var(--pip), 0.45);
+
+  &.major {
+    height: 0.6rem;
+    background: rgba(var(--pip), 0.8);
+  }
+}
+
+.direction {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+  transform: translateX(-50%);
+
+  .major & {
+    font-size: 1rem;
+    opacity: 1;
+  }
+}
+
+// The middle: where the camera looks
+.caret {
+  position: absolute;
+  top: -0.35rem;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-top: 0.35rem solid var(--pip-color);
+  border-right: 0.3rem solid transparent;
+  border-left: 0.3rem solid transparent;
+  transform: translateX(-50%);
+}
+
+// A marker: the game's icon remade in scan lines on a 24 unit grid; places on a dark chip ringed by a 1px rule
+// (dim and dashed while undiscovered, bright when targeted)
+.marker {
+  position: absolute;
+  top: 0.05rem;
+  width: 1.45rem;
+  height: 1.45rem;
+  transform: translateX(-50%);
+
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .glyph {
+    fill: var(--pip-color);
+    filter: drop-shadow(0 0 0.15rem rgba(var(--pip), 0.7));
+  }
+
+  .chip {
+    fill: var(--panel);
+  }
+
+  .ring {
+    fill: none;
+    stroke: rgba(var(--pip), 0.5);
+    stroke-width: 1px;
+    vector-effect: non-scaling-stroke;
+  }
+
+  &[data-shape='location'] {
+    top: 0.25rem;
+    width: 1.3rem;
+    height: 1.3rem;
+
+    &.undiscovered {
+      .chip {
+        fill: none;
+      }
+
+      .ring {
+        stroke: rgba(var(--pip), 0.3);
+        stroke-dasharray: 2 2;
+      }
+
+      .glyph {
+        fill: rgba(var(--pip), 0.7);
+        filter: none;
+      }
+    }
+
+    &.targeted .ring {
+      stroke: var(--pip-color);
+      filter: drop-shadow(0 0 0.2rem rgba(var(--pip), 0.8));
+    }
+  }
+
+  &[data-shape='enemy'],
+  &[data-shape='recon'] {
+    .glyph {
+      fill: rgb(var(--danger));
+      filter: drop-shadow(0 0 0.15rem rgba(var(--danger), 0.8));
+    }
+  }
+
+  &.edge {
+    opacity: 0.65;
+  }
+}
+
+// A quest marker above or below the player: a small arrow over or under it
+.height {
+  position: absolute;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-right: 0.22rem solid transparent;
+  border-left: 0.22rem solid transparent;
+  transform: translateX(-50%);
+
+  &[data-height='above'] {
+    top: -0.35rem;
+    border-bottom: 0.28rem solid var(--pip-color);
+  }
+
+  &[data-height='below'] {
+    bottom: -0.35rem;
+    border-top: 0.28rem solid var(--pip-color);
+  }
+}
+
+// The enemy's bar: name, a thin bar, the second bar under it (VATS)
+.enemy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  min-width: 22rem;
+  padding: 0.45rem 2rem 0.55rem;
+  background: linear-gradient(90deg, transparent, var(--panel) 14%, var(--panel) 86%, transparent);
+
+  .bar {
+    width: 20rem;
+  }
+
+  &.hostile {
+    .enemy-name {
+      color: var(--danger-text);
+    }
+
+    .bar .fill {
+      background: rgb(var(--danger));
+      box-shadow: 0 0 0.4rem rgba(var(--danger), 0.6);
+    }
+  }
+}
+
+.enemy-name {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  .legendary {
+    color: #e8c25a;
+    text-shadow: 0 0 0.5rem rgba(232, 194, 90, 0.6);
+  }
+
+  .skull {
+    width: 1rem;
+    height: 1rem;
+    fill: currentColor;
+  }
+}
+
+.bar {
+  position: relative;
+  height: 0.45rem;
+  overflow: hidden;
+  background: rgba(var(--pip), 0.12);
+  border: 1px solid var(--line);
+
+  .fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    background: rgba(var(--pip), 0.85);
+    box-shadow: 0 0 0.4rem rgba(var(--pip), 0.5);
+    transition: width 0.15s linear;
+  }
+
+  &.optional {
+    height: 0.25rem;
+
+    .fill {
+      background: rgba(var(--pip), 0.45);
+    }
+  }
+}
+
+// Health at the bottom left, AP at the bottom right
+.corner {
+  position: absolute;
+  bottom: 2.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &.left {
+    left: 2.4rem;
+    align-items: flex-start;
+  }
+
+  &.right {
+    right: 2.4rem;
+    align-items: flex-end;
+  }
+}
+
+.meter {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.45rem 1.1rem;
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+
+  .label {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+  }
+
+  .bar {
+    width: 17rem;
+    height: 0.6rem;
+  }
+
+  // What radiation took, from the bar's far end
+  .rads {
+    position: absolute;
+    inset: 0 0 0 auto;
+    background: rgba(var(--danger), 0.85);
+    box-shadow: 0 0 0.4rem rgba(var(--danger), 0.6);
+  }
+
+  &.mirrored .bar .fill {
+    inset: 0 0 0 auto;
+  }
+
+  &.low .bar .fill {
+    animation: low 0.9s ease-in-out infinite alternate;
+  }
+}
+
+.radiation {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--danger-text);
+  text-shadow: 0 0 0.5rem rgba(var(--danger), 0.7);
+  animation: low 0.6s ease-in-out infinite alternate;
+}
+
+.counts {
+  display: flex;
+  align-items: baseline;
+  gap: 1.4rem;
+  padding: 0.2rem 1.1rem;
+  background: linear-gradient(90deg, transparent, var(--panel) 30%);
+}
+
+// The drawn weapon's name, over its ammo
+.weapon-name {
+  max-width: 22rem;
+  margin-bottom: -0.4rem;
+  padding: 0 1.1rem;
+  overflow: hidden;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ammo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+
+  .clip {
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .reserve {
+    font-size: 1.1rem;
+    opacity: 0.7;
+
+    &::before {
+      margin-right: 0.5rem;
+      content: '|';
+      opacity: 0.4;
+    }
+  }
+}
+
+.explosives {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    fill: currentColor;
+  }
+}
+
+@keyframes low {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.45;
+  }
+}
+
+// Two guns: the crosshair in the middle of the screen, four short lines round a dot (each line's way out is --dx/--dy)
+// that a shot kicks out and that close in again; the left gun's rounds below left of it
+$crosshair-gap: 0.7rem;
+$crosshair-kick: 1.6rem;
+
+// The motorcycle's gauges, above the AP bar and the ammo count at the bottom right, from that block's left edge:
+// round dials with a chrome-less ring, in the HUD's colour so they sit with the rest of it; a red needle and
+// a red end to the fuel dial. The block's as wide as the AP meter (.meter: its bar, its label, its padding).
+.bike-gauges {
+  position: absolute;
+  right: 2.4rem;
+  bottom: 9.8rem;
+  width: 21.4rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 0.4rem;
+  filter: drop-shadow(0 0 0.4rem rgba(0, 0, 0, 0.6));
+}
+
+.gauge {
+  display: block;
+  overflow: visible;
+
+  &.speed-gauge {
+    width: 12rem;
+    height: 12rem;
+  }
+
+  &.fuel-gauge {
+    width: 7.5rem;
+    height: 7.5rem;
+  }
+
+  .bezel {
+    fill: rgba(0, 0, 0, 0.55);
+    stroke: rgba(var(--pip), 0.75);
+    stroke-width: 1.4;
+  }
+
+  .face {
+    fill: rgba(8, 12, 8, 0.72);
+    stroke: rgba(var(--pip), 0.25);
+    stroke-width: 0.5;
+  }
+
+  .tick {
+    stroke: rgba(var(--pip), 0.65);
+    stroke-width: 0.6;
+
+    &.major {
+      stroke: var(--pip-color);
+      stroke-width: 1.3;
+    }
+  }
+
+  .number,
+  .caption,
+  .readout {
+    fill: var(--pip-color);
+    text-anchor: middle;
+    dominant-baseline: central;
+    text-shadow: none;
+  }
+
+  .number {
+    font-size: 7.5px;
+    font-weight: 700;
+  }
+
+  .caption {
+    font-size: 4.4px;
+    letter-spacing: 0.14em;
+    opacity: 0.75;
+  }
+
+  .readout-box {
+    fill: rgba(0, 0, 0, 0.6);
+    stroke: rgba(var(--pip), 0.35);
+    stroke-width: 0.4;
+  }
+
+  .readout {
+    font-size: 8px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    dominant-baseline: auto;
+  }
+
+  .redline {
+    fill: none;
+    stroke: #d83a2e;
+    stroke-width: 2;
+  }
+
+  .needle {
+    stroke: #e8452f;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+
+  .hub {
+    fill: rgba(var(--pip), 0.85);
+    stroke: rgba(0, 0, 0, 0.7);
+    stroke-width: 0.8;
+  }
+
+  .lamp {
+    fill: rgba(0, 0, 0, 0.45);
+    stroke: rgba(var(--pip), 0.25);
+    stroke-width: 0.4;
+
+    &.low.lit {
+      fill: #e8a02f;
+      stroke: #e8a02f;
+      filter: drop-shadow(0 0 1.6px #e8a02f);
+    }
+
+    &.beam.lit {
+      fill: #5a9df0;
+      stroke: #5a9df0;
+      filter: drop-shadow(0 0 1.4px #5a9df0);
+    }
+  }
+}
+
+// Run dry: the warning light blinks
+.bike-gauges.dry .lamp.low {
+  animation: bike-dry 0.8s steps(2, jump-none) infinite;
+}
+
+@keyframes bike-dry {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.2;
+  }
+}
+
+.crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+
+  .arm {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 0.6rem;
+    margin: -0.3rem 0 0 -1px;
+    background: var(--pip-color);
+    box-shadow: 0 0 0.3rem rgba(var(--pip), 0.6);
+    transform: translate(calc(var(--dx) * #{$crosshair-gap}), calc(var(--dy) * #{$crosshair-gap})) rotate(var(--turn));
+
+    &.up {
+      --dx: 0;
+      --dy: -1;
+      --turn: 0deg;
+    }
+
+    &.down {
+      --dx: 0;
+      --dy: 1;
+      --turn: 0deg;
+    }
+
+    &.left {
+      --dx: -1;
+      --dy: 0;
+      --turn: 90deg;
+    }
+
+    &.right {
+      --dx: 1;
+      --dy: 0;
+      --turn: 90deg;
+    }
+  }
+
+  // two names for the same kick, so a shot during the last one starts it again
+  &.kick-a .arm {
+    animation: crosshair-kick-a 0.28s ease-out;
+  }
+
+  &.kick-b .arm {
+    animation: crosshair-kick-b 0.28s ease-out;
+  }
+
+  .dot {
+    position: absolute;
+    top: -1.5px;
+    left: -1.5px;
+    width: 3px;
+    height: 3px;
+    background: var(--pip-color);
+    box-shadow: 0 0 0.25rem rgba(var(--pip), 0.6);
+  }
+
+  .left-ammo {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.4rem;
+    display: flex;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+
+    .reserve {
+      opacity: 0.6;
+
+      &::before {
+        margin-right: 0.35rem;
+        content: '|';
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+@mixin crosshair-kick($name) {
+  @keyframes #{$name} {
+    from {
+      transform: translate(calc(var(--dx) * #{$crosshair-kick}), calc(var(--dy) * #{$crosshair-kick})) rotate(var(--turn));
+    }
+
+    to {
+      transform: translate(calc(var(--dx) * #{$crosshair-gap}), calc(var(--dy) * #{$crosshair-gap})) rotate(var(--turn));
+    }
+  }
+}
+
+@include crosshair-kick(crosshair-kick-a);
+@include crosshair-kick(crosshair-kick-b);

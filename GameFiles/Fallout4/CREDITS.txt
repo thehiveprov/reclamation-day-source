@@ -1,0 +1,29 @@
+Fallout 4: Reclamation Day uses work by others, with their permission.
+
+Built on:
+- Tilted Phoques: TiltedEvolution, the code of Skyrim Together Reborn and its Fallout 4 version (GPL-3.0,
+  github.com/tiltedphoques/TiltedEvolution). Reclamation Day carries it on, under the same licence.
+
+Required download (not included, install it yourself):
+- Garden of Eden Papyrus Script Extender by LarannKiar (Nexus mod 74160), the OG build for Fallout 4 1.10.163.
+- Bingle: Uneducated Shooter (Nexus mod 56789).
+- L00: NAC X - Natural and Atmospheric Commonwealth, Legacy Edition (Nexus mod 46722).
+- Hein84: Vivid Fallout - All in One (Nexus mod 25714).
+- DoubleYou: Flutter Flicker Fixer For Foliage (Nexus mod 79853) and This Made My Spline Stiff (Nexus mod 98935).
+- doodlum: Upscaling (Nexus mod 99130) and Motion Vector Fixes (Nexus mod 98544).
+- Antonix35: High FPS Physics Fix (Nexus mod 44798).
+- reg2k, Neanka and shadowslasher410: Mod Configuration Menu (Nexus mod 21497).
+- The Unofficial Fallout 4 Patch team: Unofficial Fallout 4 Patch (Nexus mod 4598).
+- Dashboarderian: Start Me Up Redux (Nexus mod 56984), the quick start for new characters.
+- Bingle: Actor Velocity Framework (Nexus mod 56604), which pushes characters for slides and dodges.
+- reg2k: Extended Dialogue Interface (Nexus mod 27216), 1.3.6. Its open source (github.com/reg2k/xdi) also showed where
+  the game keeps a conversation's options, which the party votes read.
+- bp42s: KARMA (Nexus mod 80425), with its icons by LOC (ItsMeJesusHChrist) and its karma sounds by tostikaas (made for
+  F4NV).
+- Rcollpc: Be Exceptional - Skills and Perk Overhaul (Nexus mod 28222).
+- Neanka: LevelUpMenuEx (Nexus mod 28822) and PipboyTabs (Nexus mod 29568), their builds for Fallout 4 1.10.163.
+
+Recommended (not included, not required):
+- crosire: ReShade (reshade.me), with Tanaka0423's TrueSight reShade preset (Nexus mod 98263) and the effects it
+  uses from CeeJay.dk's SweetFX and BlueSkyDefender's AstrayFX.
+

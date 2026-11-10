@@ -1,0 +1,17 @@
+// Just the arrow: no frame, brightening on hover
+.sorting-button {
+  padding: 0 0.4em;
+  color: rgba(var(--pip), 0.6);
+  background: transparent;
+  border: 0;
+
+  &:hover:not([disabled]) {
+    color: var(--pip-color);
+    background: transparent;
+  }
+
+  .sorting-icon {
+    font-size: 1.3rem;
+    vertical-align: sub;
+  }
+}

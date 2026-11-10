@@ -1,0 +1,139 @@
+@import 'env';
+
+@import 'mixins/gapped-vertical';
+@import 'functions/mod';
+@import 'functions/rem';
+
+:host {
+  display: block;
+
+  &[data-app-root-game='false'] {
+    &.light-image {
+      // TODO replace with an independent image
+      background: url('https://static.giga.de/wp-content/uploads/2016/10/skyrim-special-edition-landschaft.jpg');
+    }
+
+    &.dark-image {
+      // TODO replace with an independent image
+      background: url('https://i.pinimg.com/originals/ea/b1/0f/eab10fac989a85c16dadcc1c5e27489e.jpg');
+    }
+
+    &.light {
+      $background: white;
+      $lines: transparentize($-color-background, 0.8);
+
+      background: repeating-linear-gradient(
+          to right,
+          transparent,
+          transparent #{$-size-gap},
+          $lines #{$-size-gap},
+          $lines calc(#{$-size-gap} + 1px)
+        ),
+        repeating-linear-gradient(
+            to bottom,
+            transparent,
+            transparent #{$-size-gap},
+            $lines #{$-size-gap},
+            $lines calc(#{$-size-gap} + 1px)
+          )
+          $background;
+    }
+
+    &.dark {
+      $background: mod($-color-background, 0.1);
+      $lines: mod($background, 0.1);
+
+      background: repeating-linear-gradient(
+          to right,
+          transparent,
+          transparent #{$-size-gap},
+          $lines #{$-size-gap},
+          $lines calc(#{$-size-gap} + 1px)
+        ),
+        repeating-linear-gradient(
+            to bottom,
+            transparent,
+            transparent #{$-size-gap},
+            $lines #{$-size-gap},
+            $lines calc(#{$-size-gap} + 1px)
+          )
+          $background;
+    }
+  }
+
+  > app-notifications {
+    width: 30vw;
+    left: $-size-gap;
+    bottom: $-size-gap;
+    position: absolute;
+  }
+}
+
+.background-element {
+  opacity: 30%;
+}
+
+::ng-deep {
+  .app-root-popups {
+    > app-popup > app-window {
+      max-width: 30vw;
+      min-width: 20vw;
+    }
+
+    > app-popup[data-popup='server'] > app-window {
+      max-width: 75vw;
+      min-width: 40vw;
+    }
+
+    > app-popup[data-popup='playerManager'] > app-window {
+      max-width: 30vw;
+      min-width: 25vw;
+    }
+  }
+}
+
+.app-root-controls {
+  @include gapped-vertical($-size-gap);
+
+  position: absolute;
+  left: $-size-gap;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 30vw;
+  bottom: $-size-gap;
+}
+
+.app-root-menu,
+.app-root-chat {
+  flex: 0 0 auto;
+}
+
+// The Pip-Boy's tabs
+.app-root-menu {
+  display: flex;
+  width: 100%;
+  height: 2.6rem;
+
+  > button {
+    flex: 1 1 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+.app-root-chat {
+  width: 100%;
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+
+  > app-chat {
+    margin: 0.1rem;
+    flex: 1 1 auto;
+  }
+}

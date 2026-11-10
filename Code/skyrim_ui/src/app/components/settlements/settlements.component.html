@@ -1,0 +1,118 @@
+<ng-container
+  *ngIf="settlementsService.state$ | async as state; else notConnected"
+>
+  <p class="optional-info">
+    {{ 'COMPONENT.SETTLEMENTS.INFO' | transloco }}
+  </p>
+
+  <div *ngIf="!state.connected; else connected" class="empty">
+    {{ 'COMPONENT.SETTLEMENTS.NOT_CONNECTED' | transloco }}
+  </div>
+
+  <ng-template #connected>
+    <div *ngIf="state.settlements.length === 0" class="empty">
+      {{ 'COMPONENT.SETTLEMENTS.NONE' | transloco }}
+    </div>
+
+    <div class="settlement-list">
+      <div
+        *ngFor="let settlement of state.settlements; trackBy: trackSettlement"
+        class="settlement"
+        [class.mine]="settlement.mine"
+        [class.current]="settlement.id === state.currentWorkshop"
+      >
+        <div class="settlement-row">
+          <div class="settlement-name">
+            <span *ngIf="settlement.id === state.currentWorkshop" class="here"
+              >&#9656;</span
+            >
+            {{ settlement.name }}
+          </div>
+          <button
+            *ngIf="canPickUp(settlement)"
+            class="small"
+            [class.confirm]="confirming === 'pickup:' + settlement.id"
+            (click)="pickUp(settlement)"
+          >
+            {{
+              (confirming === 'pickup:' + settlement.id
+                ? 'COMPONENT.SETTLEMENTS.CONFIRM_PICK_UP'
+                : 'COMPONENT.SETTLEMENTS.PICK_UP'
+              ) | transloco
+            }}
+          </button>
+          <button
+            *ngIf="canLetGo(settlement, state.isHost)"
+            class="small"
+            [class.confirm]="confirming === settlement.id"
+            (click)="letGo(settlement)"
+            data-sound="cancel"
+          >
+            {{ letGoKey(settlement, confirming === settlement.id) | transloco }}
+          </button>
+        </div>
+
+        <div class="settlement-info">
+          <span *ngIf="!settlement.mine">
+            {{
+              'COMPONENT.SETTLEMENTS.LEADER'
+                | transloco : { name: settlement.leader }
+            }}
+            <ng-container *ngIf="!settlement.leaderOnline">
+              ({{ 'COMPONENT.SETTLEMENTS.OFFLINE' | transloco }})
+            </ng-container>
+          </span>
+          <span>{{ rightsKey(settlement) | transloco }}</span>
+        </div>
+
+        <ng-container *ngIf="settlement.mine">
+          <div *ngIf="settlement.rights.length === 0" class="rights-empty">
+            {{ 'COMPONENT.SETTLEMENTS.NO_PARTY' | transloco }}
+          </div>
+          <div
+            *ngFor="let right of settlement.rights; trackBy: trackRight"
+            class="right"
+          >
+            <div class="right-name">
+              {{ right.name }}
+              <span *ngIf="!right.online || !right.inParty" class="notes">
+                <span *ngIf="!right.online">{{
+                  'COMPONENT.SETTLEMENTS.OFFLINE' | transloco
+                }}</span>
+                <span *ngIf="!right.inParty">{{
+                  'COMPONENT.SETTLEMENTS.LEFT_PARTY' | transloco
+                }}</span>
+              </span>
+            </div>
+            <div class="right-toggles">
+              <button
+                class="small"
+                data-style-ornament="inverted"
+                [attr.data-style-active]="right.build"
+                [attr.aria-pressed]="right.build"
+                (click)="toggleBuild(settlement, right)"
+              >
+                {{ 'COMPONENT.SETTLEMENTS.BUILD' | transloco }}
+              </button>
+              <button
+                class="small"
+                data-style-ornament="inverted"
+                [attr.data-style-active]="right.scrap"
+                [attr.aria-pressed]="right.scrap"
+                (click)="toggleScrap(settlement, right)"
+              >
+                {{ 'COMPONENT.SETTLEMENTS.SCRAP' | transloco }}
+              </button>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-template>
+</ng-container>
+
+<ng-template #notConnected>
+  <div class="empty">
+    {{ 'COMPONENT.SETTLEMENTS.NOT_CONNECTED' | transloco }}
+  </div>
+</ng-template>

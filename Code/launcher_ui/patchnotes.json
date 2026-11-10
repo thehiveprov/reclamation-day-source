@@ -1,0 +1,272 @@
+[
+ {
+  "version": "v1.6.7-308",
+  "date": "2026-11-09T17:24:00.095Z",
+  "body": "A Nexus Mods download.\n\nNew since v1.6.7-306:\n- Our programs now show their version number and their real file names in their file properties.\n- A Nexus Mods download: it doesn't update itself, so Nexus players get new versions from the mod page.\n\nEveryone in a session, and any hosted server, needs this version."
+ },
+ {
+  "version": "v1.6.7-306",
+  "date": "2026-11-07T05:26:10Z",
+  "body": "VATS UNCHAINED REMOVED IN FAVOR OF RD VATS 76'\n\nNew since v1.6.7-304:\n- RD VATS 76': VATS without the pause, built into Reclamation Day. The VATS button locks on to the enemy nearest your crosshair and the game keeps running. Aim at a body part to pick it; your shots roll its hit chance and spend Action Points. It has bursts, the critical meter and a critical key, VATS perks, the melee jump, the Mysterious Stranger, and mines and grenades as targets. Change it in the pause menu: Mod Config > Reclamation Day > VATS 76'.\n- If you still have VATS Unchained installed, remove it: RD VATS 76' stays off while it's there.\n- Settings: what you change in the overlay's settings pages now reaches the game, the HUD color sliders included, and SAVE shows once something has changed.\n- Actor bars: their colors show true instead of too dark.\n- A long load behind the loading screen no longer counts as a freeze.\n\nEveryone in a session, and any hosted server, needs this version."
+ },
+ {
+  "version": "v1.6.7-304",
+  "date": "2026-11-06T20:01:57Z",
+  "body": "A larger main menu title.\n\nNew since v1.6.7-302:\n- Main menu: a larger Fallout 4: Reclamation Day title, on one line at any resolution.\n\nEveryone in a session, and any hosted server, needs this version."
+ },
+ {
+  "version": "v1.6.7-302",
+  "date": "2026-11-06T19:34:52Z",
+  "body": "Updates now install from the launcher, before you play.\n\nNew since v1.6.7-300:\n- Updates in the launcher: it checks for a new version when it opens and installs it before you can launch, the launcher and the mod together, then opens again. You see what's new first. If an update can't install, you can try again or play without it. This starts with the update after this one: this one still comes from the main menu, which keeps offering updates too.\n- Launcher: its progress screens and messages now use the colours and fonts of your chosen style.\n\nEveryone in a session, and any hosted server, needs this version."
+ },
+ {
+  "version": "v1.6.7-300",
+  "date": "2026-11-06T18:18:42Z",
+  "body": "Caravans, raids and a new respawn.\n\nNew since v1.6.7-297:\n- Caravans: trucks with a crew of two run the Commonwealth's roads and your supply lines, unloading at stops and moving on. They start appearing at level 5 or once you reach Diamond City, whichever comes first, rarely at first, and more often for every settlement you own and every supply line you connect.\n- Raids: raiders on motorcycles cut caravans off, one raid at a time, and a radiant quest sends you to a caravan under attack, its raiders closing in on foot. Raiders who win drive the truck off toward their camp. Trucks can burn and explode.\n- Respawn: you get up 100 to 120 m back along the ground you walked, instead of where you fell.\n- Better Selection (Smart Selection rebuilt): your hand reaches for what you pick up, press or open.\n- The whole overlay follows your HUD colour (Settings, Display, HUD Color): menus, windows, popups, the sidebar and the HUD.\n- Performance page: the sun's shadows are drawn less often where they don't change (Balanced by default), and more shadow and visibility options to try, all off.\n- Fixes for dual wielding, the HUD, Steam friends, nemeses and crashes on quit.\n\nEveryone in a session, and any hosted server, needs this version."
+ },
+ {
+  "version": "v1.6.7-297",
+  "date": "2026-11-02T21:39:47Z",
+  "body": "V.1 Beta: the first public release.\n\nNew since v1.6.7-294:\n- Winter of Atom: it shows in the main menu, greyed out and marked Coming soon, until the prequel campaign is out."
+ },
+ {
+  "version": "v1.6.7-294",
+  "date": "2026-11-02T16:29:21Z",
+  "body": "New since v1.6.7-285:\n- Smarter enemies: enemies fight like what they are. Robots and synths flank and work as a team, people fight smarter and react as a fight turns (they press when they have the upper hand, fall back when it goes wrong, and the cunning ones work their way around you when you dig in), and super mutants are smarter versions of themselves who now and then let their temper push them in. Each faction has its own style: Gunners use cover and crossfire, Raiders are bold in a crowd and break when it turns, the Brotherhood is drilled, the Children of Atom never break, Trappers stalk, and more. It's all the game's own combat AI, choosing how each one fights.\n- Nemeses fight by their temper: a named man's temper and traits change how he fights. A hothead rushes in when he's hit, a coward falls back when he's outnumbered, a proud one won't back down in front of his men, a cold one works around you, and a loyal one goes for revenge when a friend falls.\n- Enemies climb: people climb ledges, vault over cover and step up when their path calls for it, with the same moves as yours.\n- Enemies slide: people slide into cover and at you, like you do, and everyone sees it.\n- A new MCM page, Enemy AI, switches smarter enemies and their slides on or off. On a hosted world, the host's settings count.\n- Required mods in the launcher: a new page lists every mod Reclamation Day needs and whether you have it, with a Download button that opens the right file on Nexus Mods as a mod manager download, so Vortex or Mod Organizer 2 installs it. It's part of the first-time setup too, and you can skip it and come back.\n- The mods by other authors don't come with Reclamation Day anymore: the Unofficial Fallout 4 Patch, Start Me Up Redux, Actor Velocity Framework, KARMA, Be Exceptional, PipboyTabs, LevelUpMenuEx and Extended Dialogue Interface are required downloads now. If you already play, nothing changes: you keep the copies you have.\n- The main menu also checks for Address Library, Full Body First Person, VATS Unchained and Uneducated Shooter now. They were always required, but co-op won't start without them anymore. Its links open the right file.\n- The motorcycle's body is now the game's own motorcycle, with our turning wheels and bars. The rims spin with the tires now, and your feet rest on its footrests. The saddlebags are the same as before.\n- New looks for the launcher: Brotherhood of Steel and Minutemen replace Commonwealth Dusk and Field Terminal. If you had picked one of those, you get its replacement. Every look has a Style button now, and the Style page's previews show each look.\n- The launcher after an update: when the main menu installs an update and the game starts again, the launcher's window opens first, with what's new in its patch notes. Switching campaigns, or matching your load order to a host's, still goes straight back to the game."
+ },
+ {
+  "version": "v1.6.7-285",
+  "date": "2026-11-02T02:11:09Z",
+  "body": "New since v1.6.7-273 (everyone in a world needs this version):\n- The launcher: \"Launch Reclamation Day.exe\" opens a window first, where you pick which Fallout 4 to use and where the mods in Game Files go: Vortex's or Mod Organizer 2's staging folder as one mod, \"Reclamation Day - Game Files\", or straight into Data. It has the patch notes of every release, and four looks under Style: Pip-Boy, Commonwealth Dusk, Vault-Tec Bulletin and Field Terminal.\n- Faction quests together: when one of a faction's radiant quests starts (the Minutemen's settlement quests, the Brotherhood's, the Railroad's and the Institute's repeatables, Nuka-World's raids) and party members are in that faction too, they're invited to do it together, at the same place, against the same enemies.\n- Your standing travels: factions treat your character in other players' games as they do in yours, and a Minuteman who joins the Gunners or the raiders is thrown out of the Minutemen the way the game throws players out of the Brotherhood and the Railroad.\n- One settlement day: the host's game runs the settlements for everyone (settlers, production, happiness, attacks). Production goes to the host, or to the settlement's leader when another player leads it and is online.\n- Hit effects: cryo, fire, poison, legendary effects and stimpaks reach the game that owns the character, and invisibility and freezing show on everyone's copies.\n- Trading: trading with a companion or settler that another player's game runs reaches its owner, items and what it wears.\n- Terminals: choices at terminals (turrets, doors, robots) run for the players nearby.\n- Destruction: cars, barrels and generators burn and blow up the same way in every game nearby.\n- Pip-Boy lights: other players' Pip-Boy lights shine in your game.\n- Movement rules: on a hosted world everyone plays by the host's movement and parkour rules (MCM, Reclamation Day, Movement)."
+ },
+ {
+  "version": "v1.6.7-273",
+  "date": "2026-10-30T19:18:05Z",
+  "body": "New since v1.6.7-270 (everyone in a world needs this version):\n- The main menu lists the mods Reclamation Day needs one per line in a box that scrolls, each with its Get it button, under one heading.\n- When your mods don't match a server's, the mods to install, remove or update are listed the same way, and so is the host's load order (they were one long comma-separated line)."
+ },
+ {
+  "version": "v1.6.7-270",
+  "date": "2026-10-30T18:53:38Z",
+  "body": "New since v1.6.7-263 (everyone in a world needs this version):\n- The Previsibines Repair Pack (PRP) is now required: it fixes the broken precombines and previs that cost the most frames downtown (Boston Common went from about 85 to 115 fps here). Download 17 in the README; the main menu tells you if it's missing, and the launcher keeps PRP.esp last in the load order.\n- Faster loading: the game's archive data is decompressed with a much faster decompressor. It can be turned off with bFastDecompression=0 under [SmoothLoading] in MCM\\Settings\\ReclamationDay.ini.\n- Servers remember each plugin's id per world, so a changed load order no longer scrambles what a world saved.\n- Fixed a crash when loading a save while dual wielding with the left gun already in hand.\n- Update downloads retry a dropped pack instead of failing."
+ },
+ {
+  "version": "v1.6.7-263",
+  "date": "2026-10-29T10:00:54Z",
+  "body": "New since v1.6.7-252 (everyone in a world needs this version: it can't play with v252):\n- A greener Commonwealth: Boston Natural Surroundings by Silverfox600, remade with permission. New grass, ground and plants, and about 22,800 new trees with forests you see from far away. A one-time download of about 830 MB.\n- C.A.M.P.s: moving one is free, its turrets go with it, and anything that ends up underground after a move goes into its workbench as materials. C.A.M.P.s can go at named places that have no settlement. Fixed a C.A.M.P. coming back as nothing after mods were added to the load order.\n- Build tools: snapping to other objects on and off (F11), the game's grid snapping (End), and a Build Tools page in MCM with all four switches. Undoing the scrap of one of the world's own objects brings it back for everyone.\n- World Settings (F2): the host picks the world's weather and changes NAC X's settings without the holotape.\n- The main menu can delete a save (it goes to the Recycle Bin).\n- The host's difficulty is the world's difficulty. Fixed scripts falling far behind while a difficulty was applied over and over.\n- Fixed a crash when picking a dialogue option through Extended Dialogue Interface.\n- Fixed conversations that wouldn't start, or choices that hung, when your character's own line never finished."
+ },
+ {
+  "version": "v1.6.7-252",
+  "date": "2026-10-27T19:24:49Z",
+  "body": "New since v1.6.7-251:\n- Emotes put your weapon away first and draw it again when they end, so your hands do the emote instead of holding the gun's grip.\n- The Bird: a more natural middle finger and wrist, and a little movement while you hold it.\n- Fixed the game freezing for good during a long loading pause, while it saved a report of the pause."
+ },
+ {
+  "version": "v1.6.7-251",
+  "date": "2026-10-27T17:00:20Z",
+  "body": "New since v1.6.7-250:\n- Emotes: hold G for a wheel of eight emotes and let go over one, or type it in the chat (/salute, /sit, /clap; /emotes lists them all). Salutes, pointing, nods, clapping, cheering, booing, thinking, looking around, offering, celebrating a win, sitting on the floor, kneeling, praying, surrendering, and two of our own: The Bird and Hands Up!. Pick the wheel's eight in Reclamation Day\\config\\Emotes.ini.\n- You can walk while you do a gesture. A pose (sit, kneel, pray, surrender) holds until you press a movement key, then you get up. Another emote takes the place of the one playing.\n- Emotes work in first person: your own arms do each gesture in view, and when you sit or kneel the view goes down with your body. In third person the camera turns around your character while you sit or kneel.\n- Everyone near you sees your emotes.\n- Co-op dialogue: when someone talks to a character, party members within 30 metres vote on the reply (30 seconds, the host breaks ties). Extended Dialogue Interface is now included for everyone.\n- Fixed a crash when switching from first person with two pistols drawn.\n- Everyone in a game needs this version (the network format changed)."
+ },
+ {
+  "version": "v1.6.7-250",
+  "date": "2026-10-26T00:30:27Z",
+  "body": "New since v1.6.7-248:\n- Steam friends: join a friend's world through Steam, no port to open, as well as by address (joining by address and dedicated servers work as before). Press P in the world, or SOCIAL in the main menu or the pause menu, for the social sidebar: your Steam friends and what they're playing, Join, Invite, the players in your world and your party.\n- Your hosted world has a privacy setting in the sidebar: Friends (friends ask to join and you let each one in or refuse), Invite only, or Private. Invites go out as Steam invites and show in your friend's game; an invited friend gets straight in. Steam's own Join Game works too while you play (your game is saved first).\n- The Pip-Boy has a new DATA > SOCIAL tab: your world, friends asking to join, the players here and your Steam friends. Press a friend to invite them or join them.\n- Dual wielding in third person: the hand no longer stretches on a left-handed melee swing, the hands no longer cross with two pistols, the left gun's arm points where it shoots, a left melee weapon stays in the hand and moves like the game's own, and when you move with your weapons down the game's own walk, jog and sprint play.\n- The two-gun reload in third person is shorter and stays in front of you. Using a stimpak or a Stealth Boy in third person puts both weapons away while the game's own animation plays.\n- Weapons in the left hand show their mods.\n- Everyone in a game needs this version (the network format changed)."
+ },
+ {
+  "version": "v1.6.7-248",
+  "date": "2026-10-25T06:59:01Z",
+  "body": "New since v1.6.7-247:\n- Dual wielding: put a pistol, an SMG, a one-handed melee weapon or the grappling gun in your left hand with a right click on it in the Pip-Boy's inventory (right click it again to empty the hand). Left mouse is the right hand, right mouse the left hand; hold Z for a slight zoom with two guns. The left gun fires, reloads and takes its turns in VATS like the right one; a left melee weapon swings, power attacks (hold) and blocks (hold both buttons). Your left hand keeps its weapon through saves, and other players see it.\n- Both hands move like the game's own animations, mirrored: idles, walking, sprinting, drawing and holstering. In third person the left arm swings opposite the right when you run, and left-handed melee attacks turn your whole upper body.\n- The grappling gun: hold to see where the spike will land, let go to fire. It pulls you to a wall to hang (jump to let go, forward and back to climb the cable, strafe to swing), up onto a ledge, or pulls a person to you. Grapple Spikes reach 45 m, High Velocity spikes (craft the Spike Chamber mod) 60 m. Its blueprint comes from a wanderer near Diamond City: The Wreck of the Germination.\n- The HUD shows your drawn weapon's name over its ammo.\n- Everyone in a game needs this version (the network format changed)."
+ },
+ {
+  "version": "v1.6.7-247",
+  "date": "2026-10-24T04:15:37Z",
+  "body": "New since v1.6.7-246:\n- Realtime Pip-Boy Map (M): you're shown where you really are. The world map was drawn up to two cells off toward its edges (past the Sanctuary bridge you still showed in the middle of Sanctuary). Far Harbor and Nuka-World maps are placed the same way as the Pip-Boy's own."
+ },
+ {
+  "version": "v1.6.7-246",
+  "date": "2026-10-24T03:23:44Z",
+  "body": "New since v1.6.7-209:\n- C.A.M.P.s: the Makeshift CAMP device in your Pip-Boy sets your C.A.M.P. down anywhere outside settlements; move it with everything you built (caps) or pick it up and set it down again elsewhere (free). Give your party build and scrap rights in Player Manager > Settlements.\n- Settlement claims: claim a settlement at its workbench, lead it, give your party rights.\n- Nemeses: men who survive you remember you; the NEMESIS Pip-Boy tab and full screen (N), wound log, gunpoint questioning, Intimidation holdups.\n- Reclamation Day HUD: compass, health and rads, AP, enemy bar, ammo and grenades in the overlay's look (MCM > Reclamation Day > HUD).\n- The pause menu, settings, saves and MOD CONFIG pages drawn in the overlay.\n- Winter of Atom: its prequel plugins switched on or off for the chosen campaign.\n- Fixes: no crash on quitting while a character was talking; alt-tab with the overlay open; F2 overlay clickable again.\n- Launcher updates now carry RD_Camps.esp, RD_Nemeses.esp, the nemesis scripts, the NEMESIS tab's settings and the C.A.M.P. device's textures (1.6.7-245's update left them out)."
+ },
+ {
+  "version": "v1.6.7-245",
+  "date": "2026-10-24T02:38:41Z",
+  "body": "New since v1.6.7-209:\n- C.A.M.P.s: the Makeshift CAMP device in your Pip-Boy sets your C.A.M.P. down anywhere outside settlements; move it with everything you built (caps) or pick it up and set it down again elsewhere (free). Give your party build and scrap rights in Player Manager > Settlements.\n- Settlement claims: claim a settlement at its workbench, lead it, give your party rights.\n- Nemeses: men who survive you remember you; the NEMESIS Pip-Boy tab and full screen (N), wound log, gunpoint questioning, Intimidation holdups.\n- Reclamation Day HUD: compass, health and rads, AP, enemy bar, ammo and grenades in the overlay's look (MCM > Reclamation Day > HUD).\n- The pause menu, settings, saves and MOD CONFIG pages drawn in the overlay.\n- Winter of Atom: its prequel plugins switched on or off for the chosen campaign.\n- Fixes: no crash on quitting while a character was talking; alt-tab with the overlay open; F2 overlay clickable again."
+ },
+ {
+  "version": "v1.6.7-209",
+  "date": "2026-10-22T04:36:04Z",
+  "body": "Smart Selection: only things you can use get the outline or the VATS glow"
+ },
+ {
+  "version": "v1.6.7-208",
+  "date": "2026-10-22T04:14:45Z",
+  "body": "Smart Selection (our own: outline, or the VATS glow with the Analytical Eye perk at Intelligence 6), Smooth Loading (our own), KARMA and Be Exceptional bundled with PipboyTabs and LevelUpMenuEx"
+ },
+ {
+  "version": "v1.6.7-204",
+  "date": "2026-10-21T23:30:52Z",
+  "body": "Actor bars (Reclamation Day's own, replaces the Actor Widgets download), MCM page, Fallout 4 vtable fixes"
+ },
+ {
+  "version": "v1.6.7-202",
+  "date": "2026-10-21T21:22:33Z",
+  "body": "ReShade and TrueSight are recommended now, no longer required. Adaptive Combat Tactics is replaced by our own combat AI plugin, RD_Combat.esp (based on it, tuned for co-op): the launcher installs it and switches Adaptive Combat Tactics off."
+ },
+ {
+  "version": "v1.6.7-200",
+  "date": "2026-10-21T20:09:51Z",
+  "body": "Less network traffic in co-op: characters far from a player update less often, and a game with no other player nearby sends far less. The overlay no longer opens a debugging port (a possible cause of antivirus alerts)."
+ },
+ {
+  "version": "v1.6.7-198",
+  "date": "2026-10-18T18:01:53Z",
+  "body": "- Crashes from an error nothing caught (like the dog adoption crash) now write a line to the log naming the error, and a crash dump next to the game, instead of closing the game without a trace."
+ },
+ {
+  "version": "v1.6.7-197",
+  "date": "2026-10-18T04:03:37Z",
+  "body": "Adopting a dog no longer crashes the game."
+ },
+ {
+  "version": "v1.6.7-196",
+  "date": "2026-10-18T03:35:12Z",
+  "body": "Fixed a freeze that could stop the game for good in busy places like Diamond City."
+ },
+ {
+  "version": "v1.6.7-195",
+  "date": "2026-10-18T03:02:23Z",
+  "body": "Credits updated."
+ },
+ {
+  "version": "v1.6.7-194",
+  "date": "2026-10-18T01:33:35Z",
+  "body": "Motorcycles built at power armor stations, seven dogs to adopt, and a save made on a server no longer keeps you down offline."
+ },
+ {
+  "version": "v1.6.7-192",
+  "date": "2026-10-17T21:42:26Z",
+  "body": "The host can use /settime (hosted worlds: the host counts as admin; chat says whether it worked; minutes fixed). Dog companion support, off unless RD_Companions.esp is loaded."
+ },
+ {
+  "version": "v1.6.7-189",
+  "date": "2026-10-17T04:18:58Z",
+  "body": "Graphics are now the same for everyone: NAC X, Vivid Fallout (Best Choice), ReShade with the TrueSight NAC-X preset, Upscaling, Motion Vector Fixes, High FPS Physics Fix, Flutter Flicker Fixer For Foliage, This Made My Spline Stiff and MCM are required downloads (the README says which file to pick on each page). The main menu lists any that are missing, with a link, and co-op won't start without them. They replace ENB.\n\nFixes:\n- A crash after playing for a long while (the ledge checks of parkour never let go of the physics world).\n- A crash on the first load after the HUD marker had been shown.\n- A crash in a physics check reading a world that was just unloaded.\n- First person slides: the left arm and hand bent the wrong way at some headings.\n- Stutter on slow or busy drives: the log is written in the background now.\n- Joining a passworded server no longer writes the password into the log.\n\nEveryone, hosts included, needs this version to play together."
+ },
+ {
+  "version": "v1.6.7-182",
+  "date": "2026-10-16T00:22:38Z",
+  "body": "- Respawn only runs on a server: going down in single player, or in a save loaded before you join, no longer starts the co-op respawn countdown.\n- Leaving a server while you're down or respawning gets you up where you are, with the countdown and fade cleared. Leaving during the few seconds after a respawn no longer leaves you invulnerable.\nEveryone, including the host, needs this update to play together."
+ },
+ {
+  "version": "v1.6.7-181",
+  "date": "2026-10-15T23:49:48Z",
+  "body": "- Respawn: going down now shows one 10 second countdown, and you get back up as soon as it ends. Before, a 5 second countdown disappeared, nothing happened for a while, then a second countdown came before you got up.\nEveryone, including the host, needs this update to play together."
+ },
+ {
+  "version": "v1.6.7-180",
+  "date": "2026-10-15T20:37:20Z",
+  "body": "- Overlay: smooth again with graphics mods. With ENB (which loads since v1.6.7-177) the overlay could only draw about 5 frames a second while sliding in and out on a large screen; it now runs at 60, whatever the resolution or graphics mods, and costs the game far less.\n- Fluid Movement: no more waiting at the end of a climb, vault or step. Once you're up, holding a direction finishes the move quickly and goes straight into walking or running. Without a direction held, moves play out as before."
+ },
+ {
+  "version": "v1.6.7-178",
+  "date": "2026-10-15T01:19:55Z",
+  "body": "- Joining again after leaving a server works: after you left a server yourself, joining again in the same game session took up to half a minute or never connected. It now connects at once, whether you join by address or by name.\nEveryone, including the host, needs this update to play together."
+ },
+ {
+  "version": "v1.6.7-177",
+  "date": "2026-10-15T00:25:15Z",
+  "body": "Mods that change how the world looks and loads:\n- Graphics mods load: ENB (and other mods that replace d3d11.dll or dxgi.dll in the Fallout 4 folder, such as ReShade) now work while playing Reclamation Day. Before, they were silently skipped.\n- Any draw distance: a raised uGridsToLoad (7, 9, ...) works and is synced; the \"this will break the mod\" warning is gone.\n- Location mods: joining now also checks each plugin's version, and tells you which mods are a different version from the host's.\n- Fixed a crash when two players arrived in the same new place at the same moment (for example both travelling to a mod's own worldspace).\n- The note about having mods no longer opens the overlay every time a save loads.\nEveryone, including the host, needs this update to play together."
+ },
+ {
+  "version": "v1.6.7-173",
+  "date": "2026-10-14T16:13:17Z",
+  "body": "Updates now have plain version names (v1.6.7-173) without the code at the end. Nothing else changed since v1.6.7-172: another player's gun shows up in their hands when they switch weapons, renamed weapons keep their name for everyone, the Pip-Boy map lowers your right arm, and chain-link fences can be climbed. Everyone playing together needs this update, including whoever hosts."
+ },
+ {
+  "version": "v1.6.7-172-gd44b274c",
+  "date": "2026-10-14T15:57:36Z",
+  "body": "Weapon mods: another player's gun now shows up in their hands when they switch to a weapon of the same kind (a Glock, MAC-10 or .38 used to stay invisible until they put it away and drew it again), held properly in both hands. A weapon you rename keeps its name for everyone, also when you drop it. Realtime Pip-Boy Map: your right arm hangs down out of view while the Pip-Boy is up. Fluid Movement: chain-link fences and other see-through obstacles can be climbed. Everyone playing together needs this update, including whoever hosts."
+ },
+ {
+  "version": "v1.6.7-168-g30745fa5",
+  "date": "2026-10-14T08:07:58Z",
+  "body": "- Fluid Movement: your weapon is out of your hands for every move, so it no longer breaks the animations.\n- Realtime Pip-Boy Map: your weapon goes out of your hand while the Pip-Boy is up, and you move at your normal pace (sprinting still lowers it).\n- A crash with ragdolls in a physics world that had just been destroyed (seen after a random encounter) is now avoided, and logged.\n- Joining with the same mods as the host in another order: the overlay comes up with a Re-sort load order button."
+ },
+ {
+  "version": "v1.6.7-164-g5da6b7ca",
+  "date": "2026-10-14T06:30:45Z",
+  "body": "Realtime Pip-Boy Map: press M to raise your Pip-Boy and read a live map on it while you walk (tap M to keep it up, hold M to look): the world map outside, the local map inside, turned the way you face, with your quest targets, nearby locations, exits and the other players. Much less network traffic (characters that don't change aren't sent again). VATS stays at full speed. With Full Body First Person your body does the parkour moves too. No landing stumble in power armor. Seven Nexus mods are now required downloads (see the README)."
+ },
+ {
+  "version": "v1.6.7-157-g69de2933",
+  "date": "2026-10-13T22:51:40Z",
+  "body": "ZK's Fluid Movement: the HUD ledge marker now shows (new climb, step-up and vault icons). HUD and menu shaded backings sit under their elements on screens wider than 16:9."
+ },
+ {
+  "version": "v1.6.7-152-gc4fa6498",
+  "date": "2026-10-13T09:59:49Z",
+  "body": "ZK's Fluid Movement: parkour adapted from SkyParkour V3 by Tsptds (climbs, step-ups, vaults, ledge grabs, landing roll), first and third person, synced. The slide is a little slower and shorter."
+ },
+ {
+  "version": "v1.6.7-151-ge6cb8915",
+  "date": "2026-10-12T08:34:58Z",
+  "body": "Armor pieces whose look comes from their mods (leather, raider, metal, combat limbs and chests, with their materials) are drawn on other players' characters and on the characters they run. Armor changes of companions, settlers and enemies sync."
+ },
+ {
+  "version": "v1.6.7-150-g6ffd9296",
+  "date": "2026-10-12T06:24:53Z",
+  "body": "Equipment sync: what a player takes off (weapons, armor, clothes) now comes off on the other players' screens; a weapon swapped while another is drawn shows without holstering first; a player who rejoins or comes back into view is dressed right from the start. The slide animation also plays with the weapon put away."
+ },
+ {
+  "version": "v1.6.7-148-gdc539d88",
+  "date": "2026-10-12T03:29:03Z",
+  "body": "Climbing is smooth now. The lift onto a ledge used to stutter and the view shook with it, most of all in third person: the game was dropping about every other push of a climb. Every step of the climb now moves you at the speed it should, the start of the lift and the step over the edge are eased in, and you come out exactly on top instead of popping a little over it. Correction to the last notes: the third person camera goes by where your character is, not by the body pose, so the fix is in how the character is lifted."
+ },
+ {
+  "version": "v1.6.7-147-g05549b65",
+  "date": "2026-10-11T02:47:39Z",
+  "body": "Third person mantling, synced.\n\n- In third person your character now climbs: hands on the ledge, a press up on straight arms, legs hanging down the wall, then a step over the top. A ledge below hip height is stepped onto without the hands.\n- The other players see it too: your climb is drawn on your character on their screens, on the same ledge.\n- The third person camera follows the body while you climb.\n- First person mantling is unchanged.\n\nClient and server both changed: everyone needs this version."
+ },
+ {
+  "version": "v1.6.7-146-g98efc517",
+  "date": "2026-10-11T00:34:06Z",
+  "body": "Mantling: grab ledges in the air (hold jump), climb onto roofs and other slanted tops, and reach a little further by looking up at the ledge. The first person climb no longer breaks facing south-southeast. Other players see your slides. Discord shows Fallout 4: Reclamation Day as your status. Crash reports are no longer sent anywhere: they stay on your PC. Includes everything in 1.6.7-143."
+ },
+ {
+  "version": "v1.6.7-143-gb354306d",
+  "date": "2026-10-10T00:11:04Z",
+  "body": "Other players now see your slides and your landing stumbles (their animation used to be blocked on your character in their game). Includes everything in 1.6.7-142."
+ },
+ {
+  "version": "v1.6.7-142-g53dab4fa",
+  "date": "2026-10-10T00:01:11Z",
+  "body": "Mantling: fixed being thrown into the air (sometimes high enough to die) when frames got slow during a climb; a climb now never pushes you more than a little over the ledge. The first person climb is back to how it looked in the test before 1.6.7-140 while it gets reworked. Includes everything in 1.6.7-140."
+ },
+ {
+  "version": "v1.6.7-140-geb247181",
+  "date": "2026-10-09T22:52:28Z",
+  "body": "Mantling: climbs now get you onto the top, and in first person your hand reaches for the ledge and pulls you up. More ledges are found (the edge of a wall no longer counts as too steep). Fixed a crash when clicking in the main menu while the game was still loading."
+ },
+ {
+  "version": "v1.6.7-138-g552ff825",
+  "date": "2026-10-09T21:45:59Z",
+  "body": "Same game as 1.6.7-137, rebuilt under a new version number. Update to keep matching the hosts on the latest version. Includes everything in 1.6.7-137."
+ },
+ {
+  "version": "v1.6.7-137-g4e35980f",
+  "date": "2026-10-09T19:57:00Z",
+  "body": "The launcher keeps our game files (slide animation, slide/dodge and climb sounds) in the Data folder at every start, and updates add new game files to Data. Includes everything in 1.6.7-135."
+ },
+ {
+  "version": "v1.6.7-135-gd686bc29",
+  "date": "2026-10-09T19:31:26Z",
+  "body": "Mantling (jump at a ledge to climb it; first-person hand grab animations and climb sounds by STRADAT), Fallout menu sounds on overlay buttons, \"Match the host's load order\" when refused for plugins, fix for the overlay staying empty when it loads late."
+ },
+ {
+  "version": "v1.6.7-128-g6aa11512",
+  "date": "2026-10-09T03:21:57Z",
+  "body": "Fix: UFO4P and Start Me Up were reported missing while the game was still loading its plugins."
+ },
+ {
+  "version": "v1.6.7-124-g75f24396",
+  "date": "2026-10-09T03:04:29Z",
+  "body": "First release with the launcher updater: NPC ownership rework, one random encounter per area, animation replay, HD texture pack allowed, LAN server browser."
+ }
+]

@@ -1,0 +1,67 @@
+<ng-container *ngIf="view$ | async as view">
+  <div class="dialogue-vote" [class.full]="view.card.input">
+    <div class="head">
+      <span class="title">
+        {{
+          (view.card.talker ? 'COMPONENT.DIALOGUE_VOTE.TITLE_TALKER' : 'COMPONENT.DIALOGUE_VOTE.TITLE')
+            | transloco: { npc: view.card.npc, talker: talkerName(view.card) }
+        }}
+      </span>
+      <span *ngIf="view.card.stage !== 'result'" class="timer">{{ view.seconds }}</span>
+    </div>
+
+    <p *ngIf="view.card.talker && view.card.stage !== 'result'" class="note">
+      {{ 'COMPONENT.DIALOGUE_VOTE.TALKER_NOTE' | transloco }}
+    </p>
+
+    <ol class="options">
+      <li
+        *ngFor="let option of view.card.options; let i = index"
+        class="option"
+        [class.disabled]="!option.enabled"
+        [class.mine]="myChoice(view.card) === i"
+        [class.chosen]="view.card.stage === 'result' && view.card.result === i"
+        [class.clickable]="view.card.input && option.enabled"
+        (click)="cast(view.card, i)"
+      >
+        <span *ngIf="view.card.input" class="key">{{ i + 1 }}</span>
+        <span class="text">
+          <span class="line">
+            {{ option.line || option.prompt }}
+          </span>
+          <span class="tags">
+            <span *ngIf="option.line && option.prompt && option.prompt !== option.line" class="prompt">{{ option.prompt }}</span>
+            <span *ngIf="challenge(option.challenge) as key" class="challenge" [attr.data-level]="option.challenge">
+              {{ key | transloco }}
+            </span>
+          </span>
+        </span>
+        <span class="votes">
+          <span *ngFor="let name of votersFor(view.card, i)" class="voter">{{ name }}</span>
+        </span>
+      </li>
+    </ol>
+
+    <div *ngIf="view.card.stage === 'result'" class="outcome">
+      <ng-container *ngIf="view.card.result >= 0; else nobody">
+        {{
+          'COMPONENT.DIALOGUE_VOTE.CHOSEN'
+            | transloco: { prompt: view.card.options[view.card.result]?.line || view.card.options[view.card.result]?.prompt }
+        }}
+        <span *ngIf="view.card.hostBrokeTie" class="tie">{{ 'COMPONENT.DIALOGUE_VOTE.HOST_TIE' | transloco }}</span>
+      </ng-container>
+      <ng-template #nobody>{{ 'COMPONENT.DIALOGUE_VOTE.NOBODY' | transloco: { talker: talkerName(view.card) } }}</ng-template>
+    </div>
+
+    <div *ngIf="view.card.stage !== 'result' && !view.card.input && waitingFor(view.card) > 0" class="waiting">
+      {{ 'COMPONENT.DIALOGUE_VOTE.WAITING' | transloco: { count: waitingFor(view.card) } }}
+    </div>
+
+    <div *ngIf="view.card.input" class="actions">
+      <span class="hint">{{ 'COMPONENT.DIALOGUE_VOTE.HINT' | transloco }}</span>
+      <button class="let-go" (click)="letGo()" data-sound="cancel" data-style-ornament="simple">
+        {{ 'COMPONENT.DIALOGUE_VOTE.DONT_VOTE' | transloco }}
+      </button>
+    </div>
+  </div>
+</ng-container>

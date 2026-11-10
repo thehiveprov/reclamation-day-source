@@ -1,0 +1,212 @@
+:host {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 6%;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 11;
+}
+
+.dialogue-vote {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 24rem;
+  max-width: calc(100vw - 2rem);
+  padding: 0.6rem 1.25rem 0.75rem;
+  color: var(--pip-color);
+  text-shadow: 0 0 0.6rem rgba(var(--pip), 0.5);
+  background: var(--panel);
+  border-top: 2px solid rgba(var(--pip), 0.6);
+  border-bottom: 2px solid rgba(var(--pip), 0.6);
+
+  // a voter yet to vote: the whole card, lower down, taking the input
+  &.full {
+    width: 32rem;
+    margin-top: 16vh;
+    padding: 1rem 2rem 1.25rem;
+    gap: 0.75rem;
+    pointer-events: auto;
+  }
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  .full & {
+    font-size: 1.3rem;
+  }
+}
+
+.timer {
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.note {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid transparent;
+
+  &.clickable {
+    cursor: pointer;
+
+    &:hover {
+      border-color: rgba(var(--pip), 0.6);
+    }
+  }
+
+  &.disabled {
+    opacity: 0.4;
+  }
+
+  &.mine {
+    border-color: rgba(var(--pip), 0.8);
+  }
+
+  &.chosen {
+    color: var(--panel);
+    text-shadow: none;
+    background: rgba(var(--pip), 0.85);
+  }
+}
+
+.key {
+  min-width: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+  border: 1px solid rgba(var(--pip), 0.6);
+}
+
+.text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+// what the player character says, as XDI's menu shows it; the game's short prompt and a speech challenge under it
+.line {
+  font-weight: 700;
+  line-height: 1.3;
+
+  // the tally at the top: two lines at most each
+  .dialogue-vote:not(.full) & {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    font-size: 0.9rem;
+  }
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.prompt {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.challenge {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  // as the game colours a speech challenge: harder, redder
+  &[data-level='1'],
+  &[data-level='5'] {
+    color: #c8e26a;
+  }
+
+  &[data-level='2'],
+  &[data-level='6'] {
+    color: #f0b04a;
+  }
+
+  &[data-level='3'],
+  &[data-level='7'] {
+    color: #f06a4a;
+  }
+
+  // on the chosen option's bright row, the row's own dark text
+  .chosen & {
+    color: inherit;
+    opacity: 0.8;
+  }
+}
+
+.votes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  max-width: 40%;
+}
+
+.voter {
+  padding: 0 0.3rem;
+  font-size: 0.75rem;
+  border: 1px solid currentColor;
+}
+
+.outcome,
+.waiting {
+  font-size: 0.9rem;
+}
+
+.tie {
+  margin-left: 0.4rem;
+  opacity: 0.8;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.hint {
+  font-size: 0.8rem;
+  opacity: 0.75;
+}

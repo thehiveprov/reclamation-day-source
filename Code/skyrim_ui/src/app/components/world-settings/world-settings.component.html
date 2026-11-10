@@ -1,0 +1,70 @@
+<div class="container" *ngIf="state$ | async as state; else loading">
+  <!-- The tabs: Weather, Look, Camera, Lighting, Effects, Reset -->
+  <nav class="tabs">
+    <button
+      *ngFor="let page of state.pages; let p = index; trackBy: trackRow"
+      class="tab"
+      data-style-ornament="inverted"
+      [attr.data-style-active]="p === state.page"
+      (click)="openPage(p)"
+    >
+      {{ page }}
+    </button>
+  </nav>
+
+  <p class="error" *ngIf="state.error">{{ state.error }}</p>
+
+  <div class="rows">
+    <ng-container *ngFor="let item of state.items; trackBy: trackItem" [ngSwitch]="item.type">
+      <h2 *ngSwitchCase="'section'">{{ item.text }}</h2>
+
+      <p *ngSwitchCase="'text'" class="note">{{ item.text }}</p>
+
+      <div *ngSwitchCase="'switcher'" class="setting" (mouseenter)="showHelp(item)">
+        <label [attr.for]="'world-' + item.i">{{ item.text }}</label>
+        <input type="checkbox" [id]="'world-' + item.i" [checked]="!!item.value" (change)="toggle(item)" />
+      </div>
+
+      <div *ngSwitchCase="'dropdown'" class="setting" (mouseenter)="showHelp(item)">
+        <label>{{ item.text }}</label>
+        <app-dropdown [noTranslate]="true" [ngModel]="item.value" (ngModelChange)="choose(item, $event)">
+          <app-dropdown-option
+            *ngFor="let option of item.options; let o = index; trackBy: trackRow"
+            [text]="option"
+            [value]="o"
+          ></app-dropdown-option>
+        </app-dropdown>
+      </div>
+
+      <div *ngSwitchCase="'slider'" class="setting" (mouseenter)="showHelp(item)">
+        <label [attr.for]="'world-' + item.i">{{ item.text }}</label>
+        <span class="slider">
+          <input
+            type="range"
+            [id]="'world-' + item.i"
+            [min]="item.min"
+            [max]="item.max"
+            [step]="item.step"
+            [value]="item.value"
+            (change)="slide(item, $event)"
+          />
+          <span class="slider-value">{{ item.value > 0 ? '+' : '' }}{{ item.value }}</span>
+        </span>
+      </div>
+
+      <div *ngSwitchCase="'button'" class="setting setting-button" (mouseenter)="showHelp(item)">
+        <button data-style-ornament="inverted" (click)="press(item)">{{ item.text }}</button>
+      </div>
+    </ng-container>
+  </div>
+
+  <p class="help">{{ help }}</p>
+
+  <div class="actions">
+    <button data-style-ornament="inverted" (click)="done.emit()">Close</button>
+  </div>
+</div>
+
+<ng-template #loading>
+  <p class="note">Loading...</p>
+</ng-template>

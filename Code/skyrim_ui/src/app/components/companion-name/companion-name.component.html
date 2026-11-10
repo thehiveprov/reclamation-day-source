@@ -1,0 +1,20 @@
+<div *ngIf="request" class="companion-name">
+  <div class="title">{{ 'COMPONENT.COMPANION_NAME.TITLE' | transloco }}</div>
+  <input
+    #nameInput
+    type="text"
+    spellcheck="false"
+    [maxlength]="maxLength"
+    [placeholder]="request.name"
+    [(ngModel)]="name"
+    (keydown.enter)="confirm()"
+  />
+  <app-action-buttons>
+    <button (click)="confirm()" data-style-ornament="simple">
+      {{ 'COMPONENT.COMPANION_NAME.NAME' | transloco }}
+    </button>
+    <button (click)="keep()" data-sound="cancel" data-style-ornament="simple">
+      {{ 'COMPONENT.COMPANION_NAME.KEEP' | transloco: { name: request.name } }}
+    </button>
+  </app-action-buttons>
+</div>

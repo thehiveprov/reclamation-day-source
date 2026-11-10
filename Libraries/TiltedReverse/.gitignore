@@ -1,0 +1,8 @@
+*.dmp
+*.ilk
+*__pycache__*
+
+# xmake
+.xmake
+build
+vsxmake*

@@ -1,0 +1,463 @@
+<div *ngIf="screen$ | async as page" class="screen">
+  <!-- Tabs, the page's title, closing -->
+  <header class="header">
+    <nav class="tabs">
+      <b class="key">Q</b>
+      <button
+        *ngFor="let tab of tabs"
+        class="tab"
+        [class.active]="tab.id === page.page"
+        (click)="show(tab.id)"
+      >
+        {{ tab.key | transloco }}
+      </button>
+      <b class="key">E</b>
+    </nav>
+
+    <div class="title" [ngSwitch]="page.page">
+      <ng-container *ngSwitchCase="'record'">
+        <h1>{{ page.player }}</h1>
+        <div class="subtitle">{{ 'COMPONENT.NEMESIS_SCREEN.YOU' | transloco }} &middot; {{ page.date }}</div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'gang'">
+        <h1>{{ page.gang?.name }}</h1>
+        <div class="subtitle">
+          {{ 'COMPONENT.NEMESIS_SCREEN.UNDER' | transloco : { title: page.gang?.leaderTitle } }}
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'world'">
+        <h1>{{ 'COMPONENT.NEMESIS_SCREEN.WORLD' | transloco }}</h1>
+        <div class="subtitle">{{ page.date }}</div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'wounds'">
+        <h1>{{ 'COMPONENT.NEMESIS_SCREEN.WOUNDS' | transloco }}</h1>
+        <div class="subtitle">
+          {{ 'COMPONENT.NEMESIS_SCREEN.WOUNDS_COUNT' | transloco : { men: page.men, total: page.total, hits: page.hits } }}
+        </div>
+      </ng-container>
+    </div>
+
+    <button class="close" data-sound="cancel" (click)="close()">
+      <b class="key">N</b>{{ 'COMPONENT.NEMESIS_SCREEN.CLOSE' | transloco }}
+    </button>
+  </header>
+
+  <div *ngIf="!page.enabled" class="off">{{ 'COMPONENT.NEMESIS_SCREEN.OFF' | transloco }}</div>
+
+  <main class="content" [ngSwitch]="page.page">
+    <!-- ======================================================== YOUR RECORD -->
+    <div *ngSwitchCase="'record'" class="record">
+      <section class="column">
+        <h2>{{ 'COMPONENT.NEMESIS_SCREEN.YOUR_NEMESES' | transloco }}</h2>
+        <div *ngIf="!page.nemeses?.length" class="empty">{{ 'COMPONENT.NEMESIS_SCREEN.NO_NEMESES' | transloco }}</div>
+        <button
+          *ngFor="let man of page.nemeses; trackBy: trackId"
+          class="row man-row"
+          [attr.data-tone]="man.tone"
+          [class.gone]="man.status !== 'alive'"
+          (click)="openMan(man)"
+        >
+          <span class="chip tone">{{ man.status === 'alive' ? man.standing : (man.status === 'dead' ? ('COMPONENT.NEMESIS_SCREEN.DEAD' | transloco) : ('COMPONENT.NEMESIS_SCREEN.GONE' | transloco)) }}</span>
+          <span class="name">{{ man.name }} <i *ngIf="man.nickname">{{ man.nickname }}</i></span>
+          <span class="dim">{{ man.gang || ('COMPONENT.NEMESIS_SCREEN.LONER' | transloco) }}</span>
+          <span class="rank"><i *ngFor="let mark of marks" [class.on]="mark <= man.rank"></i></span>
+          <span *ngIf="man.fresh" class="fresh"></span>
+        </button>
+
+        <ng-container *ngIf="page.party?.length">
+          <h2>{{ 'COMPONENT.NEMESIS_SCREEN.PARTY' | transloco }}</h2>
+          <div *ngFor="let member of page.party" class="party">
+            <span class="name">{{ member.player }}</span>
+            <span class="dim">
+              <ng-container *ngIf="member.nemeses.length; else none">
+                <span *ngFor="let man of member.nemeses; let last = last">{{ man.name }} ({{ man.standing }}){{ last ? '' : ', ' }}</span>
+              </ng-container>
+              <ng-template #none>{{ 'COMPONENT.NEMESIS_SCREEN.NOBODY' | transloco }}</ng-template>
+            </span>
+          </div>
+        </ng-container>
+
+        <h2>{{ 'COMPONENT.NEMESIS_SCREEN.KARMA' | transloco }}</h2>
+        <div class="karma">
+          <span class="value">{{ page.karma?.word }}</span>
+          <span class="meter centered">
+            <span class="fill" [style.width.%]="karmaPercent(page.karma?.value ?? 0)"></span>
+            <span class="tick" style="left: 50%"></span>
+          </span>
+          <span class="dim">{{ page.karma?.value }}</span>
+        </div>
+      </section>
+
+      <section class="column">
+        <h2>{{ 'COMPONENT.NEMESIS_SCREEN.NOTORIETY' | transloco }}</h2>
+        <div *ngIf="!page.notoriety?.length" class="empty">{{ 'COMPONENT.NEMESIS_SCREEN.UNKNOWN_TO_ALL' | transloco }}</div>
+        <button *ngFor="let bar of page.notoriety" class="row notoriety-row" [attr.data-level]="bar.level" (click)="showGang(bar.gang)">
+          <span class="name">{{ bar.name }}</span>
+          <span class="meter">
+            <span class="fill" [style.width.%]="bar.value"></span>
+            <span *ngFor="let level of levels" class="tick" [style.left.%]="level"></span>
+          </span>
+          <span class="word">{{ bar.word }}</span>
+        </button>
+
+        <h2>{{ 'COMPONENT.NEMESIS_SCREEN.STORY' | transloco }}</h2>
+        <div *ngIf="!page.story?.length" class="empty">{{ 'COMPONENT.NEMESIS_SCREEN.NO_STORY' | transloco }}</div>
+        <div *ngFor="let line of page.story" class="row story-row">
+          <span class="chip">{{ line.tag }}</span>
+          <span class="text">{{ line.text }}</span>
+          <span class="date">{{ line.at }}</span>
+        </div>
+        <div *ngIf="page.storyMore" class="more">{{ 'COMPONENT.NEMESIS_SCREEN.MORE_IN_WORLD' | transloco : { count: page.storyMore } }}</div>
+
+        <h2>{{ 'COMPONENT.NEMESIS_SCREEN.ON_RECORD' | transloco }}</h2>
+        <div class="tiles">
+          <div *ngFor="let tile of page.tallies" class="tile" [class.zero]="!tile.value">
+            <span class="number">{{ tile.value }}</span>
+            <span class="label">{{ tile.label }}</span>
+          </div>
+        </div>
+
+        <ng-container *ngIf="page.dead?.length">
+          <h2>{{ 'COMPONENT.NEMESIS_SCREEN.NAMED_DEAD' | transloco }}</h2>
+          <div class="dead">
+            <button *ngFor="let man of page.dead" class="chip blood" (click)="openMan(man)">{{ man.name }}</button>
+            <span *ngIf="page.deadMore" class="chip">+{{ page.deadMore }}</span>
+          </div>
+        </ng-container>
+      </section>
+    </div>
+
+    <!-- ========================================================= HIERARCHY -->
+    <div *ngSwitchCase="'gang'" class="hierarchy">
+      <nav class="gangs">
+        <b class="key">&larr;</b>
+        <button
+          *ngFor="let gang of page.gangs; trackBy: trackId"
+          class="gang-tab"
+          [class.active]="gang.id === page.gang?.id"
+          [class.destroyed]="gang.destroyed"
+          (click)="showGang(gang.id)"
+        >
+          {{ gang.name }}
+        </button>
+        <b class="key">&rarr;</b>
+      </nav>
+
+      <ng-container *ngIf="page.gang as gang">
+        <div class="gang-state">
+          <div class="notoriety" [attr.data-level]="gang.notoriety.level">
+            <span class="label">{{ 'COMPONENT.NEMESIS_SCREEN.NOTORIETY_SHORT' | transloco }}</span>
+            <span class="word">{{ gang.notoriety.word }}</span>
+            <span class="meter wide">
+              <span class="fill" [style.width.%]="gang.notoriety.value"></span>
+              <span *ngFor="let level of levels" class="tick" [style.left.%]="level"></span>
+            </span>
+            <span class="dim">{{ gang.notoriety.value }} / 100 &middot; {{ gang.aim }}</span>
+          </div>
+          <div class="strength">
+            <span class="label">{{ 'COMPONENT.NEMESIS_SCREEN.STRENGTH' | transloco }}</span>
+            <span class="word">{{ gang.destroyed ? ('COMPONENT.NEMESIS_SCREEN.FINISHED' | transloco) : gang.strength.word }}</span>
+            <span class="small-bar"><span class="label">{{ 'COMPONENT.NEMESIS_SCREEN.GROUND' | transloco }}</span><span class="meter"><span class="fill" [style.width.%]="gang.strength.ground * 100"></span></span></span>
+            <span class="small-bar"><span class="label">{{ 'COMPONENT.NEMESIS_SCREEN.MEN' | transloco }}</span><span class="meter"><span class="fill" [style.width.%]="gang.strength.manpower * 100"></span></span></span>
+            <span class="small-bar"><span class="label">{{ 'COMPONENT.NEMESIS_SCREEN.CAPS' | transloco }}</span><span class="meter"><span class="fill" [style.width.%]="gang.strength.caps * 100"></span></span></span>
+            <span class="small-bar"><span class="label">{{ 'COMPONENT.NEMESIS_SCREEN.SUPPLIES' | transloco }}</span><span class="meter"><span class="fill" [style.width.%]="gang.strength.supplies * 100"></span></span></span>
+          </div>
+          <div *ngFor="let war of gang.wars" class="war-line">
+            {{ 'COMPONENT.NEMESIS_SCREEN.AT_WAR' | transloco : { against: war.against, over: war.over } }}
+          </div>
+        </div>
+
+        <div class="tree">
+          <!-- The leader's seat -->
+          <div class="tier">
+            <div class="tier-label">{{ gang.leaderTitle }}</div>
+            <div class="boxes leader">
+              <ng-container *ngTemplateOutlet="gang.leader ? box : vacant; context: { $implicit: gang.leader, note: gang.leaderNote }"></ng-container>
+            </div>
+          </div>
+          <!-- The tiers, the loners' men -->
+          <div *ngFor="let tier of gang.tiers" class="tier">
+            <div class="tier-label">{{ tier.label }}</div>
+            <div class="boxes">
+              <ng-container *ngFor="let man of tier.men; trackBy: trackId">
+                <ng-container *ngTemplateOutlet="box; context: { $implicit: man }"></ng-container>
+              </ng-container>
+              <ng-container *ngFor="let seat of [].constructor(tier.vacant)">
+                <ng-container *ngTemplateOutlet="vacant; context: { $implicit: null }"></ng-container>
+              </ng-container>
+            </div>
+          </div>
+          <div *ngIf="gang.men?.length" class="tier">
+            <div class="tier-label">{{ 'COMPONENT.NEMESIS_SCREEN.BANDS' | transloco }}</div>
+            <div class="boxes">
+              <ng-container *ngFor="let man of gang.men; trackBy: trackId">
+                <ng-container *ngTemplateOutlet="box; context: { $implicit: man }"></ng-container>
+              </ng-container>
+            </div>
+          </div>
+          <div *ngIf="gang.unnamed > 0" class="unnamed">{{ 'COMPONENT.NEMESIS_SCREEN.UNNAMED' | transloco : { count: gang.unnamed } }}</div>
+        </div>
+
+        <div *ngIf="gang.fallen.length" class="fallen">
+          <div class="tier-label">{{ 'COMPONENT.NEMESIS_SCREEN.FALLEN' | transloco : { count: gang.fallenCount } }}</div>
+          <div class="fallen-row">
+            <ng-container *ngFor="let man of gang.fallen; trackBy: trackId">
+              <ng-container *ngTemplateOutlet="box; context: { $implicit: man }"></ng-container>
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- ============================================================= WORLD -->
+    <div *ngSwitchCase="'world'" class="world">
+      <section class="column">
+        <h2>{{ 'COMPONENT.NEMESIS_SCREEN.WARS' | transloco }}</h2>
+        <div *ngIf="!page.wars?.length" class="empty">{{ 'COMPONENT.NEMESIS_SCREEN.NO_WARS' | transloco }}</div>
+        <div *ngFor="let war of page.wars" class="war" [class.ended]="war.ended">
+          <div class="sides"><span>{{ war.a }}</span><span class="vs">{{ 'COMPONENT.NEMESIS_SCREEN.VERSUS' | transloco }}</span><span>{{ war.b }}</span></div>
+          <div class="dim">{{ 'COMPONENT.NEMESIS_SCREEN.OVER' | transloco : { over: war.over, since: war.since } }}</div>
+          <div class="dim">
+            {{ 'COMPONENT.NEMESIS_SCREEN.BATTLES' | transloco : { battles: war.battles, a: war.a, deadA: war.deadA, b: war.b, deadB: war.deadB } }}
+          </div>
+          <div *ngIf="war.ended" class="result">{{ war.result }}</div>
+          <span *ngIf="!war.ended" class="meter"><span class="fill hot" [style.width.%]="war.heat"></span></span>
+        </div>
+
+        <h2>{{ 'COMPONENT.NEMESIS_SCREEN.RELATIONS' | transloco }}</h2>
+        <div *ngFor="let relation of page.relations" class="relation" [title]="relation.why">
+          <span class="a">{{ relation.a }}</span>
+          <span class="meter centered">
+            <span
+              class="fill"
+              [class.bad]="relation.value < 0"
+              [style.left.%]="relation.value < 0 ? 50 - relationWidth(relation.value) : 50"
+              [style.width.%]="relationWidth(relation.value)"
+            ></span>
+            <span class="tick" style="left: 50%"></span>
+          </span>
+          <span class="b">{{ relation.b }}</span>
+          <span class="word dim">{{ relation.word }}</span>
+        </div>
+
+        <ng-container *ngIf="page.funerals?.length">
+          <h2>{{ 'COMPONENT.NEMESIS_SCREEN.FUNERALS' | transloco }}</h2>
+          <div *ngFor="let funeral of page.funerals" class="row story-row">
+            <span class="chip">{{ funeral.gang }}</span>
+            <span class="text">{{ funeral.who }}, {{ funeral.place }}</span>
+            <span class="date">{{ funeral.at }}</span>
+          </div>
+        </ng-container>
+      </section>
+
+      <section class="column wide">
+        <h2>{{ 'COMPONENT.NEMESIS_SCREEN.WORD' | transloco }}</h2>
+        <div *ngIf="!page.chronicle?.length" class="empty">{{ 'COMPONENT.NEMESIS_SCREEN.NO_WORD' | transloco }}</div>
+        <div class="chronicle">
+          <div *ngFor="let line of page.chronicle" class="row story-row" [class.yours]="line.tag === 'you'">
+            <span class="chip">{{ line.tag === 'you' ? ('COMPONENT.NEMESIS_SCREEN.YOU_TAG' | transloco) : line.tag }}</span>
+            <span class="text"><b>{{ line.title }}</b><ng-container *ngIf="line.text">. {{ line.text }}</ng-container></span>
+            <span class="date">{{ line.at }}</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========================================================= WOUND LOG -->
+    <div *ngSwitchCase="'wounds'" class="wounds">
+      <div *ngIf="!page.victims?.length" class="empty center">{{ 'COMPONENT.NEMESIS_SCREEN.NO_WOUNDS' | transloco }}</div>
+      <ng-container *ngIf="page.victims?.length">
+        <section class="victims">
+          <h2>{{ 'COMPONENT.NEMESIS_SCREEN.VICTIMS' | transloco }}</h2>
+          <div class="victim-list">
+            <ng-container *ngFor="let man of page.victims; let v = index; trackBy: trackId">
+              <button class="victim" [attr.data-outcome]="man.outcome" [class.active]="v === victim" (click)="pickVictim(v)">
+                <span *ngIf="man.nemesis" class="star">*</span>{{ man.name }}
+              </button>
+              <ng-container *ngIf="v === victim">
+                <button
+                  *ngFor="let hit of man.wounds; let w = index"
+                  class="hit"
+                  [class.active]="w === wound"
+                  [attr.data-severity]="hit.severity"
+                  (click)="pickWound(v, w)"
+                >
+                  <span class="square"></span>{{ w + 1 }}&nbsp;&nbsp;{{ hit.where }}
+                </button>
+              </ng-container>
+            </ng-container>
+          </div>
+
+          <ng-container *ngIf="selectedWound(page) as hit">
+            <h2>{{ 'COMPONENT.NEMESIS_SCREEN.THIS_HIT' | transloco }}</h2>
+            <dl class="facts">
+              <dt>{{ 'COMPONENT.NEMESIS_SCREEN.WEAPON' | transloco }}</dt><dd>{{ hit.weapon }}</dd>
+              <ng-container *ngIf="hit.ammo"><dt>{{ 'COMPONENT.NEMESIS_SCREEN.AMMO' | transloco }}</dt><dd>{{ hit.ammo }}</dd></ng-container>
+              <dt>{{ 'COMPONENT.NEMESIS_SCREEN.RANGE' | transloco }}</dt><dd>{{ hit.range | number : '1.1-1' }} m</dd>
+              <dt>{{ 'COMPONENT.NEMESIS_SCREEN.WHEN' | transloco }}</dt><dd>{{ hit.at }}</dd>
+              <dt>{{ 'COMPONENT.NEMESIS_SCREEN.WHERE' | transloco }}</dt><dd>{{ hit.place || '?' }}</dd>
+            </dl>
+          </ng-container>
+        </section>
+
+        <section class="body-panel">
+          <div class="shot-count">
+            {{ 'COMPONENT.NEMESIS_SCREEN.HIT_OF' | transloco : { n: wound + 1, of: selectedVictim(page)?.wounds?.length } }}
+          </div>
+          <svg class="body" viewBox="0 0 200 400" aria-hidden="true">
+            <ng-container *ngIf="{ hit: selectedWound(page), touched: hitParts(selectedVictim(page)) } as marks">
+              <circle class="part" cx="100" cy="44" r="25" [class.touched]="marks.touched.has(0)" [class.selected]="marks.hit?.part === 0" [attr.data-severity]="marks.hit?.severity" />
+              <rect class="part" x="68" y="76" width="64" height="124" rx="10" [class.touched]="marks.touched.has(1)" [class.selected]="marks.hit?.part === 1" [attr.data-severity]="marks.hit?.severity" />
+              <rect class="part" x="136" y="80" width="20" height="128" rx="8" [class.touched]="marks.touched.has(2)" [class.selected]="marks.hit?.part === 2" [attr.data-severity]="marks.hit?.severity" />
+              <rect class="part" x="44" y="80" width="20" height="128" rx="8" [class.touched]="marks.touched.has(3)" [class.selected]="marks.hit?.part === 3" [attr.data-severity]="marks.hit?.severity" />
+              <rect class="part" x="102" y="204" width="26" height="170" rx="9" [class.touched]="marks.touched.has(4)" [class.selected]="marks.hit?.part === 4" [attr.data-severity]="marks.hit?.severity" />
+              <rect class="part" x="72" y="204" width="26" height="170" rx="9" [class.touched]="marks.touched.has(5)" [class.selected]="marks.hit?.part === 5" [attr.data-severity]="marks.hit?.severity" />
+            </ng-container>
+            <text class="side" x="176" y="392">L</text>
+            <text class="side" x="18" y="392">R</text>
+          </svg>
+        </section>
+
+        <section *ngIf="selectedVictim(page) as man" class="victim-detail">
+          <h1 class="victim-name" (click)="openMan(man)">{{ man.name }}</h1>
+          <div class="dim center">
+            {{ man.nemesis ? ('COMPONENT.NEMESIS_SCREEN.NEMESIS' | transloco) + ' · ' : '' }}{{ man.gang || ('COMPONENT.NEMESIS_SCREEN.LONER' | transloco) }}
+          </div>
+          <div class="outcome" [attr.data-outcome]="man.outcome">{{ man.outcome }}</div>
+
+          <ng-container *ngIf="selectedWound(page) as hit">
+            <h2>{{ 'COMPONENT.NEMESIS_SCREEN.WHAT_IT_DID' | transloco }}</h2>
+            <div class="damage">
+              <span class="label">{{ 'COMPONENT.NEMESIS_SCREEN.DAMAGE' | transloco }}</span>
+              <span class="meter"><span class="fill" [attr.data-severity]="hit.severity" [style.width.%]="hit.damage"></span></span>
+              <span class="value" [attr.data-severity]="hit.severity">{{ hit.damage }}</span>
+            </div>
+            <div class="effect">
+              <span class="square" [attr.data-severity]="hit.severity"></span>
+              <span>{{ hit.where }}, {{ hit.cause }}<ng-container *ngIf="hit.hits > 1"> &times;{{ hit.hits }}</ng-container></span>
+              <span class="severity" [attr.data-severity]="hit.severity">{{ hit.severity }}</span>
+            </div>
+            <div *ngIf="hit.crippled" class="effect">
+              <span class="square" data-severity="crippling"></span>
+              <span>{{ 'COMPONENT.NEMESIS_SCREEN.CRIPPLED' | transloco : words(man.female, { where: hit.where }) }}</span>
+            </div>
+            <div *ngIf="hit.lethal" class="effect">
+              <span class="square" data-severity="lethal"></span>
+              <span>{{ (man.outcome === 'left for dead' ? 'COMPONENT.NEMESIS_SCREEN.DROPPED' : 'COMPONENT.NEMESIS_SCREEN.KILLED_HIM') | transloco : words(man.female) }}</span>
+            </div>
+          </ng-container>
+        </section>
+      </ng-container>
+    </div>
+  </main>
+
+  <footer class="hints">
+    <span><b class="key">Q</b><b class="key">E</b> {{ 'COMPONENT.NEMESIS_SCREEN.HINT_TABS' | transloco }}</span>
+    <span *ngIf="page.page === 'gang'"><b class="key">&larr;</b><b class="key">&rarr;</b> {{ 'COMPONENT.NEMESIS_SCREEN.HINT_GANGS' | transloco }}</span>
+    <span *ngIf="page.page === 'wounds'"><b class="key">&uarr;</b><b class="key">&darr;</b> {{ 'COMPONENT.NEMESIS_SCREEN.HINT_HITS' | transloco }}</span>
+    <span>{{ 'COMPONENT.NEMESIS_SCREEN.HINT_MAN' | transloco }}</span>
+    <span><b class="key">N</b> {{ 'COMPONENT.NEMESIS_SCREEN.CLOSE' | transloco }}</span>
+  </footer>
+
+  <!-- A man's page, over the screen -->
+  <div *ngIf="man$ | async as man" class="man-backdrop" (click)="closeMan()">
+    <article class="man-page" [attr.data-tone]="man.tone" (click)="$event.stopPropagation()">
+      <header>
+        <h1>{{ man.known ? man.name : ('COMPONENT.NEMESIS_SCREEN.UNKNOWN' | transloco) }}</h1>
+        <div *ngIf="man.nickname" class="nickname">{{ man.nickname }}</div>
+        <div class="dim">{{ man.seat }}<ng-container *ngIf="man.age"> &middot; {{ 'COMPONENT.NEMESIS_SCREEN.AGE' | transloco : { age: man.age } }}</ng-container><ng-container *ngIf="man.trade"> &middot; {{ man.trade }}</ng-container></div>
+        <div class="rank"><i *ngFor="let mark of marks" [class.on]="mark <= man.rank"></i></div>
+        <div *ngIf="man.status !== 'alive'" class="outcome" data-outcome="dead">{{ man.statusWord }}<span *ngIf="man.fate"> &middot; {{ man.fate }}</span></div>
+      </header>
+
+      <div class="man-columns">
+        <section>
+          <div *ngIf="!man.grudge && !man.temper && !man.scars.length && !man.injuries && !man.ties.length" class="empty">
+            {{ 'COMPONENT.NEMESIS_SCREEN.LITTLE_KNOWN' | transloco : words(man.female) }}
+          </div>
+          <ng-container *ngIf="man.grudge as grudge">
+            <h2>{{ 'COMPONENT.NEMESIS_SCREEN.GRUDGE' | transloco : words(man.female) }}</h2>
+            <div class="grudge" [attr.data-tone]="man.tone">
+              <span class="word">{{ grudge.hateWord }}</span>
+              <span class="meter"><span class="fill" [style.width.%]="grudge.hate"></span></span>
+              <span class="dim">{{ grudge.fearWord }}</span>
+            </div>
+            <p>{{ grudge.origin }}</p>
+            <p class="dim">{{ 'COMPONENT.NEMESIS_SCREEN.SINCE' | transloco : { since: grudge.since } }}<span *ngIf="grudge.intent"> &middot; {{ grudge.intent }}</span></p>
+            <p *ngIf="grudge.downedYou">{{ (grudge.downedYou === 1 ? 'COMPONENT.NEMESIS_SCREEN.DOWNED_YOU_ONCE' : 'COMPONENT.NEMESIS_SCREEN.DOWNED_YOU') | transloco : words(man.female, { count: grudge.downedYou }) }}</p>
+            <p *ngIf="grudge.mercy">{{ 'COMPONENT.NEMESIS_SCREEN.MERCY' | transloco : words(man.female) }}</p>
+            <p *ngIf="grudge.informant">{{ 'COMPONENT.NEMESIS_SCREEN.INFORMANT' | transloco : words(man.female) }}</p>
+          </ng-container>
+
+          <ng-container *ngIf="man.temper">
+            <h2>{{ man.temper }}</h2>
+            <p>{{ man.temperText }}</p>
+            <p class="dim">{{ 'COMPONENT.NEMESIS_SCREEN.WITS' | transloco : { wits: man.wits } }}<span *ngIf="man.home"> &middot; {{ man.home }}</span><span *ngIf="man.faith"> &middot; {{ man.faith }}</span></p>
+          </ng-container>
+
+          <ng-container *ngIf="man.scars.length || man.injuries">
+            <h2>{{ 'COMPONENT.NEMESIS_SCREEN.SCARS' | transloco }}</h2>
+            <p *ngFor="let scar of man.scars">{{ scar.text }}<span *ngIf="scar.place" class="dim"> ({{ scar.place }})</span></p>
+            <p *ngIf="man.injuries" class="dim">{{ man.injuries }}</p>
+          </ng-container>
+
+          <ng-container *ngIf="man.ties.length">
+            <h2>{{ 'COMPONENT.NEMESIS_SCREEN.KNOW' | transloco }}</h2>
+            <p *ngFor="let tie of man.ties">
+              <button *ngIf="tie.id; else plain" class="link" (click)="openMan(tie)">{{ tie.text }}</button>
+              <ng-template #plain>{{ tie.text }}</ng-template>
+            </p>
+          </ng-container>
+
+          <button *ngIf="man.wounds" class="small" (click)="openWounds(man.id)">
+            {{ 'COMPONENT.NEMESIS_SCREEN.SEE_WOUNDS' | transloco : words(man.female, { count: man.wounds }) }}
+          </button>
+        </section>
+
+        <section>
+          <h2>{{ 'COMPONENT.NEMESIS_SCREEN.HISTORY' | transloco }}</h2>
+          <div *ngIf="!man.history.length" class="empty">{{ 'COMPONENT.NEMESIS_SCREEN.NO_HISTORY' | transloco : words(man.female) }}</div>
+          <div class="history">
+            <div *ngFor="let line of man.history" class="row story-row" [attr.data-history-tone]="line.tone">
+              <span class="date">{{ line.at }}</span>
+              <span class="text">{{ line.text }}</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer class="man-footer">
+        <button class="small" data-sound="cancel" (click)="closeMan()">
+          <b class="key">&larr;</b>{{ 'COMPONENT.NEMESIS_SCREEN.BACK' | transloco }}
+        </button>
+      </footer>
+    </article>
+  </div>
+</div>
+
+<!-- A man's box on the hierarchy -->
+<ng-template #box let-man>
+  <button
+    class="box"
+    [attr.data-tone]="man.tone"
+    [class.dead]="man.status !== 'alive'"
+    [class.unknown]="!man.known"
+    (click)="openMan(man)"
+  >
+    <span class="box-name">{{ man.known ? man.name : ('COMPONENT.NEMESIS_SCREEN.UNKNOWN' | transloco) }}</span>
+    <span class="box-nick">{{ man.known ? man.nickname : man.seat }}</span>
+    <span class="box-foot">
+      <span class="box-standing">{{ man.status !== 'alive' ? ('COMPONENT.NEMESIS_SCREEN.DEAD' | transloco) : man.standing }}</span>
+      <span class="rank"><i *ngFor="let mark of marks" [class.on]="mark <= man.rank"></i></span>
+    </span>
+    <span *ngIf="man.fresh" class="fresh"></span>
+  </button>
+</ng-template>
+
+<!-- An empty seat -->
+<ng-template #vacant let-note="note">
+  <div class="box vacant">
+    <span>{{ 'COMPONENT.NEMESIS_SCREEN.VACANT' | transloco }}</span>
+    <span *ngIf="note" class="box-nick">{{ note }}</span>
+  </div>
+</ng-template>

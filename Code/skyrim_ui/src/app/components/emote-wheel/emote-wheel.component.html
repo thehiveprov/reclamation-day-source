@@ -1,0 +1,28 @@
+<div *ngIf="wheel" class="emote-wheel">
+  <svg class="wheel" viewBox="-200 -200 400 400">
+    <g
+      *ngFor="let emote of wheel.emotes; let i = index"
+      class="slice"
+      [class.active]="i === hovered"
+      (mouseenter)="hover(i)"
+      (click)="play(emote)"
+    >
+      <path [attr.d]="slices[i]?.path"></path>
+      <text
+        [attr.x]="slices[i]?.x"
+        [attr.y]="slices[i]?.y"
+        text-anchor="middle"
+        dominant-baseline="middle"
+      >
+        {{ emote.label }}
+      </text>
+    </g>
+    <circle class="hub" [attr.r]="HUB"></circle>
+    <text class="hub-label" y="-6" text-anchor="middle" dominant-baseline="middle">
+      {{ hovered >= 0 ? wheel.emotes[hovered].label : ('COMPONENT.EMOTE_WHEEL.NONE' | transloco) }}
+    </text>
+    <text class="hub-hint" y="16" text-anchor="middle" dominant-baseline="middle">
+      {{ 'COMPONENT.EMOTE_WHEEL.RELEASE' | transloco: { key: wheel.key } }}
+    </text>
+  </svg>
+</div>

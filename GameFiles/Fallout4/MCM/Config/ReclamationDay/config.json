@@ -1,0 +1,805 @@
+{
+  "modName": "ReclamationDay",
+  "displayName": "Reclamation Day",
+  "minMcmVersion": 2,
+  "pluginRequirements": [],
+  "content": [],
+  "pages": [
+    {
+      "pageDisplayName": "HUD",
+      "content": [
+        { "type": "text", "text": "The compass, health and radiation, AP, the enemy's bar, ammo and grenades in Reclamation Day's own look. Each shows exactly when the game's own would." },
+        {
+          "type": "switcher", "id": "bEnabled:HUD", "text": "Reclamation Day HUD",
+          "help": "Off: the game's own HUD pieces come back as they were.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        }
+      ]
+    },
+    {
+      "pageDisplayName": "Actor Bars",
+      "content": [
+        { "type": "text", "text": "Name, level and health bars over characters, in your HUD color. Based on Zzyxzz's Actor Widgets." },
+        {
+          "type": "switcher", "id": "bEnabled:General", "text": "Show Actor Bars",
+          "help": "Turns all actor bars on or off.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        { "type": "section", "text": "Enemies" },
+        {
+          "type": "switcher", "id": "bShow:Enemies", "text": "Show Enemy Bars",
+          "help": "Shows bars over hostile characters and creatures.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bAlwaysDisplay:Enemies", "text": "Always Display",
+          "help": "Shows enemy bars at all times. Has no effect while Combat Only or Missing Health Only is on.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bCombatOnly:Enemies", "text": "Combat Only",
+          "help": "Shows an enemy's bar only while that enemy is in combat. With Missing Health Only also on, both must be met.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bMissingHealthOnly:Enemies", "text": "Missing Health Only",
+          "help": "Shows an enemy's bar only once that enemy has lost health. With Combat Only also on, both must be met.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bAimedTargetOnly:Enemies", "text": "Aimed Enemy Only",
+          "help": "While aiming down sights, shows only the bar of the enemy under your crosshair.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bHideBehindWalls:Enemies", "text": "Hide Behind Walls",
+          "help": "Hides an enemy's bar while a wall, a closed door or a tree is between you and them.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bUseWarningColor:Enemies", "text": "Red Enemy Bars",
+          "help": "Draws enemy bars in the game's red warning color instead of your HUD color.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bShowLegendaryIcon:Enemies", "text": "Legendary Star",
+          "help": "Shows a star beside the names of legendary enemies.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bShowBossMarker:Enemies", "text": "Skull For Much Higher Levels",
+          "help": "Shows a skull in place of the level of enemies far above your level, as the game's own enemy health bar does.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        { "type": "section", "text": "Friendly Characters and Other Players" },
+        {
+          "type": "switcher", "id": "bShow:Friendly", "text": "Show Friendly Bars",
+          "help": "Shows bars over companions, Dogmeat, settlers and other characters who aren't hostile.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bShowPlayers:Friendly", "text": "Show Other Players",
+          "help": "Shows a friendly bar with their name and level over the other players. They follow the friendly rules below (their combat is yours and theirs).",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bAlwaysDisplay:Friendly", "text": "Always Display",
+          "help": "Shows friendly bars at all times. Has no effect while Combat Only or Missing Health Only is on.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bCombatOnly:Friendly", "text": "Combat Only",
+          "help": "Shows a friendly character's bar only while they are in combat. With Missing Health Only also on, both must be met.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bMissingHealthOnly:Friendly", "text": "Missing Health Only",
+          "help": "Shows a friendly character's bar only once they have lost health. With Combat Only also on, both must be met.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bAimedTargetOnly:Friendly", "text": "Aimed Friendly Only",
+          "help": "While aiming down sights, shows only the bar of the friendly character under your crosshair.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bHideBehindWalls:Friendly", "text": "Hide Behind Walls",
+          "help": "Hides a friendly character's bar while a wall, a closed door or a tree is between you and them.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bUseFixedColor:Friendly", "text": "Green Friendly Bars",
+          "help": "Draws friendly bars in green instead of your HUD color.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bShowLegendaryIcon:Friendly", "text": "Legendary Star",
+          "help": "Shows a star beside the names of legendary friendly characters.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bShowBossMarker:Friendly", "text": "Skull For Much Higher Levels",
+          "help": "Shows a skull in place of the level of friendly characters far above your level.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        { "type": "section", "text": "Display" },
+        {
+          "type": "switcher", "id": "bUppercaseNames:Display", "text": "Uppercase Names",
+          "help": "Writes names in capitals, like the rest of the HUD.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bShowLevel:Display", "text": "Show Level",
+          "help": "Shows the level after the name.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bShowHealthBar:Display", "text": "Show Health Bar",
+          "help": "Shows the health bar under the name.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bShowActionPointsBar:Display", "text": "Show Action Points Bar",
+          "help": "Shows a thin Action Points bar under the health bar.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bAutoHideUnusedActionPoints:Display", "text": "Hide Full Action Points",
+          "help": "Hides the Action Points bar while it's full.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bAnimateBars:Display", "text": "Show Health Lost",
+          "help": "Health just lost stays on the bar a moment in a lighter shade, then shrinks away.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "slider", "id": "iBarAnimationDurationMs:Display", "text": "Health Lost Shrink Time (ms)",
+          "help": "How many milliseconds the health just lost takes to shrink away.",
+          "valueOptions": { "min": 50, "max": 2000, "step": 25, "sourceType": "ModSettingInt" }
+        },
+        { "type": "section", "text": "Distance and Size" },
+        {
+          "type": "slider", "id": "fMaximumDistance:Visibility", "text": "Maximum Distance",
+          "help": "Characters further away than this have no bar.",
+          "valueOptions": { "min": 256, "max": 8192, "step": 64, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "switcher", "id": "bFadeByDistance:Visibility", "text": "Fade With Distance",
+          "help": "Bars fade out between the Fade Start Distance and the Maximum Distance.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "slider", "id": "fFadeStartDistance:Visibility", "text": "Fade Start Distance",
+          "help": "How far away bars begin to fade.",
+          "valueOptions": { "min": 0, "max": 8192, "step": 64, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "fUpperBarHideDistance:Visibility", "text": "Name Distance",
+          "help": "Beyond this distance only the bars show, without the name, level, star or skull.",
+          "valueOptions": { "min": 256, "max": 8192, "step": 64, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "switcher", "id": "bDistanceScaling:Visibility", "text": "Smaller With Distance",
+          "help": "Bars of characters further away are drawn smaller.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "slider", "id": "fDistanceScaleStart:Visibility", "text": "Shrink Start Distance",
+          "help": "How far away bars begin to get smaller.",
+          "valueOptions": { "min": 0, "max": 4096, "step": 64, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "fDistanceScaleStrength:Visibility", "text": "Shrink Strength",
+          "help": "How quickly bars get smaller with distance.",
+          "valueOptions": { "min": 0.1, "max": 2, "step": 0.05, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "fMinimumDistanceScale:Visibility", "text": "Smallest Size",
+          "help": "The smallest a far bar gets, as a share of its full size.",
+          "valueOptions": { "min": 0.1, "max": 1, "step": 0.05, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "fWidgetScale:Visibility", "text": "Bar Size",
+          "help": "The size of all bars.",
+          "valueOptions": { "min": 0.25, "max": 4, "step": 0.05, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "fWidgetOpacity:Visibility", "text": "Bar Opacity",
+          "help": "How solid all bars are.",
+          "valueOptions": { "min": 0, "max": 1, "step": 0.05, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "fDeadActorDelay:Visibility", "text": "Bar After Death (s)",
+          "help": "How many seconds a bar stays after its character dies.",
+          "valueOptions": { "min": 0, "max": 10, "step": 0.5, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "switcher", "id": "bHideInvisibleActors:Visibility", "text": "Hide Invisible Characters",
+          "help": "No bar over characters using a Stealth Boy or other invisibility.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "slider", "id": "iMaximumWidgets:Visibility", "text": "Most Bars At Once",
+          "help": "Only the nearest this many characters have bars.",
+          "valueOptions": { "min": 1, "max": 100, "step": 1, "sourceType": "ModSettingInt" }
+        }
+      ]
+    },
+    {
+      "pageDisplayName": "Performance",
+      "content": [
+        { "type": "text", "text": "More frames from the same picture: work the game repeats every frame even when nothing changed." },
+        {
+          "type": "dropdown", "id": "iSunShadowCache:Performance", "text": "Sun Shadow Caching",
+          "help": "Keeps the sun's distant shadow maps between updates instead of redrawing them every frame. The nearest is always drawn every frame. Quality redraws the most often, Performance the least. Custom uses the two settings below.",
+          "valueOptions": { "options": ["Off", "Quality", "Balanced", "Performance", "Custom"], "sourceType": "ModSettingInt" }
+        },
+        {
+          "type": "slider", "id": "iSunShadowMiddleFrames:Performance", "text": "Custom: Middle Shadows, Every N Frames",
+          "help": "Custom only. How often the middle distance sun shadows are redrawn.",
+          "valueOptions": { "min": 1, "max": 30, "step": 1, "sourceType": "ModSettingInt" }
+        },
+        {
+          "type": "slider", "id": "iSunShadowFarFrames:Performance", "text": "Custom: Far Shadows, Every N Frames",
+          "help": "Custom only. How often the far sun shadows are redrawn.",
+          "valueOptions": { "min": 1, "max": 30, "step": 1, "sourceType": "ModSettingInt" }
+        },
+        { "type": "text", "text": "Experimental: each of these is off until it has been proven. If one misbehaves, turn it off and tell us which." },
+        {
+          "type": "slider", "id": "iSmallCasterTexels:Performance", "text": "Skip Tiny Shadow Casters, Texels",
+          "help": "Skips shadow casters smaller than this many texels of a shadow map. 0 is off. Fewer draws, and the smallest specks of shadow go.",
+          "valueOptions": { "min": 0, "max": 16, "step": 1, "sourceType": "ModSettingInt" }
+        },
+        {
+          "type": "dropdown", "id": "iVisibilityWorkers:Performance", "text": "Visibility Workers",
+          "help": "How many threads work out what's visible. The game's own is 4. Limited to what your processor has. Takes effect the next time you start the game.",
+          "valueOptions": { "options": ["Game's 4", "6", "8", "12"], "sourceType": "ModSettingInt" }
+        },
+        {
+          "type": "switcher", "id": "bParallelSunGather:Performance", "text": "Parallel Sun Shadow Gathering",
+          "help": "Works out what casts a sun shadow on another thread while the main view draws, instead of on the main thread after it.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "slider", "id": "iLocalLightCache:Performance", "text": "Local Light Shadow Maps Kept",
+          "help": "Keeps the shadow maps of this many spot and point lights while nothing in them changes, instead of redrawing them. 0 is off. Each uses video memory.",
+          "valueOptions": { "min": 0, "max": 16, "step": 1, "sourceType": "ModSettingInt" }
+        },
+        {
+          "type": "switcher", "id": "bStaticDynamicShadows:Performance", "text": "Separate Static And Moving Shadows",
+          "help": "Needs Sun Shadow Caching. Keeps what doesn't move in the distant sun shadows, and draws what moves over that every frame, so moving things don't lag behind.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bOcclusionCull:Performance", "text": "Occlusion Culling",
+          "help": "Doesn't draw what the last frames show is behind something, which helps where broken previs draws too much. Something coming into view can show a few frames late.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bGpuShadows:Performance", "text": "GPU-Driven Sun Shadows",
+          "help": "Draws plain solid sun shadow casters together instead of one by one. Fewer draw calls, and the shadows should look the same.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        }
+      ]
+    },
+    {
+      "pageDisplayName": "Smooth Loading",
+      "content": [
+        { "type": "text", "text": "Less stutter when you enter new areas. Based on Zzyxzz's Smooth Cell Loading. Changes take effect the next time you start the game." },
+        {
+          "type": "switcher", "id": "bCellBatching:SmoothLoading", "text": "Batch Cell Loading",
+          "help": "While an area loads, starts loading its models together instead of one by one.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bFaceGenBatching:SmoothLoading", "text": "Batch Face Loading",
+          "help": "Starts loading each character's head, textures and models together.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bSubgraphCache:SmoothLoading", "text": "Remember Weapon Animations",
+          "help": "Remembers which animation set each race, outfit and weapon combination uses instead of searching for it every time.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        }
+      ]
+    },
+    {
+      "pageDisplayName": "Better Selection",
+      "content": [
+        { "type": "text", "text": "When the crosshair is on nothing, picks what you are most likely looking at and outlines it. What the crosshair is on always comes first. Based on Zzyxzz's Smart Selection." },
+        {
+          "type": "switcher", "id": "bEnableFirstPerson:SmartSelection", "text": "First Person",
+          "help": "Use Better Selection in first person.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bEnableThirdPerson:SmartSelection", "text": "Third Person",
+          "help": "Use Better Selection in third person.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        { "type": "section", "text": "Hands" },
+        {
+          "type": "switcher", "id": "bHands:BetterInteract", "text": "Hand Animations",
+          "help": "Your left hand goes out when you pick something up, press a button or push a door. It never slows you down or holds up what you did.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bHandGrab:BetterInteract", "text": "Picking Up Items",
+          "help": "The hand grabs what you pick up.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bHandPress:BetterInteract", "text": "Buttons And Switches",
+          "help": "The hand presses buttons and switches, one finger out.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bHandPush:BetterInteract", "text": "Doors",
+          "help": "The hand pushes doors, palm flat.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bItemInHand:BetterInteract", "text": "Item In The Hand",
+          "help": "What you pick up shows in your hand until the hand goes away.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bItemFlies:BetterInteract", "text": "Item Flies To The Hand",
+          "help": "What you pick up stays where it lay a moment, then comes to your hand. Off: it's just in your hand once the hand reaches it.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bHandsThirdPerson:BetterInteract", "text": "In Third Person",
+          "help": "Your character's hand does it in third person too.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bHandsOtherPlayers:BetterInteract", "text": "Other Players' Hands",
+          "help": "See other players' hands go out when they do these.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        { "type": "section", "text": "What Can Be Picked" },
+        {
+          "type": "switcher", "id": "bSelectActivatables:SmartSelection", "text": "Activators",
+          "help": "Furniture, doors, switches, the bike's seat and similar.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bSelectItems:SmartSelection", "text": "Items",
+          "help": "Loose weapons, aid, ammo, books, armor and junk.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bSelectContainers:SmartSelection", "text": "Containers",
+          "help": "Boxes, lockers, the bike's saddlebags and similar.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bSelectNPCs:SmartSelection", "text": "NPCs",
+          "help": "Characters and creatures, including bodies to search.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        { "type": "section", "text": "What Gets Outlined" },
+        {
+          "type": "switcher", "id": "bOutlineActivatables:SmartSelection", "text": "Activators",
+          "help": "Outline furniture, doors, switches and similar.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bOutlineItems:SmartSelection", "text": "Items",
+          "help": "Outline loose items.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bOutlineContainers:SmartSelection", "text": "Containers",
+          "help": "Outline containers.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bOutlineNPCs:SmartSelection", "text": "NPCs",
+          "help": "Outline characters and creatures.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        { "type": "section", "text": "First Person: Outline" },
+        {
+          "type": "switcher", "id": "bOutlineSelectedTarget:SmartSelection1P", "text": "Outline The Target",
+          "help": "Draws an outline around what you would use.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "stepper", "id": "iOutlineColor:SmartSelection1P", "text": "Outline Color",
+          "help": "The outline's color. HUD Color follows your HUD color.",
+          "valueOptions": { "sourceType": "ModSettingInt", "options": ["HUD Color", "Red", "Gold", "Green", "White", "Blue", "Pink"] }
+        },
+        {
+          "type": "slider", "id": "iOutlineWidth:SmartSelection1P", "text": "Outline Width",
+          "help": "How thick the outline is, in pixels at 1080p (thicker at higher resolutions).",
+          "valueOptions": { "min": 1, "max": 4, "step": 1, "sourceType": "ModSettingInt" }
+        },
+        {
+          "type": "slider", "id": "fOutlineOpacity:SmartSelection1P", "text": "Outline Opacity",
+          "help": "How solid the outline is.",
+          "valueOptions": { "min": 0, "max": 1, "step": 0.05, "sourceType": "ModSettingFloat" }
+        },
+        { "type": "section", "text": "First Person: Selection" },
+        {
+          "type": "slider", "id": "fSelectionRange:SmartSelection1P", "text": "Selection Distance",
+          "help": "How far away something can be picked.",
+          "valueOptions": { "min": 40, "max": 1000, "step": 5, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "fMaxAngleDifference:SmartSelection1P", "text": "Selection Width",
+          "help": "How far beside the crosshair something can be. Higher is more forgiving.",
+          "valueOptions": { "min": 0.05, "max": 2, "step": 0.05, "sourceType": "ModSettingFloat" }
+        },
+        { "type": "section", "text": "First Person: Preferences" },
+        {
+          "type": "slider", "id": "fAngleWeight:SmartSelection1P", "text": "Prefer Near The Crosshair",
+          "help": "How much where you aim matters.",
+          "valueOptions": { "min": 0, "max": 10, "step": 0.1, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "fDistanceWeight:SmartSelection1P", "text": "Prefer Nearby",
+          "help": "How much being close matters.",
+          "valueOptions": { "min": 0, "max": 10, "step": 0.1, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "fTypeWeight:SmartSelection1P", "text": "Prefer Useful Kinds",
+          "help": "How much the kind of thing matters: keys, notes, ammo, aid, weapons and armor before containers, junk, doors and furniture.",
+          "valueOptions": { "min": 0, "max": 10, "step": 0.1, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "fItemValueWeight:SmartSelection1P", "text": "Prefer Valuable Items",
+          "help": "How much an item's value in caps matters.",
+          "valueOptions": { "min": 0, "max": 10, "step": 0.1, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "iValueNormalizationCap:SmartSelection1P", "text": "Value Comparison Point",
+          "help": "The value prices are compared against. Lower makes price differences matter more.",
+          "valueOptions": { "min": 1, "max": 2000, "step": 1, "sourceType": "ModSettingInt" }
+        },
+        {
+          "type": "slider", "id": "fPreviousSelectionBonus:SmartSelection1P", "text": "Keep The Current Target",
+          "help": "How strongly the current pick is kept. Higher means less switching between things close together.",
+          "valueOptions": { "min": -2, "max": 5, "step": 0.01, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "fNPCSelectionBonus:SmartSelection1P", "text": "Prefer Characters",
+          "help": "How strongly characters are preferred, when NPCs can be picked.",
+          "valueOptions": { "min": -2, "max": 5, "step": 0.01, "sourceType": "ModSettingFloat" }
+        },
+        { "type": "section", "text": "Third Person: Outline" },
+        {
+          "type": "switcher", "id": "bOutlineSelectedTarget:SmartSelection3P", "text": "Outline The Target",
+          "help": "Draws an outline around what you would use.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "stepper", "id": "iOutlineColor:SmartSelection3P", "text": "Outline Color",
+          "help": "The outline's color. HUD Color follows your HUD color.",
+          "valueOptions": { "sourceType": "ModSettingInt", "options": ["HUD Color", "Red", "Gold", "Green", "White", "Blue", "Pink"] }
+        },
+        {
+          "type": "slider", "id": "iOutlineWidth:SmartSelection3P", "text": "Outline Width",
+          "help": "How thick the outline is, in pixels at 1080p (thicker at higher resolutions).",
+          "valueOptions": { "min": 1, "max": 4, "step": 1, "sourceType": "ModSettingInt" }
+        },
+        {
+          "type": "slider", "id": "fOutlineOpacity:SmartSelection3P", "text": "Outline Opacity",
+          "help": "How solid the outline is.",
+          "valueOptions": { "min": 0, "max": 1, "step": 0.05, "sourceType": "ModSettingFloat" }
+        },
+        { "type": "section", "text": "Third Person: Selection" },
+        {
+          "type": "slider", "id": "fSelectionRange:SmartSelection3P", "text": "Selection Distance",
+          "help": "How far away something can be picked.",
+          "valueOptions": { "min": 40, "max": 1000, "step": 5, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "fMaxAngleDifference:SmartSelection3P", "text": "Selection Width",
+          "help": "How far beside the crosshair something can be. Higher is more forgiving.",
+          "valueOptions": { "min": 0.05, "max": 2, "step": 0.05, "sourceType": "ModSettingFloat" }
+        },
+        { "type": "section", "text": "Third Person: Preferences" },
+        {
+          "type": "slider", "id": "fAngleWeight:SmartSelection3P", "text": "Prefer Near The Crosshair",
+          "help": "How much where you aim matters.",
+          "valueOptions": { "min": 0, "max": 10, "step": 0.1, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "fDistanceWeight:SmartSelection3P", "text": "Prefer Nearby",
+          "help": "How much being close matters.",
+          "valueOptions": { "min": 0, "max": 10, "step": 0.1, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "fTypeWeight:SmartSelection3P", "text": "Prefer Useful Kinds",
+          "help": "How much the kind of thing matters: keys, notes, ammo, aid, weapons and armor before containers, junk, doors and furniture.",
+          "valueOptions": { "min": 0, "max": 10, "step": 0.1, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "fItemValueWeight:SmartSelection3P", "text": "Prefer Valuable Items",
+          "help": "How much an item's value in caps matters.",
+          "valueOptions": { "min": 0, "max": 10, "step": 0.1, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "iValueNormalizationCap:SmartSelection3P", "text": "Value Comparison Point",
+          "help": "The value prices are compared against. Lower makes price differences matter more.",
+          "valueOptions": { "min": 1, "max": 2000, "step": 1, "sourceType": "ModSettingInt" }
+        },
+        {
+          "type": "slider", "id": "fPreviousSelectionBonus:SmartSelection3P", "text": "Keep The Current Target",
+          "help": "How strongly the current pick is kept. Higher means less switching between things close together.",
+          "valueOptions": { "min": -2, "max": 5, "step": 0.01, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "fNPCSelectionBonus:SmartSelection3P", "text": "Prefer Characters",
+          "help": "How strongly characters are preferred, when NPCs can be picked.",
+          "valueOptions": { "min": -2, "max": 5, "step": 0.01, "sourceType": "ModSettingFloat" }
+        }
+      ]
+    },
+    {
+      "pageDisplayName": "Movement",
+      "content": [
+        { "type": "text", "text": "Sliding, what sprinting, swimming and sneaking cost, stumbles after big falls, and parkour. On a hosted world the host's rules apply to everyone." },
+        { "type": "section", "text": "Movement (the Host's)" },
+        {
+          "type": "switcher", "id": "bSliding:Movement", "text": "Sliding",
+          "help": "Crouch while sprinting to slide.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "slider", "id": "iSlideApCost:Movement", "text": "Slide AP Cost (%)",
+          "help": "The share of your maximum AP a slide takes.",
+          "valueOptions": { "min": 0, "max": 100, "step": 5, "sourceType": "ModSettingInt" }
+        },
+        {
+          "type": "switcher", "id": "bCheaperSprintOutOfCombat:Movement", "text": "Cheaper Sprinting Out of Combat",
+          "help": "Sprinting takes less AP when nothing is fighting you.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "slider", "id": "iSprintOutOfCombatCost:Movement", "text": "Sprint Cost Out of Combat (%)",
+          "help": "Out of combat, the share of the game's own sprint AP drain still taken. 0: sprinting is free.",
+          "valueOptions": { "min": 0, "max": 100, "step": 5, "sourceType": "ModSettingInt" }
+        },
+        {
+          "type": "switcher", "id": "bSwimmingApDrain:Movement", "text": "Swimming Takes AP",
+          "help": "Swimming drains AP.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bSneakingApDrain:Movement", "text": "Sneaking Takes AP",
+          "help": "Moving while sneaking drains AP.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bLandingStumble:Movement", "text": "Stumble After Big Falls",
+          "help": "Landing from a big drop staggers you (not in power armor, not after a landing roll).",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        { "type": "section", "text": "Parkour (the Host's)" },
+        {
+          "type": "switcher", "id": "bEnabled:Parkour", "text": "Parkour",
+          "help": "Jump at a ledge to climb it, step up onto something low, vault while running, or hold jump in the air to grab a ledge.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "slider", "id": "iClimbApCost:Parkour", "text": "Climb AP Cost (%)",
+          "help": "The share of your maximum AP a climb as high as your head or higher takes; lower moves take half. Without enough AP the climb fails.",
+          "valueOptions": { "min": 0, "max": 100, "step": 5, "sourceType": "ModSettingInt" }
+        },
+        {
+          "type": "switcher", "id": "bLandingRoll:Parkour", "text": "Landing Roll",
+          "help": "Crouch just before you land to roll instead of stumbling (half the AP of a climb).",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bNpcParkour:Parkour", "text": "NPCs Use Parkour",
+          "help": "Human NPCs climb and vault what's in their way: going after someone in a fight, following you, or stuck on their way somewhere. Ghouls, super mutants and creatures don't.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        { "type": "section", "text": "In Your Game" },
+        {
+          "type": "slider", "id": "fSlideCameraShake:Movement", "text": "Slide Camera Shake",
+          "help": "How much the view shakes during a slide. 0: none.",
+          "valueOptions": { "min": 0, "max": 1, "step": 0.05, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "switcher", "id": "bLedgeMarkers:Parkour", "text": "Ledge Markers",
+          "help": "A marker in your HUD on the ledge or obstacle a jump would take.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        }
+      ]
+    },
+    {
+      "pageDisplayName": "Build Tools",
+      "content": [
+        { "type": "text", "text": "Build mode switches. Their keys switch them while you build too: F1, F4, F11 and End by default (the keys are in Reclamation Day\\config\\BuildTools.ini)." },
+        {
+          "type": "switcher", "id": "bPlaceAnywhere:BuildTools", "text": "Place Anywhere",
+          "help": "Objects can be placed overlapping, floating, or outside the build area.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bScrapAnything:BuildTools", "text": "Scrap Anything",
+          "help": "Anything in the settlement's build area can be moved and scrapped like what was built there, dead bodies too.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        { "type": "section", "text": "Snapping" },
+        {
+          "type": "switcher", "id": "bObjectSnap:BuildTools", "text": "Snap to Objects",
+          "help": "Walls, floors and the like snap to each other's edges, as the game does. Off: objects go exactly where you hold them.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bGridSnap:BuildTools", "text": "Snap to a Grid",
+          "help": "The game's own grid: positions in steps of 32 units, turns in steps of 45 degrees.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        }
+      ]
+    },
+    {
+      "pageDisplayName": "Nemeses",
+      "content": [
+        {
+          "type": "text",
+          "text": "Gang men who survive you remember you: they come back with a name, a rank and a grudge. Your nemeses are in your Pip-Boy (DATA > NEMESIS). Talk to a man who surrendered to question him. On a hosted world the host's settings decide how often they come."
+        },
+        {
+          "type": "switcher", "id": "bEnabled:Nemeses", "text": "Nemeses",
+          "help": "Gang men become nemeses and come for you. Off: nothing is sent and no deeds are counted.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        { "type": "section", "text": "How Often (the Host's)" },
+        {
+          "type": "slider", "id": "fEncounterHours:Nemeses", "text": "Game Hours Between Chances",
+          "help": "How many game hours pass between two chances of a nemesis coming for you (fewer when a gang wants you badly).",
+          "valueOptions": { "min": 1, "max": 24, "step": 0.5, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "slider", "id": "iEncounterChance:Nemeses", "text": "Chance (%)",
+          "help": "How likely someone comes at each chance, if anyone holds a grudge.",
+          "valueOptions": { "min": 0, "max": 100, "step": 5, "sourceType": "ModSettingInt" }
+        },
+        {
+          "type": "slider", "id": "iCheatDeath:Nemeses", "text": "Cheat Death (%)",
+          "help": "How likely a nemesis you killed lived after all (more for higher ranks; never after an execution).",
+          "valueOptions": { "min": 0, "max": 80, "step": 5, "sourceType": "ModSettingInt" }
+        },
+        {
+          "type": "switcher", "id": "bWorldNews:Nemeses", "text": "World News",
+          "help": "Wars, new leaders and fallen gangs show on your HUD.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        { "type": "section", "text": "In Your Game" },
+        {
+          "type": "switcher", "id": "bSurrender:Nemeses", "text": "Gang Men Surrender",
+          "help": "Near death, gang men who aren't brave give up, and you can question them.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bShowTaunts:Nemeses", "text": "Show Taunts",
+          "help": "What a nemesis says when he comes shows on your HUD.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bKeepFaces:Nemeses", "text": "Keep Their Faces (Experimental)",
+          "help": "A nemesis comes back with the face he had when he met you. Not tested in game yet: leave off unless you are testing it.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        }
+      ]
+    },
+    {
+      "pageDisplayName": "Enemy AI",
+      "content": [
+        {
+          "type": "text",
+          "text": "Enemies fight like what they are. Robots and synths flank and hold their ground with a plan, people press an advantage and fall back when a fight turns against them, super mutants rush together and rage when hurt, and each faction has its own way of fighting. On a hosted world the host's settings apply to everyone."
+        },
+        { "type": "section", "text": "Enemy Tactics (the Host's)" },
+        {
+          "type": "switcher", "id": "bNpcTactics:Tactics", "text": "Smarter Enemies",
+          "help": "Each enemy fights by its kind and faction, and changes as the fight goes. Off: everyone fights with their usual combat style.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bNpcSlides:Tactics", "text": "NPCs Slide",
+          "help": "People in a fight slide into cover and slide in at their target, as you can.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        }
+      ]
+    },
+    {
+      "pageDisplayName": "VATS 76'",
+      "content": [
+        {
+          "type": "text",
+          "text": "VATS without the pause, as in Fallout 76: the VATS button locks on to the enemy nearest your crosshair and the game keeps running. Aim at a body part to pick it; your shots roll its hit chance. Based on Zzyxzz's VATS Unchained."
+        },
+        {
+          "type": "switcher", "id": "bEnabled:Vats76", "text": "VATS 76'",
+          "help": "Off: the VATS button opens the game's own VATS.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        { "type": "section", "text": "Targets" },
+        {
+          "type": "slider", "id": "fMaxHitChance:Vats76", "text": "Highest Hit Chance (%)",
+          "help": "No shot is surer than this. Critical strikes always hit.",
+          "valueOptions": { "min": 50, "max": 100, "step": 1, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "switcher", "id": "bShowAllParts:Vats76", "text": "Show Every Part's Chance",
+          "help": "Off: only the part you aim at shows its chance.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bHighlightPart:Vats76", "text": "Highlight The Part",
+          "help": "The part you aim at glows, as in VATS.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "slider", "id": "fEndDelay:Vats76", "text": "Stays On Without A Target (s)",
+          "help": "How long it waits for a new target once the last one is gone.",
+          "valueOptions": { "min": 0, "max": 5, "step": 0.5, "sourceType": "ModSettingFloat" }
+        },
+        {
+          "type": "switcher", "id": "bExcludeCompanions:Vats76", "text": "Skip Companions",
+          "help": "Companions are never picked unless they turn on you.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bExcludeDogmeat:Vats76", "text": "Skip Dogmeat",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bExcludeSettlers:Vats76", "text": "Skip Settlers",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bTargetExplosives:Vats76", "text": "Target Mines and Grenades",
+          "help": "Mines and thrown grenades can be picked and shot out of the air, as in VATS.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        { "type": "section", "text": "Attacks" },
+        {
+          "type": "switcher", "id": "bPerks:Vats76", "text": "VATS Perks Work",
+          "help": "Concentrated Fire, Gun Fu, Grim Reaper's Sprint and Demolition Expert work here as they do in VATS.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bMeleeJump:Vats76", "text": "Melee Attacks Jump To The Target",
+          "help": "A melee attack at a target out of reach jumps you to them, as in VATS (further with Blitz).",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bBursts:Vats76", "text": "Automatic Weapons Fire Bursts",
+          "help": "A pull of the trigger fires the whole VATS burst, as in VATS.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        {
+          "type": "switcher", "id": "bMysteriousStranger:Vats76", "text": "Mysterious Stranger",
+          "help": "With the Mysterious Stranger perk, he can appear beside you to finish off a badly hurt target, as in VATS. Other players see him too.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        { "type": "section", "text": "Critical Strikes" },
+        {
+          "type": "hotkey", "id": "armCritical", "text": "Critical Strike Key",
+          "help": "Readies a critical strike once the critical meter is full: your next attack always hits and is critical. Press it again to keep the strike for later. With no key set, the jump key does it while VATS 76' is on, as in Fallout 76."
+        },
+        {
+          "type": "switcher", "id": "bCriticalReadyMessage:Vats76", "text": "Critical Ready Message",
+          "help": "A message and the VATS sound when the critical meter fills.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        },
+        { "type": "section", "text": "Sound" },
+        {
+          "type": "switcher", "id": "bSounds:Vats76", "text": "VATS Sounds",
+          "help": "The game's VATS sounds when it locks on, picks a target and turns off.",
+          "valueOptions": { "sourceType": "ModSettingBool" }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+#include "winres.h"
+#include "BuildInfo.h"
+
+// The name the program ships under (set_basename in xmake.lua)
+#if defined(TARGET_FT)
+#define PROGRAM_FILE_NAME "ReclamationDay.exe"
+#else
+#define PROGRAM_FILE_NAME "SkyrimTogether.exe"
+#endif
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION BUILD_VERSION_MAJOR,BUILD_VERSION_MINOR,BUILD_VERSION_PATCH,BUILD_VERSION_BUILD
+PRODUCTVERSION BUILD_VERSION_MAJOR,BUILD_VERSION_MINOR,BUILD_VERSION_PATCH,BUILD_VERSION_BUILD
+FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+FILEFLAGS 0x1L
+#else
+FILEFLAGS 0x0L
+#endif
+FILEOS 0x4L
+FILETYPE 0x1L
+FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "Together Team"
+            VALUE "ProductName", "HIVEMIND"
+            VALUE "FileDescription", "Multiplayer mod for Bethesda games"
+            VALUE "FileVersion", BUILD_COMMIT
+            VALUE "InternalName", PROGRAM_FILE_NAME
+            VALUE "OriginalFilename", PROGRAM_FILE_NAME
+            VALUE "ProductVersion",	BUILD_BRANCH "@" BUILD_COMMIT
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "resources/launcher.manifest"
+
+#if defined(TARGET_ST)
+102 ICON "resources/st.ico"
+#elif defined(TARGET_FT)
+102 ICON "resources/ft.ico"
+#endif

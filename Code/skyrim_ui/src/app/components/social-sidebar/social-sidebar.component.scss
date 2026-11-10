@@ -1,0 +1,362 @@
+// The social sidebar: the overlay menus' look (start-menu, multiplayer-menu), Pip-Boy green on a dark panel ruled by
+// thin lines, a column on the right like Fallout 76's friends panel
+:host,
+:host * {
+  font-family: 'roboto-condensed', 'futura-condensed-medium', sans-serif;
+  box-sizing: border-box;
+}
+
+.so-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.so {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1101;
+  display: flex;
+  flex-direction: column;
+  width: min(30vw, 560px);
+  min-width: 360px;
+  padding: 3vh 2.4vh 2vh;
+  color: var(--pip-color);
+  background: linear-gradient(90deg, rgba(var(--tint-mid), 0.92), rgba(var(--tint-deep), 0.97));
+  border-left: 2px solid var(--pip-color);
+  box-shadow: -1vh 0 3vh rgba(0, 0, 0, 0.6);
+  user-select: none;
+  animation: so-slide 0.18s ease-out;
+}
+
+@keyframes so-slide {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.so-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1vh;
+  padding-bottom: 1.2vh;
+  border-bottom: 1px solid var(--line);
+}
+
+.so-title {
+  font-size: 4.4vh;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.so-me {
+  overflow: hidden;
+  font-size: 1.8vh;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  opacity: 0.75;
+}
+
+.so-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 1.2vh 0;
+}
+
+.so-scroll {
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(var(--pip), 0.4);
+  }
+}
+
+.so-kicker {
+  font-size: 1.5vh;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  opacity: 0.6;
+}
+
+.so-world,
+.so-requests,
+.so-players {
+  margin-bottom: 1.6vh;
+  padding: 1.2vh 1.4vh;
+  border: 1px solid var(--line);
+  background: rgba(var(--pip), 0.05);
+}
+
+.so-world-name {
+  margin: 0.4vh 0 1vh;
+  font-size: 2.6vh;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.so-privacy {
+  display: flex;
+  gap: 0.6vh;
+}
+
+.so-chip {
+  all: unset;
+  flex: 1 1 0;
+  padding: 0.6vh 0;
+  font-size: 1.5vh;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-align: center;
+  border: 1px solid var(--line);
+  cursor: pointer;
+
+  &.on {
+    color: #000;
+    background: var(--pip-color);
+  }
+
+  &:hover:not(.on) {
+    background: rgba(var(--pip), 0.15);
+  }
+}
+
+.so-hint {
+  margin-top: 0.8vh;
+  font-size: 1.5vh;
+  opacity: 0.7;
+}
+
+.so-note {
+  padding: 2vh 0.4vh;
+  font-size: 1.8vh;
+  opacity: 0.8;
+}
+
+.so-group {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: 0.8vh;
+  width: 100%;
+  margin-top: 1.2vh;
+  padding: 0.6vh 0.2vh;
+  font-size: 1.6vh;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.so-group-arrow {
+  width: 1.4vh;
+  text-align: center;
+}
+
+.so-count {
+  margin-left: auto;
+  opacity: 0.6;
+}
+
+.so-row {
+  display: flex;
+  align-items: center;
+  gap: 1.2vh;
+  padding: 0.8vh 0.4vh;
+  border-bottom: 1px solid rgba(var(--pip), 0.12);
+
+  &.dim {
+    opacity: 0.45;
+  }
+
+  &.invite {
+    background: rgba(var(--pip), 0.1);
+    box-shadow: inset 3px 0 0 var(--pip-color);
+  }
+}
+
+.so-avatar {
+  position: relative;
+  flex: 0 0 auto;
+  width: 4.6vh;
+  height: 4.6vh;
+  border: 1px solid var(--line);
+  background: rgba(var(--pip), 0.08);
+
+  img {
+    width: 100%;
+    height: 100%;
+    filter: saturate(0.6);
+  }
+}
+
+.so-dot {
+  position: absolute;
+  right: -0.4vh;
+  bottom: -0.4vh;
+  width: 1.2vh;
+  height: 1.2vh;
+  border: 1px solid #000;
+  border-radius: 50%;
+  background: #777;
+
+  &[data-state='online'] {
+    background: #57cbde;
+  }
+  &[data-state='away'],
+  &[data-state='snooze'],
+  &[data-state='busy'] {
+    background: #c9a63c;
+  }
+  &[data-state='rd'] {
+    background: var(--pip-color);
+  }
+}
+
+.so-who {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.so-name,
+.so-status {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.so-name {
+  font-size: 2vh;
+  font-weight: 700;
+}
+
+.so-status {
+  font-size: 1.5vh;
+  opacity: 0.75;
+}
+
+.so-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.5vh;
+}
+
+.so-button {
+  all: unset;
+  padding: 0.5vh 1vh;
+  font-size: 1.5vh;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  border: 1px solid var(--line);
+  cursor: pointer;
+
+  &.primary {
+    color: #000;
+    background: var(--pip-color);
+  }
+
+  &:hover:not([disabled]):not(.primary) {
+    background: rgba(var(--pip), 0.15);
+  }
+
+  &[disabled] {
+    cursor: default;
+    opacity: 0.5;
+  }
+}
+
+.so-icon {
+  padding: 0.5vh 0.7vh;
+  font-size: 1.2vh;
+  opacity: 0.7;
+}
+
+.so-key {
+  padding: 0 0.5vh;
+  border: 1px solid var(--pip-color);
+}
+
+.so-foot {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 1.2vh;
+  border-top: 1px solid var(--line);
+}
+
+.so-confirm {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3vh;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.so-confirm-box {
+  padding: 2.4vh;
+  border: 1px solid var(--pip-color);
+  background: rgba(var(--tint-deep), 0.98);
+}
+
+.so-confirm-message {
+  font-size: 2.2vh;
+  font-weight: 700;
+}
+
+.so-confirm-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1vh;
+  margin-top: 2vh;
+}
+
+// The friends asking in, while the sidebar is closed: a small card at the top right, over the HUD
+.so-ask-card {
+  position: fixed;
+  top: 12vh;
+  right: 2.4vh;
+  z-index: 1050;
+  width: min(22vw, 380px);
+  min-width: 260px;
+  padding: 1.2vh 1.4vh;
+  color: var(--pip-color);
+  background: rgba(var(--tint-deep), 0.88);
+  border: 1px solid var(--pip-color);
+  box-shadow: inset 3px 0 0 var(--pip-color);
+  pointer-events: none;
+  animation: so-slide 0.18s ease-out;
+}
+
+.so-ask-line {
+  display: flex;
+  align-items: center;
+  gap: 1vh;
+  margin-top: 0.8vh;
+}
+
+.so-avatar.small {
+  width: 3.2vh;
+  height: 3.2vh;
+}
+
+.so-blink {
+  animation: so-blink 1s steps(2, start) infinite;
+}
+
+@keyframes so-blink {
+  to {
+    visibility: hidden;
+  }
+}

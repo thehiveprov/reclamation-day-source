@@ -1,0 +1,11 @@
+# The bundled mods' files, relative to Game Files (written by Tools/ListBundledMods.js). The launcher keeps them in
+# the game's Data folder and switches on the plugins among them; "[folder]" starts a mod.
+
+# Boston Natural Surroundings by Silverfox600 (Nexus 30673), 3.0, remade as RD_Landscape.esp and RD_Trees.esp (F:\modfiles\RDNature): the 2287 Commonwealth's grass, ground and trees, off in Winter of Atom
+[RDNature]
+RD_Landscape - Main.ba2
+RD_Landscape - Textures.ba2
+RD_Landscape.esp
+RD_Trees - Main.ba2
+RD_Trees - Textures.ba2
+RD_Trees.esp

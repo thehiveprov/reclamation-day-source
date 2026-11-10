@@ -1,0 +1,5 @@
+# The 2287 Commonwealth's own plugins, in load order: switched on in plugins.txt for any campaign but Winter of Atom
+# (the prequel's snowbound Commonwealth), off for it (Updater's SwitchPrequelPlugins). Their archives load only with them.
+# The nature overhaul (Boston Natural Surroundings by Silverfox600, remade): grass, ground and plants, then the trees
+RD_Landscape.esp
+RD_Trees.esp

@@ -1,0 +1,24 @@
+@import 'env';
+
+// A dark panel with a thin Pip-Boy border
+:host {
+  display: block;
+  padding: 0.25rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+
+  // Popups: brighter border, glowing
+  &[data-app-window-border='fancy'] {
+    padding: 1.5rem 1.75rem;
+    background: rgba(var(--tint), 0.96);
+    border: 2px solid var(--pip-color);
+    box-shadow: 0 0 2rem rgba(var(--pip), 0.3);
+  }
+
+  // Tab bars: lines above and below
+  &[data-app-window-border='strip'] {
+    padding: 0;
+    border-width: 2px 0;
+    border-color: rgba(var(--pip), 0.6);
+  }
+}

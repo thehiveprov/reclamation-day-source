@@ -1,0 +1,1118 @@
+// The nemesis screen: the whole view, dark, Pip-Boy green, the overlay's fonts. Tones: murderous in the overlay's
+// danger red, vengeful amber, resentful green, no grudge dim.
+:host {
+  --murderous: rgb(var(--danger));
+  --vengeful: #ffb347;
+  --resentful: rgba(var(--pip), 0.95);
+  --none: rgba(var(--pip), 0.45);
+  --light: rgba(var(--pip), 0.75);
+  --serious: #e8c25a;
+  --severe: #ff9a4d;
+  --crippling: #ff7a3d;
+  --lethal: rgb(var(--danger));
+
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  // closed it's an empty layer over the whole overlay: clicks go through it to the rest
+  pointer-events: none;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 2.2vh 4vw 1.6vh;
+  color: var(--pip-color);
+  text-shadow: 0 0 0.5rem rgba(var(--pip), 0.35);
+  background:
+    radial-gradient(ellipse at 50% 35%, rgba(var(--pip), 0.05), transparent 65%),
+    rgba(var(--tint-deep), 0.97);
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(1.4rem, 2.2vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+// Headings with a rule running out to the right
+h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 1.1rem 0 0.55rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  &::after {
+    flex: 1;
+    height: 1px;
+    content: '';
+    background: rgba(var(--pip), 0.3);
+  }
+}
+
+p {
+  margin: 0.25rem 0;
+  line-height: 1.35;
+}
+
+.dim {
+  opacity: 0.6;
+}
+
+.center {
+  text-align: center;
+}
+
+.empty {
+  padding: 0.4rem 0;
+  font-style: italic;
+  opacity: 0.55;
+
+  &.center {
+    margin: auto;
+    font-size: 1.1rem;
+  }
+}
+
+.key {
+  display: inline-block;
+  min-width: 1.3rem;
+  margin-right: 0.35rem;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+  color: var(--ink);
+  text-shadow: none;
+  background: var(--pip-color);
+}
+
+// ---------------------------------------------------------------- header
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1rem;
+  align-items: center;
+  padding-bottom: 1.2vh;
+  border-bottom: 1px solid rgba(var(--pip), 0.45);
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.tab,
+.gang-tab {
+  padding: 0.35rem 0.6rem;
+  font-size: clamp(0.8rem, 1.05vw, 1.05rem);
+  white-space: nowrap;
+  border: none;
+  opacity: 0.6;
+
+  &.active {
+    color: var(--pip-color);
+    text-decoration: underline;
+    text-underline-offset: 0.35em;
+    background: transparent;
+    opacity: 1;
+  }
+
+  &:hover:not(.active) {
+    opacity: 1;
+  }
+}
+
+.title {
+  text-align: center;
+
+  .subtitle {
+    margin-top: 0.3rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    opacity: 0.65;
+  }
+}
+
+.close {
+  justify-self: end;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+.off {
+  margin-top: 0.6rem;
+  padding: 0.4rem;
+  text-align: center;
+  color: var(--vengeful);
+  border: 1px solid rgba(255, 179, 71, 0.5);
+}
+
+.content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.hints {
+  display: flex;
+  justify-content: center;
+  gap: 2.2rem;
+  padding-top: 1vh;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-top: 1px solid rgba(var(--pip), 0.45);
+  opacity: 0.85;
+}
+
+// ---------------------------------------------------------------- shared rows, bars, chips
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+  padding: 0.35rem 0.4rem;
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-align: left;
+  text-transform: none;
+  border: 1px solid transparent;
+}
+
+button.row:hover {
+  color: var(--pip-color);
+  background: rgba(var(--pip), 0.1);
+  border-color: rgba(var(--pip), 0.35);
+}
+
+.chip {
+  flex: none;
+  min-width: 6.5rem;
+  padding: 0.18rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-align: center;
+  text-transform: uppercase;
+  border: 1px solid rgba(var(--pip), 0.55);
+
+  &.blood {
+    min-width: 0;
+    color: var(--murderous);
+    border-color: rgba(var(--danger), 0.7);
+  }
+}
+
+.meter {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 4rem;
+  height: 0.35rem;
+  background: rgba(var(--pip), 0.15);
+
+  &.wide {
+    flex: 0 1 26rem;
+  }
+
+  .fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(var(--pip), 0.8);
+
+    &.bad,
+    &.hot {
+      background: var(--murderous);
+    }
+  }
+
+  .tick {
+    position: absolute;
+    top: -0.2rem;
+    width: 1px;
+    height: 0.75rem;
+    background: rgba(var(--pip), 0.6);
+  }
+}
+
+// Five marks for the rank
+.rank {
+  display: inline-flex;
+  flex: none;
+  gap: 0.18rem;
+
+  i {
+    width: 0.5rem;
+    height: 0.5rem;
+    border: 1px solid rgba(var(--pip), 0.55);
+    transform: rotate(45deg);
+
+    &.on {
+      background: var(--pip-color);
+      border-color: var(--pip-color);
+    }
+  }
+}
+
+.fresh {
+  flex: none;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--pip-color);
+  box-shadow: 0 0 0.4rem var(--pip-color);
+}
+
+[data-tone='murderous'] {
+  --tone: var(--murderous);
+}
+
+[data-tone='vengeful'] {
+  --tone: var(--vengeful);
+}
+
+[data-tone='resentful'] {
+  --tone: var(--resentful);
+}
+
+[data-tone='none'] {
+  --tone: var(--none);
+}
+
+// ---------------------------------------------------------------- record
+
+.record,
+.world {
+  display: flex;
+  gap: 4vw;
+  padding-top: 0.4rem;
+
+  .column {
+    flex: 1 1 0;
+    min-width: 0;
+
+    &.wide {
+      flex: 1.6 1 0;
+    }
+  }
+}
+
+.man-row {
+  .tone {
+    color: var(--tone);
+    border-color: var(--tone);
+  }
+
+  .name {
+    flex: 1 1 auto;
+    font-weight: 700;
+
+    i {
+      margin-left: 0.3rem;
+      font-weight: 400;
+      opacity: 0.7;
+    }
+  }
+
+  &.gone {
+    opacity: 0.55;
+  }
+}
+
+.party {
+  display: flex;
+  gap: 0.8rem;
+  padding: 0.25rem 0.4rem;
+
+  .name {
+    font-weight: 700;
+  }
+}
+
+.karma {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.25rem 0.4rem;
+
+  .value {
+    min-width: 6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+}
+
+.notoriety-row {
+  .name {
+    flex: 0 0 9rem;
+    font-weight: 700;
+  }
+
+  .word {
+    flex: 0 0 7rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+}
+
+[data-level='3'] .word,
+[data-level='3'] .fill {
+  color: var(--vengeful);
+  background-color: var(--vengeful);
+}
+
+[data-level='4'] .word,
+[data-level='4'] .fill {
+  color: var(--murderous);
+  background-color: var(--murderous);
+}
+
+.notoriety-row .word,
+.notoriety .word {
+  background-color: transparent !important;
+}
+
+.story-row {
+  align-items: baseline;
+
+  .text {
+    flex: 1 1 auto;
+    line-height: 1.3;
+  }
+
+  .date {
+    flex: none;
+    font-size: 0.8rem;
+    opacity: 0.55;
+  }
+
+  &.yours .chip {
+    color: var(--ink);
+    text-shadow: none;
+    background: var(--pip-color);
+  }
+}
+
+.more {
+  padding: 0.2rem 0.4rem;
+  font-size: 0.85rem;
+  font-style: italic;
+  opacity: 0.6;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.7rem 0.3rem 0.5rem;
+  background: rgba(var(--pip), 0.06);
+  border: 1px solid rgba(var(--pip), 0.3);
+
+  .number {
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .label {
+    margin-top: 0.35rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-align: center;
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+
+  &.zero {
+    opacity: 0.45;
+  }
+}
+
+.dead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+
+  button.chip {
+    padding: 0.25rem 0.6rem;
+
+    &:hover {
+      color: var(--ink);
+      background: var(--murderous);
+    }
+  }
+}
+
+// ---------------------------------------------------------------- hierarchy
+
+.gangs {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.6rem 0;
+  overflow-x: auto;
+  border-bottom: 1px solid rgba(var(--pip), 0.3);
+
+  .gang-tab {
+    flex: none;
+    font-size: 0.9rem;
+
+    &.destroyed {
+      text-decoration: line-through;
+    }
+  }
+}
+
+.gang-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid rgba(var(--pip), 0.3);
+
+  .label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  .word {
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+}
+
+.notoriety,
+.strength {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: min(60rem, 100%);
+}
+
+.notoriety .meter.wide {
+  flex: 1 1 26rem;
+}
+
+.small-bar {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  gap: 0.5rem;
+
+  .meter {
+    min-width: 3rem;
+  }
+}
+
+.war-line {
+  font-size: 0.85rem;
+  color: var(--vengeful);
+}
+
+.tree {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  padding: 1.4rem 0 0.8rem;
+}
+
+.tier {
+  display: grid;
+  grid-template-columns: 9rem 1fr;
+  align-items: center;
+}
+
+.tier-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+// A row of seats, joined by a rule over them (a stem up from each)
+.boxes {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.1rem 1rem;
+
+  &:not(.leader)::before {
+    position: absolute;
+    top: -0.8rem;
+    left: 6.25rem;
+    right: 6.25rem;
+    height: 1px;
+    content: '';
+    background: rgba(var(--pip), 0.4);
+  }
+
+  &:not(.leader) > .box::before {
+    position: absolute;
+    top: calc(-0.8rem - 1px);
+    left: 50%;
+    width: 1px;
+    height: 0.8rem;
+    content: '';
+    background: rgba(var(--pip), 0.4);
+  }
+}
+
+.box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 12.5rem;
+  min-height: 4.4rem;
+  padding: 0.45rem 0.6rem;
+  font-weight: 400;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  background: rgba(var(--tint-mid), 0.9);
+  border: 1px solid var(--tone, rgba(var(--pip), 0.5));
+
+  &:hover {
+    color: var(--pip-color);
+    background: rgba(var(--pip), 0.12);
+    border-color: var(--pip-color);
+  }
+
+  .box-name {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  .box-nick {
+    min-height: 1em;
+    margin-top: 0.15rem;
+    font-size: 0.78rem;
+    opacity: 0.65;
+  }
+
+  .box-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 0.3rem;
+  }
+
+  .box-standing {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--tone);
+    text-transform: uppercase;
+  }
+
+  .fresh {
+    position: absolute;
+    top: 0.45rem;
+    right: 0.45rem;
+  }
+
+  &.unknown .box-name {
+    opacity: 0.7;
+  }
+
+  &.dead {
+    opacity: 0.5;
+    border-style: dashed;
+  }
+
+  &.vacant {
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    border: 1px dashed rgba(var(--pip), 0.3);
+    opacity: 0.55;
+  }
+}
+
+.unnamed {
+  text-align: center;
+  font-size: 0.85rem;
+  font-style: italic;
+  opacity: 0.55;
+}
+
+.fallen {
+  padding-top: 0.6rem;
+  border-top: 1px solid rgba(var(--pip), 0.3);
+
+  .fallen-row {
+    display: flex;
+    gap: 1rem;
+    padding: 0.6rem 0 0.4rem;
+    overflow-x: auto;
+
+    .box {
+      flex: none;
+    }
+  }
+}
+
+// ---------------------------------------------------------------- world
+
+.war {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.7rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid rgba(var(--danger), 0.55);
+
+  .sides {
+    display: flex;
+    gap: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+
+    .vs {
+      opacity: 0.5;
+    }
+  }
+
+  .meter {
+    flex: none;
+    margin-top: 0.3rem;
+  }
+
+  &.ended {
+    border-color: rgba(var(--pip), 0.25);
+    opacity: 0.6;
+  }
+}
+
+.relation {
+  display: grid;
+  grid-template-columns: 7rem 1fr 7rem 7rem;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.25rem 0.2rem;
+  font-size: 0.9rem;
+
+  .a {
+    text-align: right;
+  }
+
+  .word {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+}
+
+.chronicle .story-row .chip {
+  min-width: 7rem;
+}
+
+// ---------------------------------------------------------------- wound log
+
+.wounds {
+  display: grid;
+  grid-template-columns: minmax(16rem, 1fr) minmax(18rem, 1.25fr) minmax(16rem, 1.1fr);
+  gap: 2.5vw;
+  height: 100%;
+  padding-top: 0.4rem;
+}
+
+.victims {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.victim-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.victim,
+.hit {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  font-weight: 400;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: 0.03em;
+  border: none;
+  border-left: 3px solid transparent;
+}
+
+.victim {
+  font-size: 1rem;
+
+  .star {
+    margin-right: 0.4rem;
+    color: var(--murderous);
+  }
+
+  &[data-outcome='killed'],
+  &[data-outcome='dead'] {
+    border-left-color: var(--murderous);
+  }
+
+  &[data-outcome='survived'] {
+    border-left-color: rgba(var(--pip), 0.8);
+  }
+
+  &[data-outcome='left for dead'] {
+    border-left-color: var(--vengeful);
+  }
+
+  &.active {
+    background: rgba(var(--pip), 0.1);
+  }
+}
+
+.hit {
+  gap: 0.6rem;
+  margin-left: 1.2rem;
+  width: calc(100% - 1.2rem);
+  font-size: 0.88rem;
+  border-left: 1px solid rgba(var(--pip), 0.3);
+
+  &.active {
+    outline: 2px solid var(--pip-color);
+    outline-offset: -2px;
+  }
+}
+
+.square {
+  flex: none;
+  width: 0.55rem;
+  height: 0.55rem;
+  background: var(--light);
+}
+
+[data-severity='serious'] {
+  --severity: var(--serious);
+}
+
+[data-severity='severe'] {
+  --severity: var(--severe);
+}
+
+[data-severity='crippling'] {
+  --severity: var(--crippling);
+}
+
+[data-severity='lethal'] {
+  --severity: var(--lethal);
+}
+
+.square[data-severity],
+.hit[data-severity] .square {
+  background: var(--severity, var(--light));
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem 1rem;
+  margin: 0;
+  font-size: 0.9rem;
+
+  dt {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+
+  dd {
+    margin: 0;
+    text-align: right;
+  }
+}
+
+.body-panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  border: 1px solid rgba(var(--pip), 0.4);
+  background-image:
+    linear-gradient(rgba(var(--pip), 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--pip), 0.07) 1px, transparent 1px);
+  background-size: 2.5rem 2.5rem;
+
+  .shot-count {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+}
+
+.body {
+  height: 88%;
+  max-height: 34rem;
+
+  .part {
+    fill: rgba(var(--pip), 0.06);
+    stroke: rgba(var(--pip), 0.55);
+    stroke-width: 2;
+
+    // Where his other hits from the player landed
+    &.touched {
+      fill: rgba(var(--pip), 0.3);
+      stroke: rgba(var(--pip), 0.9);
+      stroke-dasharray: 6 3;
+    }
+
+    &.selected {
+      fill: var(--severity, var(--light));
+      fill-opacity: 0.75;
+      stroke: var(--severity, var(--pip-color));
+      filter: drop-shadow(0 0 6px var(--severity, var(--pip-color)));
+    }
+  }
+
+  .side {
+    font-size: 14px;
+    fill: rgba(var(--pip), 0.5);
+  }
+}
+
+.victim-detail {
+  min-height: 0;
+  overflow-y: auto;
+
+  .victim-name {
+    margin-top: 0.4rem;
+    font-size: 1.6rem;
+    text-align: center;
+    cursor: pointer;
+  }
+}
+
+.outcome {
+  margin: 0.9rem 0 0.4rem;
+  padding: 0.55rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
+  background: rgba(var(--pip), 0.12);
+  border-left: 4px solid var(--pip-color);
+
+  &[data-outcome='killed'],
+  &[data-outcome='dead'] {
+    color: var(--murderous);
+    background: rgba(var(--danger), 0.12);
+    border-left-color: var(--murderous);
+  }
+
+  &[data-outcome='left for dead'] {
+    color: var(--vengeful);
+    background: rgba(255, 179, 71, 0.1);
+    border-left-color: var(--vengeful);
+  }
+}
+
+.damage {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.6rem;
+
+  .label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  .fill {
+    background: var(--severity, var(--light));
+  }
+
+  .value {
+    min-width: 2rem;
+    font-weight: 700;
+    text-align: right;
+    color: var(--severity, var(--pip-color));
+  }
+}
+
+.effect {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.25rem 0;
+
+  span:nth-child(2) {
+    flex: 1 1 auto;
+  }
+
+  .severity {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--severity, var(--pip-color));
+  }
+}
+
+// ---------------------------------------------------------------- a man's page
+
+.man-backdrop {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.man-page {
+  display: flex;
+  flex-direction: column;
+  width: min(62rem, 92vw);
+  max-height: 86vh;
+  padding: 1.4rem 2rem 1rem;
+  background: rgba(var(--tint-mid), 0.98);
+  border: 1px solid var(--tone, rgba(var(--pip), 0.6));
+  box-shadow: 0 0 2rem rgba(0, 0, 0, 0.8);
+
+  header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid rgba(var(--pip), 0.35);
+
+    .nickname {
+      font-style: italic;
+      opacity: 0.75;
+    }
+
+    .outcome {
+      margin: 0.4rem 0 0;
+      padding: 0.3rem 1rem;
+      font-size: 0.95rem;
+    }
+  }
+}
+
+.man-columns {
+  display: flex;
+  gap: 2.5rem;
+  min-height: 0;
+  overflow-y: auto;
+
+  section {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
+.grudge {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+
+  .word {
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--tone);
+  }
+
+  .fill {
+    background: var(--tone, rgba(var(--pip), 0.8));
+  }
+}
+
+.history .story-row {
+  padding: 0.25rem 0;
+
+  .date {
+    flex: 0 0 9.5rem;
+  }
+}
+
+[data-history-tone='1'] .text {
+  color: var(--murderous);
+}
+
+[data-history-tone='2'] .text {
+  color: var(--serious);
+}
+
+[data-history-tone='3'] .text {
+  opacity: 0.6;
+}
+
+button.link {
+  padding: 0;
+  font-size: inherit;
+  font-weight: 400;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: normal;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  border: none;
+
+  &:hover {
+    color: var(--pip-color);
+    background: transparent;
+  }
+}
+
+button.small {
+  margin-top: 0.8rem;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+.man-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.6rem;
+  border-top: 1px solid rgba(var(--pip), 0.35);
+}

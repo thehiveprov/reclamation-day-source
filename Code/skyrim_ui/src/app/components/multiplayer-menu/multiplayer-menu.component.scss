@@ -1,0 +1,738 @@
+// Fallout 4's look (its colors are in styles.scss): Pip-Boy green on dark panels, Roboto Condensed (the game's menu
+// font)
+:host,
+:host * {
+  font-family: 'roboto-condensed', 'futura-condensed-medium', sans-serif;
+  box-sizing: border-box;
+}
+
+.mm {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--pip-color);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.55) 0%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+  user-select: none;
+}
+
+// Past 1080p it grows with the height, as the text does: at 1500px on a taller screen the logo wouldn't fit its column
+.mm-frame {
+  display: flex;
+  flex-direction: column;
+  width: min(92vw, max(1500px, 139vh));
+  height: 94vh;
+}
+
+// Header
+
+.mm-header {
+  flex: none;
+  padding: 1vh 0 1.4vh;
+  margin-bottom: 1.6vh;
+  border-bottom: 2px solid rgba(var(--pip), 0.6);
+}
+
+.mm-brand {
+  font-size: 1.9vh;
+  letter-spacing: 0.3em;
+  opacity: 0.7;
+}
+
+.mm-title {
+  margin: 0.4vh 0 0;
+  font-size: 4.4vh;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-shadow: 0 0 0.8vh rgba(var(--pip), 0.45);
+}
+
+.mm-subtitle {
+  margin-top: 0.3vh;
+  font-size: 1.9vh;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.mm-status {
+  flex: none;
+  margin-bottom: 1.4vh;
+  padding: 0.8vh 1.2vh;
+  font-size: 1.9vh;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-left: 4px solid var(--pip-color);
+  background: rgba(var(--pip), 0.08);
+}
+
+.mm-status-error {
+  color: rgb(255, 180, 163);
+  border-color: rgb(var(--danger));
+  background: rgba(var(--danger), 0.1);
+}
+
+// A newer release: what it is and the button that installs it
+.mm-update {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6vh;
+  text-transform: none;
+}
+
+.mm-update-failed {
+  color: rgb(255, 180, 163);
+}
+
+// The missing mods: one per line, in a box that scrolls when the list is long
+.mm-requirements {
+  max-height: 24vh;
+  overflow-y: auto;
+  margin: 0.8vh 0 0;
+  padding: 0.6vh 1vh;
+  list-style: none;
+  text-transform: none;
+  border: 1px solid rgba(var(--danger), 0.5);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+// A missing mod, with the button that opens its download page
+.mm-requirement {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.6vh;
+
+  & + & {
+    margin-top: 0.6vh;
+  }
+
+  .mm-button {
+    flex: none;
+    padding: 0.5vh 1.4vh;
+    font-size: 1.6vh;
+  }
+}
+
+// Card grids: 3 x 3 cards visible, scrolling for more
+
+.mm-grid {
+  --gap: 1.6vh;
+  --card-height: 22vh;
+
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: var(--card-height);
+  gap: var(--gap);
+  align-content: start;
+  min-height: 0;
+  max-height: calc(3 * var(--card-height) + 2 * var(--gap));
+  padding: 0.2vh 1vh 0.2vh 0.2vh;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 0.6vh;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(var(--pip), 0.08);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(var(--pip), 0.6);
+  }
+}
+
+.mm-grid-wide {
+  --card-height: 26vh;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mm-card {
+  all: unset;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--pip-color);
+  text-align: left;
+  cursor: pointer;
+  background: rgba(var(--tint), 0.78);
+  border: 1px solid rgba(var(--pip), 0.35);
+  transition:
+    border-color 0.12s,
+    box-shadow 0.12s,
+    background 0.12s;
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(var(--pip), 0.1);
+    border-color: var(--pip-color);
+    box-shadow:
+      0 0 1.4vh rgba(var(--pip), 0.35),
+      inset 0 0 0 1px var(--pip-color);
+  }
+}
+
+// A save's card with its DELETE in the corner across from the tag, brighter while the card is pointed at
+.mm-save {
+  position: relative;
+  min-height: 0;
+
+  > .mm-card {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+  }
+
+  &:hover .mm-save-delete {
+    opacity: 1;
+  }
+}
+
+.mm-save-delete {
+  all: unset;
+  position: absolute;
+  top: 0.8vh;
+  right: 0.8vh;
+  padding: 0.2vh 0.8vh;
+  font-size: 1.4vh;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pip-color);
+  cursor: pointer;
+  opacity: 0.6;
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid rgba(var(--pip), 0.5);
+  transition:
+    opacity 0.12s,
+    color 0.12s,
+    border-color 0.12s;
+
+  &:hover,
+  &:focus-visible {
+    opacity: 1;
+    color: rgb(255, 180, 163);
+    border-color: rgb(var(--danger));
+    background: rgba(var(--danger), 0.25);
+  }
+}
+
+.mm-thumb {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  background: rgba(var(--pip), 0.05);
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.mm-tag {
+  position: absolute;
+  top: 0.8vh;
+  left: 0.8vh;
+  max-width: calc(100% - 1.6vh);
+  padding: 0.2vh 0.8vh;
+  overflow: hidden;
+  font-size: 1.4vh;
+  letter-spacing: 0.08em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid rgba(var(--pip), 0.5);
+}
+
+.mm-card-body {
+  flex: none;
+  padding: 0.9vh 1.2vh 1vh;
+  border-top: 1px solid rgba(var(--pip), 0.25);
+}
+
+.mm-card-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1vh;
+}
+
+.mm-card-title {
+  overflow: hidden;
+  font-size: 2.2vh;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.mm-card-title-big {
+  font-size: 3vh;
+  white-space: normal;
+}
+
+.mm-card-level {
+  flex: none;
+  font-size: 1.8vh;
+  font-weight: 700;
+}
+
+.mm-card-line {
+  overflow: hidden;
+  font-size: 1.6vh;
+  letter-spacing: 0.03em;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.mm-card-kicker {
+  font-size: 1.5vh;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.mm-dim {
+  opacity: 0.65;
+}
+
+.mm-card-create {
+  align-items: center;
+  justify-content: center;
+  gap: 1vh;
+  padding: 2vh;
+  text-align: center;
+  border-style: dashed;
+
+  .mm-card-line {
+    max-width: 85%;
+    white-space: normal;
+    opacity: 0.75;
+  }
+}
+
+.mm-plus {
+  font-size: 7vh;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.mm-card-world {
+  justify-content: center;
+  gap: 0.8vh;
+  padding: 2vh;
+}
+
+// Forms: naming a world, joining a server
+
+.mm-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2vh;
+  max-width: 64vh;
+  margin-top: 2vh;
+}
+
+// Joining a server: tabs (on the network / public), the servers found, then joining by address
+
+.mm-join {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.4vh;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.mm-tabs {
+  display: flex;
+  gap: 0.6vh;
+  border-bottom: 1px solid rgba(var(--pip), 0.35);
+  align-self: stretch;
+}
+
+.mm-tab {
+  all: unset;
+  padding: 0.8vh 2vh;
+  font-size: 2vh;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0.6;
+  border-bottom: 3px solid transparent;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.mm-tab-active {
+  opacity: 1;
+  border-bottom-color: var(--pip-color);
+}
+
+.mm-join-note {
+  font-size: 1.8vh;
+  opacity: 0.75;
+}
+
+.mm-lan-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8vh;
+  align-self: stretch;
+  max-width: 96vh;
+}
+
+.mm-lan-server {
+  all: unset;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6vh 2.4vh;
+  padding: 1.2vh 1.6vh;
+  color: var(--pip-color);
+  cursor: pointer;
+  background: rgba(var(--tint), 0.78);
+  border: 1px solid rgba(var(--pip), 0.35);
+
+  &:hover:not([disabled]) {
+    border-color: var(--pip-color);
+    background: rgba(var(--pip), 0.12);
+  }
+
+  &[disabled] {
+    cursor: default;
+    opacity: 0.55;
+  }
+}
+
+.mm-lan-name {
+  flex: 1 1 100%;
+  font-size: 2.4vh;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.mm-lan-detail {
+  font-size: 1.7vh;
+}
+
+.mm-lan-version {
+  color: rgb(255, 180, 163);
+}
+
+.mm-join .mm-form {
+  align-self: stretch;
+  margin-top: 1vh;
+}
+
+.mm-label {
+  font-size: 1.6vh;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.mm-input {
+  all: unset;
+  padding: 1vh 1.4vh;
+  font-size: 2.6vh;
+  color: var(--pip-color);
+  caret-color: var(--pip-color);
+  user-select: text;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(var(--pip), 0.6);
+  opacity: 1 !important;
+
+  &:focus {
+    border-color: var(--pip-color);
+    box-shadow: 0 0 1vh rgba(var(--pip), 0.4);
+  }
+
+  &::placeholder {
+    color: rgba(var(--pip), 0.35);
+  }
+}
+
+.mm-form-hint {
+  font-size: 1.6vh;
+  opacity: 0.65;
+}
+
+.mm-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8vh;
+}
+
+.mm-chip {
+  all: unset;
+  padding: 0.4vh 1vh;
+  font-size: 1.7vh;
+  cursor: pointer;
+  border: 1px solid rgba(var(--pip), 0.5);
+
+  &:hover {
+    color: var(--ink);
+    background: var(--pip-color);
+  }
+}
+
+// Buttons and footer
+
+.mm-button {
+  all: unset;
+  padding: 0.9vh 2vh;
+  font-size: 2vh;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--pip-color);
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid rgba(var(--pip), 0.55);
+
+  &:hover:not([disabled]) {
+    color: var(--ink);
+    background: var(--pip-color);
+  }
+
+  &[disabled] {
+    cursor: default;
+    opacity: 0.35;
+  }
+}
+
+.mm-button-primary {
+  align-self: flex-start;
+  margin-top: 1vh;
+  background: rgba(var(--pip), 0.12);
+}
+
+.mm-key {
+  display: inline-block;
+  margin-right: 0.6vh;
+  padding: 0 0.6vh;
+  font-size: 1.5vh;
+  border: 1px solid currentColor;
+}
+
+.mm-footer {
+  flex: none;
+  display: flex;
+  gap: 1.6vh;
+  margin-top: auto;
+  padding-top: 1.6vh;
+  border-top: 2px solid rgba(var(--pip), 0.6);
+}
+
+.mm-empty {
+  padding: 4vh 0;
+  font-size: 2.4vh;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.mm-busy {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4vh;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+@keyframes mm-blink {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.mm-blink {
+  animation: mm-blink 1.2s steps(2, start) infinite;
+}
+
+// Title: the main menu
+
+.mm-home {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 6vh;
+  min-height: 0;
+}
+
+.mm-home-menu {
+  display: flex;
+  flex: 0 0 38%;
+  flex-direction: column;
+  min-width: max-content;
+  gap: 2vh;
+}
+
+.mm-logo-top {
+  font-size: 9vh;
+  font-weight: 700;
+  white-space: nowrap;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 1.4vh rgba(var(--pip), 0.5);
+}
+
+.mm-logo-bottom {
+  margin-top: 0.6vh;
+  font-size: 3.4vh;
+  letter-spacing: 0.55em;
+  white-space: nowrap;
+  opacity: 0.85;
+}
+
+// The prequel campaign is the one loaded
+.mm-logo-campaign {
+  margin-top: 1vh;
+  font-size: 2.2vh;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.mm-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4vh;
+  margin-top: 2vh;
+}
+
+.mm-menu-item {
+  all: unset;
+  padding: 0.7vh 1.6vh;
+  font-size: 3vh;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--pip-color);
+  text-transform: uppercase;
+  cursor: pointer;
+
+  &:hover:not([disabled]),
+  &:focus-visible {
+    color: var(--ink);
+    background: var(--pip-color);
+  }
+
+  &[disabled] {
+    cursor: default;
+    opacity: 0.35;
+  }
+
+  // Not out yet: grey instead of the dimmed green of an entry that's only waiting for something
+  &.mm-menu-soon[disabled] {
+    color: #8e8e8e;
+    opacity: 0.8;
+  }
+}
+
+.mm-soon-label {
+  margin-left: 1.2vh;
+  padding: 0.15vh 0.8vh;
+  font-size: 1.5vh;
+  letter-spacing: 0.14em;
+  vertical-align: middle;
+  border: 1px solid currentColor;
+}
+
+.mm-home-loading {
+  padding-left: 1.6vh;
+  font-size: 1.8vh;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.mm-home-preview {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.8vh;
+  max-width: 76vh;
+  padding: 2vh;
+  background: rgba(var(--tint), 0.6);
+  border: 1px solid rgba(var(--pip), 0.35);
+}
+
+.mm-home-shot {
+  aspect-ratio: 5 / 3;
+  background: rgba(var(--pip), 0.05);
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// "Are you sure?"
+
+.mm-confirm {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.mm-confirm-box {
+  min-width: 60vh;
+  max-width: 92vh;
+  padding: 3vh 3.5vh;
+  background: rgba(var(--tint), 0.96);
+  border: 2px solid var(--pip-color);
+  box-shadow: 0 0 3vh rgba(var(--pip), 0.3);
+}
+
+.mm-confirm-message {
+  font-size: 3vh;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.mm-confirm-note {
+  margin-top: 1.2vh;
+  font-size: 1.9vh;
+  opacity: 0.8;
+}
+
+.mm-confirm-buttons {
+  display: flex;
+  gap: 1.6vh;
+  margin-top: 3vh;
+
+  .mm-button-primary {
+    margin-top: 0;
+  }
+}
+
+.mm-busy {
+  z-index: 2;
+}

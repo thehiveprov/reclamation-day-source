@@ -1,0 +1,32 @@
+@import 'env';
+
+@import 'functions/rem';
+
+:host {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+hr {
+  width: 100%;
+}
+
+// Four tabs don't fit a small window side by side: they wrap into rows instead of running past the panel
+.tab-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: 10px;
+
+  button {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}

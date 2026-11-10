@@ -1,0 +1,621 @@
+<ng-container *ngIf="open$ | async">
+  <div
+    class="mm"
+    *transloco="let t; read: 'COMPONENT.MULTIPLAYER_MENU'"
+  >
+    <ng-container *ngIf="data$ | async as data">
+      <div class="mm-frame">
+        <header class="mm-header" *ngIf="screen !== 'title'">
+          <div class="mm-brand">{{ t('BRAND') }}</div>
+          <ng-container [ngSwitch]="screen">
+            <ng-container *ngSwitchCase="'singlePlayer'">
+              <h1 class="mm-title">{{ t('LOAD') }}</h1>
+              <div class="mm-subtitle">{{ t('SINGLE_PLAYER') }}</div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'characters'">
+              <h1 class="mm-title">{{ t('SELECT_CHARACTER') }}</h1>
+              <div class="mm-subtitle">{{ t('MULTIPLAYER') }}</div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'saves'">
+              <h1 class="mm-title">{{ character?.newest?.name }}</h1>
+              <div class="mm-subtitle" *ngIf="character">
+                <ng-container *ngIf="character.worldId === ''">{{
+                  t('SINGLE_PLAYER')
+                }}</ng-container>
+                <ng-container
+                  *ngIf="world(data, character.worldId) as characterWorld"
+                >
+                  {{ characterWorld.name }} ·
+                  {{
+                    characterWorld.hosted
+                      ? t('HOSTED')
+                      : characterWorld.address
+                  }}
+                </ng-container>
+              </div>
+            </ng-container>
+            <ng-container *ngSwitchCase="'worlds'">
+              <h1 class="mm-title">{{ t('CHOOSE_WORLD') }}</h1>
+              <div class="mm-subtitle">{{ t('CHOOSE_WORLD_HINT') }}</div>
+            </ng-container>
+            <h1 *ngSwitchCase="'newWorld'" class="mm-title">
+              {{ t('NAME_WORLD') }}
+            </h1>
+            <h1 *ngSwitchCase="'joinServer'" class="mm-title">
+              {{ t('JOIN_SERVER') }}
+            </h1>
+            <ng-container *ngSwitchCase="'start'">
+              <h1 class="mm-title">{{ t('HOW_TO_START') }}</h1>
+              <div class="mm-subtitle" *ngIf="world(data, worldId) as chosen">
+                {{ chosen.name }} ·
+                {{ chosen.hosted ? t('HOSTED') : chosen.address }}
+              </div>
+            </ng-container>
+            <h1 *ngSwitchCase="'sourceSaves'" class="mm-title">
+              {{ t('PICK_SAVE') }}
+            </h1>
+          </ng-container>
+        </header>
+
+        <ng-container *ngIf="status$ | async as status; else dataStatus">
+          <div
+            class="mm-status"
+            *ngIf="status.message && !status.busy"
+            [class.mm-status-error]="status.error"
+          >
+            {{ status.message }}
+          </div>
+        </ng-container>
+        <ng-template #dataStatus>
+          <div class="mm-status" *ngIf="data.status && screen === 'title'">
+            {{ data.status }}
+          </div>
+        </ng-template>
+
+        <div class="mm-status mm-update" *ngIf="screen === 'title' && data.update as pendingUpdate">
+          <ng-container [ngSwitch]="pendingUpdate.state">
+            <div *ngSwitchCase="'updating'">
+              {{ t('UPDATING', { version: pendingUpdate.version }) }}
+            </div>
+            <ng-container *ngSwitchDefault>
+              <div>
+                {{
+                  t('UPDATE_AVAILABLE', {
+                    version: pendingUpdate.version,
+                    current: pendingUpdate.current
+                  })
+                }}
+              </div>
+              <div *ngIf="pendingUpdate.state === 'failed'" class="mm-update-failed">
+                {{ t('UPDATE_FAILED') }}
+              </div>
+              <button class="mm-button mm-button-primary" (click)="installUpdate()">
+                {{ t('UPDATE_AND_RESTART') }}
+              </button>
+            </ng-container>
+          </ng-container>
+        </div>
+
+        <div
+          class="mm-status mm-status-error"
+          *ngIf="screen === 'title' && data.missingRequirements?.length"
+        >
+          <div>{{ t('REQUIREMENTS_MISSING') }}</div>
+          <ul class="mm-requirements">
+            <li
+              *ngFor="let requirement of data.missingRequirements"
+              class="mm-requirement"
+            >
+              <span>{{ requirement.name }}</span>
+              <button class="mm-button" (click)="openUrl(requirement.url)">
+                {{ t('GET_IT') }}
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <ng-container [ngSwitch]="screen">
+          <!-- Title: the main menu -->
+          <div *ngSwitchCase="'title'" class="mm-home">
+            <div class="mm-home-menu">
+              <div class="mm-logo">
+                <div class="mm-logo-top">FALLOUT 4</div>
+                <div class="mm-logo-bottom">RECLAMATION DAY</div>
+                <div
+                  class="mm-logo-campaign"
+                  *ngIf="data.campaign === 'winter-of-atom'"
+                >
+                  {{ t('CAMPAIGN_WOA') }}
+                </div>
+              </div>
+              <nav class="mm-menu">
+                <button
+                  *ngIf="data.continueSave"
+                  class="mm-menu-item"
+                  [disabled]="!data.dataLoaded"
+                  (click)="continueGame()"
+                >
+                  {{ t('CONTINUE') }}
+                </button>
+                <button
+                  class="mm-menu-item"
+                  [disabled]="!data.dataLoaded"
+                  (click)="newGame(data)"
+                >
+                  {{ t('NEW_GAME') }}
+                </button>
+                <button
+                  class="mm-menu-item"
+                  [disabled]="!data.singlePlayerCharacters.length"
+                  (click)="openSinglePlayer()"
+                >
+                  {{ t('LOAD') }}
+                </button>
+                <button class="mm-menu-item" (click)="openMultiplayer()">
+                  {{ t('MULTIPLAYER') }}
+                </button>
+                <button class="mm-menu-item" (click)="openSocial()">
+                  {{ t('SOCIAL') }}
+                </button>
+                <button
+                  *ngIf="data.campaign === 'winter-of-atom'; else prequelSoon"
+                  class="mm-menu-item"
+                  (click)="backTo2287()"
+                >
+                  {{ t('CAMPAIGN_2287') }}
+                </button>
+                <ng-template #prequelSoon>
+                  <button class="mm-menu-item mm-menu-soon" disabled>
+                    {{ t('CAMPAIGN_WOA') }}
+                    <span class="mm-soon-label">{{ t('COMING_SOON') }}</span>
+                  </button>
+                </ng-template>
+                <button
+                  *ngFor="let entry of data.nativeEntries"
+                  class="mm-menu-item"
+                  (click)="openNative(entry)"
+                >
+                  {{ entry.text }}
+                </button>
+                <button class="mm-menu-item" (click)="quit()">
+                  {{ t('QUIT') }}
+                </button>
+              </nav>
+              <div class="mm-home-loading mm-blink" *ngIf="!data.dataLoaded">
+                {{ t('LOADING_DATA') }}
+              </div>
+            </div>
+
+            <div class="mm-home-preview" *ngIf="data.continueSave as last">
+              <div class="mm-card-kicker">{{ t('LAST_SAVE') }}</div>
+              <div class="mm-home-shot">
+                <img *ngIf="last.thumbnail" [src]="last.thumbnail" alt="" />
+              </div>
+              <div class="mm-card-row">
+                <span class="mm-card-title">{{ last.name }}</span>
+                <span class="mm-card-level">{{
+                  t('LEVEL', { level: last.level })
+                }}</span>
+              </div>
+              <div class="mm-card-line">{{ last.location }}</div>
+              <div class="mm-card-line mm-dim">
+                {{ playTime(last.playTime) }} · {{ date(last.modified) }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Single-player LOAD: characters -->
+          <ng-container *ngSwitchCase="'singlePlayer'">
+            <div
+              class="mm-grid"
+              *ngIf="data.singlePlayerCharacters.length; else noSaves"
+            >
+              <button
+                *ngFor="
+                  let character of data.singlePlayerCharacters;
+                  trackBy: trackByCharacter
+                "
+                class="mm-card"
+                (click)="openCharacter(character)"
+              >
+                <div class="mm-thumb">
+                  <img
+                    *ngIf="character.newest.thumbnail"
+                    [src]="character.newest.thumbnail"
+                    alt=""
+                  />
+                  <span class="mm-tag">{{
+                    t('SAVES', { count: character.saves })
+                  }}</span>
+                </div>
+                <div class="mm-card-body">
+                  <div class="mm-card-row">
+                    <span class="mm-card-title">{{ character.newest.name }}</span>
+                    <span class="mm-card-level">{{
+                      t('LEVEL', { level: character.newest.level })
+                    }}</span>
+                  </div>
+                  <div class="mm-card-line">{{ character.newest.location }}</div>
+                  <div class="mm-card-line mm-dim">
+                    {{ playTime(character.newest.playTime) }} ·
+                    {{ date(character.newest.modified) }}
+                  </div>
+                </div>
+              </button>
+            </div>
+            <ng-template #noSaves>
+              <div class="mm-empty">{{ t('NO_SAVES') }}</div>
+            </ng-template>
+          </ng-container>
+
+          <!-- Characters -->
+          <div *ngSwitchCase="'characters'" class="mm-grid">
+            <button
+              class="mm-card mm-card-create"
+              (click)="createCharacter()"
+            >
+              <span class="mm-plus">+</span>
+              <span class="mm-card-title">{{ t('CREATE_CHARACTER') }}</span>
+              <span class="mm-card-line">{{
+                t('CREATE_CHARACTER_HINT')
+              }}</span>
+            </button>
+            <button
+              *ngFor="let character of data.characters"
+              class="mm-card"
+              (click)="openCharacter(character)"
+            >
+              <div class="mm-thumb">
+                <img
+                  *ngIf="character.newest.thumbnail"
+                  [src]="character.newest.thumbnail"
+                  alt=""
+                />
+                <span class="mm-tag" *ngIf="world(data, character.worldId) as w">
+                  {{ w.name }}
+                </span>
+              </div>
+              <div class="mm-card-body">
+                <div class="mm-card-row">
+                  <span class="mm-card-title">{{ character.newest.name }}</span>
+                  <span class="mm-card-level">{{
+                    t('LEVEL', { level: character.newest.level })
+                  }}</span>
+                </div>
+                <div class="mm-card-line">{{ character.newest.location }}</div>
+                <div class="mm-card-line mm-dim">
+                  <ng-container
+                    *ngIf="world(data, character.worldId) as w"
+                  >
+                    {{ w.hosted ? t('HOSTED') : w.address }} ·
+                  </ng-container>
+                  {{ playTime(character.newest.playTime) }} ·
+                  {{ date(character.newest.modified) }}
+                </div>
+              </div>
+            </button>
+          </div>
+
+          <!-- One character's saves -->
+          <ng-container *ngSwitchCase="'saves'">
+            <ng-container *ngIf="saves$ | async as saves; else loading">
+              <div class="mm-grid" *ngIf="saves.saves.length; else noSavesLeft">
+                <!-- A card and its DELETE in the corner (a button can't hold another) -->
+                <div
+                  *ngFor="let save of saves.saves; trackBy: trackByFile"
+                  class="mm-save"
+                >
+                  <button class="mm-card" (click)="play(save)">
+                    <div class="mm-thumb">
+                      <img *ngIf="save.thumbnail" [src]="save.thumbnail" alt="" />
+                      <span class="mm-tag">{{
+                        t(kindKey(save), { number: save.number })
+                      }}</span>
+                    </div>
+                    <div class="mm-card-body">
+                      <div class="mm-card-row">
+                        <span class="mm-card-title">{{ save.location }}</span>
+                        <span class="mm-card-level">{{
+                          t('LEVEL', { level: save.level })
+                        }}</span>
+                      </div>
+                      <div class="mm-card-line mm-dim">
+                        {{ playTime(save.playTime) }} · {{ date(save.modified) }}
+                      </div>
+                    </div>
+                  </button>
+                  <button class="mm-save-delete" data-sound="cancel" (click)="deleteSave(save)">
+                    {{ t('DELETE') }}
+                  </button>
+                </div>
+              </div>
+              <ng-template #noSavesLeft>
+                <div class="mm-empty">{{ t('NO_SAVES_LEFT') }}</div>
+              </ng-template>
+            </ng-container>
+          </ng-container>
+
+          <!-- Creating a character: the world -->
+          <div *ngSwitchCase="'worlds'" class="mm-grid">
+            <button class="mm-card mm-card-create" (click)="newWorld()">
+              <span class="mm-plus">+</span>
+              <span class="mm-card-title">{{ t('HOST_WORLD') }}</span>
+              <span class="mm-card-line">{{ t('HOST_WORLD_HINT') }}</span>
+            </button>
+            <button
+              class="mm-card mm-card-create"
+              (click)="joinServer(data.recentServers)"
+            >
+              <span class="mm-plus">+</span>
+              <span class="mm-card-title">{{ t('JOIN_SERVER') }}</span>
+              <span class="mm-card-line">{{ t('JOIN_SERVER_HINT') }}</span>
+            </button>
+            <button
+              *ngFor="let w of data.worlds; trackBy: trackById"
+              class="mm-card mm-card-world"
+              (click)="chooseWorld(w)"
+            >
+              <span class="mm-card-kicker">{{
+                w.hosted ? t('HOSTED_WORLD') : t('SERVER')
+              }}</span>
+              <span class="mm-card-title mm-card-title-big">{{ w.name }}</span>
+              <span
+                class="mm-card-line"
+                *ngIf="!w.hosted && w.address !== w.name"
+                >{{ w.address }}</span
+              >
+              <span class="mm-card-line mm-dim">{{
+                w.characters === 1
+                  ? t('ONE_CHARACTER')
+                  : t('CHARACTERS', { count: w.characters })
+              }}</span>
+            </button>
+          </div>
+
+          <!-- Naming a hosted world -->
+          <form
+            *ngSwitchCase="'newWorld'"
+            class="mm-form"
+            (ngSubmit)="submitWorld()"
+          >
+            <label class="mm-label" for="mm-world-name">{{
+              t('WORLD_NAME')
+            }}</label>
+            <input
+              id="mm-world-name"
+              class="mm-input"
+              name="worldName"
+              maxlength="40"
+              autocomplete="off"
+              [(ngModel)]="worldName"
+              appAutofocus
+            />
+            <div class="mm-form-hint">{{ t('WORLD_NAME_HINT') }}</div>
+            <button
+              class="mm-button mm-button-primary"
+              type="submit"
+              [disabled]="!worldName.trim()"
+            >
+              {{ t('CREATE_WORLD') }}
+            </button>
+          </form>
+
+          <!-- Joining a server: the ones on the network (LAN), public ones (coming), or by address -->
+          <div *ngSwitchCase="'joinServer'" class="mm-join">
+            <div class="mm-tabs">
+              <button
+                type="button"
+                class="mm-tab"
+                data-sound="prevnext"
+                [class.mm-tab-active]="joinTab === 'lan'"
+                (click)="showLan()"
+              >
+                {{ t('LAN_SERVERS') }}
+              </button>
+              <button
+                type="button"
+                class="mm-tab"
+                data-sound="prevnext"
+                [class.mm-tab-active]="joinTab === 'public'"
+                (click)="joinTab = 'public'"
+              >
+                {{ t('PUBLIC_SERVERS') }}
+              </button>
+            </div>
+
+            <div *ngIf="joinTab === 'public'" class="mm-join-note">
+              {{ t('PUBLIC_SERVERS_SOON') }}
+            </div>
+
+            <ng-container *ngIf="joinTab === 'lan'">
+              <div class="mm-lan-list">
+                <button
+                  *ngFor="let server of lanServers$ | async"
+                  type="button"
+                  class="mm-lan-server"
+                  [disabled]="!server.compatible"
+                  (click)="joinLan(server)"
+                >
+                  <span class="mm-lan-name">{{ server.name }}</span>
+                  <span class="mm-lan-detail">{{
+                    t('LAN_PLAYERS', {
+                      players: server.players,
+                      max: server.maxPlayers
+                    })
+                  }}</span>
+                  <span class="mm-lan-detail mm-dim">{{ server.address }}</span>
+                  <span class="mm-lan-detail" *ngIf="server.password">{{
+                    t('LAN_PASSWORD')
+                  }}</span>
+                  <span
+                    class="mm-lan-detail mm-lan-version"
+                    *ngIf="!server.compatible"
+                    >{{ t('LAN_OTHER_VERSION', { version: server.version }) }}</span
+                  >
+                </button>
+                <div class="mm-join-note" *ngIf="lanSearching$ | async">
+                  {{ t('LAN_SEARCHING') }}
+                </div>
+                <div
+                  class="mm-join-note"
+                  *ngIf="
+                    (lanSearched$ | async) &&
+                    (lanSearching$ | async) === false &&
+                    (lanServers$ | async)?.length === 0
+                  "
+                >
+                  {{ t('LAN_NONE') }}
+                </div>
+              </div>
+              <button
+                type="button"
+                class="mm-button"
+                [disabled]="lanSearching$ | async"
+                (click)="searchLan()"
+              >
+                {{ t('LAN_REFRESH') }}
+              </button>
+            </ng-container>
+
+          <form class="mm-form" (ngSubmit)="submitServer()">
+            <label class="mm-label" for="mm-server-address">{{
+              t('OR_SERVER_ADDRESS')
+            }}</label>
+            <input
+              id="mm-server-address"
+              class="mm-input"
+              name="serverAddress"
+              maxlength="64"
+              autocomplete="off"
+              placeholder="192.168.1.20:10578"
+              [(ngModel)]="serverAddress"
+              appAutofocus
+            />
+            <div class="mm-chips" *ngIf="data.recentServers.length">
+              <span class="mm-label">{{ t('RECENT_SERVERS') }}</span>
+              <button
+                type="button"
+                class="mm-chip"
+                *ngFor="let server of data.recentServers"
+                (click)="serverAddress = server"
+              >
+                {{ server }}
+              </button>
+            </div>
+            <label class="mm-label" for="mm-server-name">{{
+              t('SERVER_NAME')
+            }}</label>
+            <input
+              id="mm-server-name"
+              class="mm-input"
+              name="serverName"
+              maxlength="40"
+              autocomplete="off"
+              [(ngModel)]="serverName"
+            />
+            <button
+              class="mm-button mm-button-primary"
+              type="submit"
+              [disabled]="!serverAddress.trim()"
+            >
+              {{ t('JOIN') }}
+            </button>
+          </form>
+          </div>
+
+          <!-- Creating a character: how it starts -->
+          <div *ngSwitchCase="'start'" class="mm-grid mm-grid-wide">
+            <button
+              class="mm-card mm-card-create"
+              (click)="startNewGame(data)"
+            >
+              <span class="mm-card-title mm-card-title-big">{{
+                t('NEW_GAME')
+              }}</span>
+              <span class="mm-card-line">{{
+                data.startMeUp ? t('NEW_GAME_SMU') : t('NEW_GAME_PROLOGUE')
+              }}</span>
+            </button>
+            <button class="mm-card mm-card-create" (click)="startFromSave()">
+              <span class="mm-card-title mm-card-title-big">{{
+                t('FROM_SAVE')
+              }}</span>
+              <span class="mm-card-line">{{ t('FROM_SAVE_HINT') }}</span>
+            </button>
+          </div>
+
+          <!-- Creating a character from a single-player save -->
+          <ng-container *ngSwitchCase="'sourceSaves'">
+            <ng-container *ngIf="sourceSaves$ | async as sources; else loading">
+              <div class="mm-grid" *ngIf="sources.length; else noSources">
+                <button
+                  *ngFor="let save of sources; trackBy: trackByFile"
+                  class="mm-card"
+                  (click)="pickSourceSave(save)"
+                >
+                  <div class="mm-thumb">
+                    <img *ngIf="save.thumbnail" [src]="save.thumbnail" alt="" />
+                    <span class="mm-tag">{{ save.name }}</span>
+                  </div>
+                  <div class="mm-card-body">
+                    <div class="mm-card-row">
+                      <span class="mm-card-title">{{ save.location }}</span>
+                      <span class="mm-card-level">{{
+                        t('LEVEL', { level: save.level })
+                      }}</span>
+                    </div>
+                    <div class="mm-card-line mm-dim">
+                      {{ playTime(save.playTime) }} · {{ date(save.modified) }}
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <ng-template #noSources>
+                <div class="mm-empty">{{ t('NO_SOURCE_SAVES') }}</div>
+              </ng-template>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+
+        <ng-template #loading>
+          <div class="mm-empty mm-blink">{{ t('LOADING') }}</div>
+        </ng-template>
+
+        <footer class="mm-footer">
+          <button *ngIf="screen !== 'title'" class="mm-button" (click)="back()" data-sound="cancel">
+            <span class="mm-key">ESC</span> {{ t('BACK') }}
+          </button>
+          <button
+            *ngIf="screen === 'title'"
+            class="mm-button"
+            (click)="exportCrashReports()"
+          >
+            {{ t('EXPORT') }}
+          </button>
+        </footer>
+      </div>
+
+      <!-- "Are you sure?", as the game's own menu asks -->
+      <div class="mm-confirm" *ngIf="confirmation">
+        <div class="mm-confirm-box">
+          <div class="mm-confirm-message">{{ confirmation.message }}</div>
+          <div class="mm-confirm-note" *ngIf="confirmation.note">
+            {{ confirmation.note }}
+          </div>
+          <div class="mm-confirm-buttons">
+            <button class="mm-button mm-button-primary" (click)="confirm()">
+              <span class="mm-key">ENTER</span> {{ t('YES') }}
+            </button>
+            <button class="mm-button" (click)="cancelConfirmation()" data-sound="cancel">
+              <span class="mm-key">ESC</span> {{ t('NO') }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mm-busy" *ngIf="(status$ | async)?.busy">
+        <span class="mm-blink">{{ (status$ | async)?.message }}</span>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>

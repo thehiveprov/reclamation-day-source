@@ -1,0 +1,17 @@
+<app-popup *ngIf="error$ | async as error">
+  <div class="error-content">
+    <div class="error-text" [innerHTML]="error"></div>
+    <app-action-buttons>
+      <button
+        *ngIf="hostLoadOrder$ | async"
+        (click)="matchHostLoadOrder()"
+        data-style-ornament="simple"
+      >
+        {{ ((loadOrderOnly$ | async) ? 'COMPONENT.ERROR.RESORT_LOAD_ORDER' : 'COMPONENT.ERROR.MATCH_LOAD_ORDER') | transloco }}
+      </button>
+      <button (click)="removeError()" data-style-ornament="simple">
+        {{ 'COMPONENT.ERROR.OK' | transloco }}
+      </button>
+    </app-action-buttons>
+  </div>
+</app-popup>

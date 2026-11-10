@@ -1,0 +1,585 @@
+// The overlay main menu's look (multiplayer-menu): Pip-Boy green on dark panels ruled by thin lines, big uppercase
+// entries that light up under the mouse, Roboto Condensed
+:host,
+:host * {
+  font-family: 'roboto-condensed', 'futura-condensed-medium', sans-serif;
+  box-sizing: border-box;
+}
+
+.sm {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--pip-color);
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.9) 100%);
+  user-select: none;
+}
+
+.sm-frame {
+  display: flex;
+  gap: 5vh;
+  width: min(92vw, 1500px);
+  height: 82vh;
+}
+
+// Left: the brand and the screen's list
+
+.sm-side {
+  display: flex;
+  flex: 0 0 32%;
+  flex-direction: column;
+  gap: 3vh;
+  min-height: 0;
+}
+
+.sm-logo-top {
+  font-size: 6.5vh;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 1.4vh rgba(var(--pip), 0.5);
+}
+
+.sm-logo-bottom {
+  margin-top: 0.6vh;
+  font-size: 2.4vh;
+  letter-spacing: 0.55em;
+  opacity: 0.85;
+}
+
+.sm-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3vh;
+  min-height: 0;
+}
+
+.sm-menu-item {
+  all: unset;
+  padding: 0.6vh 1.6vh;
+  font-size: 2.8vh;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--pip-color);
+  text-transform: uppercase;
+  cursor: pointer;
+
+  &.selected {
+    box-shadow: inset 3px 0 0 var(--pip-color);
+  }
+
+  &:hover:not([disabled]),
+  &:focus-visible {
+    color: var(--ink);
+    background: var(--pip-color);
+  }
+
+  &[disabled] {
+    cursor: default;
+    opacity: 0.35;
+  }
+}
+
+.sm-menu-small .sm-menu-item {
+  font-size: 2.2vh;
+}
+
+.sm-side-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.8vh;
+  padding-left: 1.6vh;
+  font-size: 1.6vh;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  opacity: 0.6;
+}
+
+.sm-scroll {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--pip), 0.5) transparent;
+}
+
+// Right: the screen in a ruled panel
+
+.sm-panel {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 1.6vh;
+  min-width: 0;
+  min-height: 0;
+  padding: 2.4vh 2.8vh;
+  background: rgba(var(--tint), 0.6);
+  border: 1px solid var(--line);
+}
+
+.sm-panel-title {
+  padding-bottom: 1vh;
+  font-size: 3vh;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 0.8vh rgba(var(--pip), 0.45);
+  border-bottom: 2px solid rgba(var(--pip), 0.6);
+}
+
+.sm-note {
+  font-size: 2vh;
+  letter-spacing: 0.06em;
+  opacity: 0.7;
+}
+
+.sm-rows {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.sm-row {
+  all: unset;
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 2vh;
+  min-height: 4.6vh;
+  padding: 0 1.4vh;
+  font-size: 2vh;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid rgba(var(--pip), 0.12);
+  cursor: pointer;
+
+  &.selected,
+  &:hover {
+    background: rgba(var(--pip), 0.1);
+    box-shadow: inset 3px 0 0 var(--pip-color);
+  }
+}
+
+.sm-row-head {
+  min-height: 3.4vh;
+  font-size: 1.5vh;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  opacity: 0.6;
+  cursor: default;
+
+  &:hover {
+    background: none;
+    box-shadow: none;
+  }
+}
+
+.sm-row-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sm-row-control {
+  display: flex;
+  flex: 0 0 40%;
+  justify-content: flex-end;
+}
+
+.sm-cell {
+  flex: 0 0 22%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sm-key {
+  font-weight: 700;
+}
+
+.sm-dim {
+  opacity: 0.6;
+}
+
+// A slider: a thin rule filled to its value, the game's step
+
+.sm-slider {
+  position: relative;
+  width: 100%;
+  height: 1.8vh;
+
+  &::before {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: 0;
+    height: 0.5vh;
+    content: '';
+    background: rgba(var(--pip), 0.15);
+    border: 1px solid var(--line);
+    transform: translateY(-50%);
+  }
+
+  input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    margin: 0;
+    cursor: pointer;
+    opacity: 0;
+  }
+}
+
+.sm-slider-fill {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 0.5vh;
+  background: var(--pip-color);
+  box-shadow: 0 0 0.6vh rgba(var(--pip), 0.6);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+// A stepper: the value between its arrows
+
+.sm-stepper {
+  display: flex;
+  align-items: center;
+  gap: 1vh;
+
+  button {
+    all: unset;
+    padding: 0 1vh;
+    font-size: 2.8vh;
+    line-height: 1;
+    cursor: pointer;
+
+    &:hover:not([disabled]) {
+      color: var(--ink);
+      background: var(--pip-color);
+    }
+
+    &[disabled] {
+      cursor: default;
+      opacity: 0.25;
+    }
+  }
+}
+
+.sm-stepper-value {
+  min-width: 18vh;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+// A checkbox: a ruled box lit when on
+
+.sm-check {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4vh;
+  height: 2.4vh;
+  border: 1px solid var(--pip-color);
+  cursor: pointer;
+
+  span {
+    width: 1.4vh;
+    height: 1.4vh;
+  }
+
+  &.on span {
+    background: var(--pip-color);
+    box-shadow: 0 0 0.6vh rgba(var(--pip), 0.7);
+  }
+}
+
+.sm-guide {
+  flex: none;
+  min-height: 6vh;
+  padding: 1.2vh 1.4vh;
+  font-size: 1.8vh;
+  line-height: 1.4;
+  border-left: 3px solid var(--pip-color);
+  background: rgba(var(--pip), 0.06);
+}
+
+.sm-prompt {
+  align-self: center;
+  padding: 1.4vh 3vh;
+  font-size: 2.6vh;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.sm-help {
+  flex: 1 1 auto;
+  min-height: 0;
+
+  h2 {
+    margin: 0 0 1.4vh;
+    font-size: 2.6vh;
+    letter-spacing: 0.06em;
+  }
+
+  p {
+    margin: 0;
+    font-size: 2vh;
+    line-height: 1.5;
+    white-space: pre-line;
+  }
+}
+
+.sm-saves {
+  display: flex;
+  flex: 1 1 auto;
+  gap: 2vh;
+  min-height: 0;
+
+  .sm-rows {
+    flex: 1 1 60%;
+  }
+}
+
+.sm-save-info {
+  display: flex;
+  flex: 0 0 32%;
+  flex-direction: column;
+  gap: 0.8vh;
+  padding: 1.6vh;
+  font-size: 1.9vh;
+  border: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.sm-save-player {
+  font-size: 2.4vh;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.sm-footer {
+  display: flex;
+  flex: none;
+  gap: 1.4vh;
+  padding-top: 1.2vh;
+  border-top: 1px solid var(--line);
+}
+
+.sm-button {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8vh;
+  padding: 0.7vh 1.6vh;
+  font-size: 1.8vh;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  border: 1px solid rgba(var(--pip), 0.5);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--ink);
+    background: var(--pip-color);
+  }
+}
+
+.sm-button-primary {
+  color: var(--ink);
+  background: var(--pip-color);
+}
+
+.sm-key-hint {
+  padding: 0 0.6vh;
+  font-size: 1.4vh;
+  border: 1px solid currentColor;
+}
+
+// The game's "are you sure?"
+
+.sm-confirm {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.sm-confirm-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4vh;
+  min-width: 52vh;
+  max-width: 80vh;
+  padding: 3vh 3.4vh;
+  background: var(--panel);
+  border-top: 2px solid rgba(var(--pip), 0.6);
+  border-bottom: 2px solid rgba(var(--pip), 0.6);
+}
+
+.sm-confirm-message {
+  font-size: 2.4vh;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+}
+
+.sm-confirm-buttons {
+  display: flex;
+  gap: 1.4vh;
+}
+
+.sm-blink {
+  animation: blink 1s ease-in-out infinite alternate;
+}
+
+@keyframes blink {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.4;
+  }
+}
+
+// MCM's pages: the mods down the left (the open one's pages under it), the page's entries in the panel
+
+.sm-side-title {
+  padding: 0 1.6vh 0.8vh;
+  font-size: 1.6vh;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  opacity: 0.6;
+  border-bottom: 1px solid var(--line);
+}
+
+.sm-menu-sub {
+  padding-left: 3.4vh;
+  font-size: 1.8vh;
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+.sm-section {
+  flex: none;
+  margin-top: 2vh;
+  padding: 0 1.4vh 0.6vh;
+  font-size: 1.7vh;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(var(--pip), 0.5);
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.sm-text {
+  flex: none;
+  padding: 0.8vh 1.4vh;
+  font-size: 1.9vh;
+  line-height: 1.45;
+  white-space: pre-line;
+  opacity: 0.85;
+
+  &.big {
+    font-size: 3vh;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    opacity: 1;
+    text-shadow: 0 0 0.8vh rgba(var(--pip), 0.45);
+  }
+}
+
+.sm-section,
+.sm-text {
+  &.centered {
+    text-align: center;
+  }
+}
+
+.sm-spacer {
+  flex: none;
+  height: 2vh;
+}
+
+.sm-row-button {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+
+  .sm-row-control {
+    font-size: 1.5vh;
+    letter-spacing: 0.16em;
+  }
+}
+
+.sm-slider-control {
+  align-items: center;
+  gap: 1.6vh;
+}
+
+.sm-slider-value {
+  flex: 0 0 7vh;
+  font-weight: 700;
+  text-align: right;
+}
+
+.sm-hotkey {
+  align-items: center;
+  gap: 0.8vh;
+}
+
+.sm-key-button {
+  all: unset;
+  min-width: 16vh;
+  padding: 0.5vh 1.2vh;
+  font-size: 1.8vh;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-align: center;
+  border: 1px solid rgba(var(--pip), 0.5);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--ink);
+    background: var(--pip-color);
+  }
+}
+
+.sm-key-clear {
+  all: unset;
+  padding: 0 0.8vh;
+  font-size: 2.4vh;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.6;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.sm-input {
+  width: 100%;
+  max-width: 28vh;
+  padding: 0.5vh 1vh;
+  font-size: 1.8vh;
+  color: var(--pip-color);
+  background: rgba(var(--pip), 0.06);
+  border: 1px solid rgba(var(--pip), 0.5);
+  outline: none;
+
+  &:focus {
+    border-color: var(--pip-color);
+  }
+}

@@ -1,0 +1,207 @@
+@import 'functions/rem';
+
+@import 'env';
+
+:host {
+  position: relative;
+  display: flex;
+  gap: 1em;
+  width: 70vw;
+  --server-list-font-size: 1rem;
+  --server-list-row-height: 2rem;
+}
+
+.server-list-action-bar {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1%;
+
+  hr {
+    width: 100%;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+  }
+
+  .server-list-filters {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75em;
+
+    .filter-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+  }
+
+  .server-count {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex: 1 1 auto;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+
+  .server-list-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5em;
+
+    button {
+      min-width: 4em;
+    }
+  }
+
+  // On your network / Public
+  .server-list-tabs {
+    display: flex;
+    gap: 0.5em;
+    margin-bottom: 1em;
+
+    button {
+      flex: 1 1 0;
+      opacity: 0.6;
+
+      &.active {
+        opacity: 1;
+        border-bottom: 2px solid currentColor;
+      }
+    }
+  }
+}
+
+.scrollbar-offset {
+  margin-right: 1rem;
+  //overflow-y: scroll;
+}
+
+.serverlist-alternative {
+  height: calc(60vh - var(--server-list-row-height) - 1px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  &.serverlist-loading {
+    flex: 1 1 auto;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.virtual-viewport {
+  height: calc(60vh - var(--server-list-row-height) - 1px);
+  width: 100%;
+
+  // Rows fit the list instead of growing with long server names
+  ::ng-deep .cdk-virtual-scroll-content-wrapper {
+    width: 100%;
+  }
+}
+
+.search-list-server {
+  display: inline-block;
+  font-size: 0.9rem;
+}
+
+.server-list {
+  flex: 1 1 auto;
+  overflow: auto;
+  max-height: 60vh;
+  height: 60vh;
+
+  cdk-virtual-scroll-viewport {
+    overflow-y: scroll;
+  }
+
+  .server-list-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+
+    .row {
+      height: var(--server-list-row-height);
+      line-height: var(--server-list-row-height);
+      display: flex;
+      align-items: center;
+      width: 100%;
+      border-bottom: 1px solid rgba(var(--pip), 0.2);
+      border-collapse: separate;
+      font-size: var(--server-list-font-size);
+
+      &.odd {
+        background: rgba(var(--pip), 0.04);
+      }
+
+      // The name takes what's left
+      :nth-child(2) {
+        flex: 1 1 0;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      > div {
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      &.header {
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border-bottom: 1px solid rgba(var(--pip), 0.6);
+
+        & > div {
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+
+    .offline {
+      background-color: rgba(var(--danger), 0.2);
+    }
+
+    .server-compatible {
+      color: var(--pip-color);
+    }
+
+    .server-incompatible {
+      color: var(--danger-text);
+    }
+
+    .join-button {
+      padding: 0.15em 0.6em;
+      margin-left: 5%;
+      margin-right: 5%;
+      float: right;
+    }
+
+    .server-list-favorite {
+      cursor: pointer;
+      color: var(--pip-color);
+
+      &:hover {
+        color: rgba(var(--pip), 0.5);
+      }
+
+      &.not {
+        color: rgba(var(--pip), 0.35);
+
+        &:hover {
+          color: var(--pip-color);
+        }
+      }
+    }
+  }
+}

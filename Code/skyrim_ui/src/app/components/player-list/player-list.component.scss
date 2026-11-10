@@ -1,0 +1,57 @@
+:host {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.no-players {
+  overflow: hidden;
+  margin: 3%;
+  display: flex;
+  justify-content: center;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+.player-list {
+  overflow: auto;
+  max-height: 60vh;
+
+  .player-list-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    .list-header {
+      position: sticky;
+      top: 0px;
+      background-color: var(--ink);
+      z-index: 1;
+    }
+
+    th {
+      text-align: left;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(var(--pip), 0.6);
+      border-collapse: separate;
+
+      button {
+        padding: 0 0.5rem;
+      }
+    }
+
+    tr:not(:last-child) {
+      border-bottom: 1px solid rgba(var(--pip), 0.2);
+      padding: 15px;
+    }
+
+    .user-action-button {
+      padding: 0.15em 0.6em;
+      margin-left: 5%;
+    }
+  }
+}

@@ -1,0 +1,103 @@
+<div class="debug-helper" [class.open]="visible | async" cdkDrag>
+  <div class="debug-helper-actions">
+    <button (click)="toggleVisibility()">
+      <fa-icon [icon]="faCode"></fa-icon>
+    </button>
+    <span *ngIf="visible | async" class="title">Debug Menu</span>
+    <button cdkDragHandle class="drag">
+      <fa-icon [icon]="faArrowsUpDownLeftRight"></fa-icon>
+    </button>
+  </div>
+  <div *ngIf="visible | async" class="debug-helper-content">
+    <div class="separator">Players</div>
+    <button (click)="addMockPlayer()">Add Player</button>
+    <div class="player-actions">
+      <div *ngFor="let player of players$ | async">
+        <hr />
+        <div class="player-info">{{ player.name }} [{{ player.cellName }}]</div>
+        <div class="action-row">
+          <button (click)="disconnectMockPlayer(player.id)">Disconnect</button>
+          <button
+            *ngIf="player.invited"
+            [disabled]="player.hasOwnParty"
+            (click)="accteptMockPlayerInvite(player.id)"
+          >
+            Accept Invite
+          </button>
+          <button
+            *ngIf="player.hasOwnParty && (connected$ | async)"
+            (click)="inviteToPlayerMockParty(player.id)"
+          >
+            Invite You
+          </button>
+          <button
+            *ngIf="!player.hasOwnParty && !player.isInGroup"
+            (click)="startPlayerMockParty(player.id)"
+          >
+            Start Party
+          </button>
+          <button
+            *ngIf="player.hasOwnParty || player.isInGroup"
+            (click)="mockPlayerLeaveParty(player.id)"
+          >
+            Leave Party
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="separator">Nemeses</div>
+    <div class="debug-helper-row">
+      <button (click)="mockNemesis('screen')">Screen</button>
+      <button (click)="mockNemesis('gunpoint')">Gunpoint</button>
+      <button (click)="mockNemesis('card')">Question</button>
+      <button (click)="mockNemesis('clear')">Clear</button>
+    </div>
+    <div class="separator">C.A.M.P.</div>
+    <div class="debug-helper-row">
+      <button (click)="mockCamp('card')">Card</button>
+      <button (click)="mockCamp('blocked')">Can't move</button>
+      <button (click)="mockCamp('clear')">Clear</button>
+    </div>
+    <div class="separator">Emotes and dialogue votes</div>
+    <div class="debug-helper-row">
+      <button (click)="mockEmoteWheel('open')">Wheel</button>
+      <button (click)="mockEmoteWheel('clear')">Clear</button>
+      <button (click)="mockDialogueVote('voter')">Voter</button>
+      <button (click)="mockDialogueVote('talker')">Talker</button>
+      <button (click)="mockDialogueVote('result')">Result</button>
+      <button (click)="mockDialogueVote('clear')">Clear</button>
+    </div>
+    <div class="separator">HUD</div>
+    <div class="debug-helper-row">
+      <button (click)="mockHud('show')">Show</button>
+      <button (click)="mockHud('spin')">Spin</button>
+      <button (click)="mockHud('clear')">Clear</button>
+    </div>
+    <div class="separator">Pause menu</div>
+    <div class="debug-helper-row">
+      <button (click)="mockStartMenu('pause')">Pause</button>
+      <button (click)="mockStartMenu('options')">Settings</button>
+      <button (click)="mockStartMenu('controls')">Controls</button>
+      <button (click)="mockStartMenu('saves')">Load</button>
+      <button (click)="mockModConfig(true)">MCM</button>
+      <button (click)="mockModConfig(false); mockStartMenu('clear')">Clear</button>
+    </div>
+    <div class="separator">Background</div>
+    <div class="debug-helper-row">
+      <button (click)="setBackground('dark')">Dark</button>
+      <button (click)="setBackground('light')">Ligh</button>
+      <button (click)="setBackground('dark-image')">Image Dark</button>
+      <button (click)="setBackground('light-image')">Image Light</button>
+    </div>
+    <div class="separator">Debug</div>
+    <div>
+      <label for="random-debug">Randomize Debug Info</label>
+      <input
+        type="checkbox"
+        id="random-debug"
+        [ngModel]="randomizeDebug | async"
+        (ngModelChange)="randomizeDebug.next($event)"
+      />
+    </div>
+  </div>
+</div>

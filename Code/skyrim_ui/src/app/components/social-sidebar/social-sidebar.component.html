@@ -1,0 +1,156 @@
+<ng-container *ngIf="open$ | async">
+  <div class="so-backdrop" (click)="close()"></div>
+  <aside class="so" *ngIf="state$ | async as state; else waiting">
+    <header class="so-head">
+      <div class="so-title">SOCIAL</div>
+      <div class="so-me" *ngIf="state.me?.name">{{ state.me?.name }}</div>
+    </header>
+
+    <div class="so-note" *ngIf="!state.available">
+      Steam isn't running for the game, so friends can't join through it. Joining by address still works.
+    </div>
+
+    <div class="so-body so-scroll" *ngIf="state.available">
+      <!-- The world this player hosts: its door for Steam friends -->
+      <section class="so-world" *ngIf="state.hosting as hosting">
+        <div class="so-kicker">YOUR WORLD</div>
+        <div class="so-world-name">{{ hosting.world }}</div>
+        <div class="so-privacy">
+          <button
+            *ngFor="let privacy of privacies"
+            class="so-chip"
+            [class.on]="hosting.privacy === privacy.value"
+            (click)="setPrivacy(privacy.value)"
+          >
+            {{ privacy.label }}
+          </button>
+        </div>
+        <div class="so-hint">{{ privacyHint(hosting.privacy) }}</div>
+        <div class="so-hint" *ngIf="state.peerToPeer === false">Steam's networking isn't available: friends join by address.</div>
+      </section>
+      <section class="so-world" *ngIf="!state.hosting && state.playing as playing">
+        <div class="so-kicker">PLAYING IN</div>
+        <div class="so-world-name">{{ playing.world }}</div>
+      </section>
+
+      <!-- Friends asking to join the host's world -->
+      <section class="so-requests" *ngIf="state.requests.length">
+        <div class="so-kicker">ASKING TO JOIN</div>
+        <div class="so-row so-request" *ngFor="let request of state.requests; trackBy: trackFriend">
+          <div class="so-avatar">
+            <img *ngIf="(avatars$ | async)?.[request.id] as url" [src]="url" alt="" />
+          </div>
+          <div class="so-who">
+            <div class="so-name">{{ request.name }}</div>
+            <div class="so-status">wants to join your world</div>
+          </div>
+          <div class="so-actions">
+            <button class="so-button primary" (click)="answer(request.id, true)">LET IN</button>
+            <button class="so-button" (click)="answer(request.id, false)">REFUSE</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- The players in this world, the party first -->
+      <section class="so-players" *ngIf="state.players?.length">
+        <div class="so-kicker">IN THIS WORLD</div>
+        <div class="so-row" *ngFor="let player of state.players; trackBy: trackPlayer">
+          <div class="so-who">
+            <div class="so-name">{{ player.name }}</div>
+            <div class="so-status">{{ partyText(player) }}</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- The friends -->
+      <ng-container *ngFor="let group of groups(state); trackBy: trackGroup">
+        <button class="so-group" (click)="toggle(group.key)">
+          <span class="so-group-arrow">{{ collapsed[group.key] ? '+' : '–' }}</span>
+          {{ group.label }}
+          <span class="so-count">{{ group.friends.length }}</span>
+        </button>
+        <ng-container *ngIf="!collapsed[group.key]">
+          <div
+            class="so-row"
+            *ngFor="let friend of group.friends; trackBy: trackFriend"
+            [class.dim]="friend.state === 'offline'"
+            [class.invite]="friend.invitedMe"
+          >
+            <div class="so-avatar">
+              <img *ngIf="(avatars$ | async)?.[friend.id] as url" [src]="url" alt="" />
+              <span class="so-dot" [attr.data-state]="friend.game === 'rd' ? 'rd' : friend.state"></span>
+            </div>
+            <div class="so-who">
+              <div class="so-name">{{ friend.name }}</div>
+              <div class="so-status">{{ statusText(friend) }}</div>
+            </div>
+            <div class="so-actions">
+              <button *ngIf="friend.canJoin" class="so-button primary" (click)="join(friend, state)">JOIN</button>
+              <button
+                *ngIf="state.hosting && friend.state !== 'offline'"
+                class="so-button"
+                [disabled]="friend.invited"
+                (click)="invite(friend)"
+              >
+                {{ friend.invited ? 'INVITED' : 'INVITE' }}
+              </button>
+              <button class="so-button so-icon" title="Steam profile" (click)="profile(friend)">STEAM</button>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <div class="so-note" *ngIf="!state.friends.length">No Steam friends yet.</div>
+    </div>
+
+    <footer class="so-foot">
+      <button class="so-button" (click)="close()" data-sound="cancel">
+        <span class="so-key">ESC</span><ng-container *ngIf="state.key"> / <span class="so-key">{{ state.key }}</span></ng-container>
+        CLOSE
+      </button>
+    </footer>
+
+    <!-- Joining from inside a world leaves it (saved first): asked -->
+    <div class="so-confirm" *ngIf="confirmJoin as friend">
+      <div class="so-confirm-box">
+        <div class="so-confirm-message">Leave this world to join {{ friend.name }}'s {{ friend.world || 'world' }}?</div>
+        <div class="so-hint">Your game is saved first.</div>
+        <div class="so-confirm-buttons">
+          <button class="so-button primary" (click)="confirm()">JOIN</button>
+          <button class="so-button" (click)="confirmJoin = null" data-sound="cancel">CANCEL</button>
+        </div>
+      </div>
+    </div>
+    <div class="so-confirm" *ngIf="joinAsk$ | async as ask">
+      <div class="so-confirm-box">
+        <div class="so-confirm-message">Leave this world to join {{ ask.name }}'s {{ ask.world || 'world' }}?</div>
+        <div class="so-hint">Your game is saved first.</div>
+        <div class="so-confirm-buttons">
+          <button class="so-button primary" (click)="joinAsked(ask.id)">JOIN</button>
+          <button class="so-button" (click)="dismissAsk()" data-sound="cancel">CANCEL</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <ng-template #waiting>
+    <aside class="so">
+      <header class="so-head"><div class="so-title">SOCIAL</div></header>
+      <div class="so-note so-blink">Asking Steam...</div>
+    </aside>
+  </ng-template>
+</ng-container>
+
+<!-- In the world with the sidebar closed: the friends asking to join the host's world, until they're answered -->
+<ng-container *ngIf="state$ | async as state">
+  <div class="so-ask-card" *ngIf="(open$ | async) === false && state.inWorld && state.requests.length">
+    <div class="so-kicker">ASKING TO JOIN YOUR WORLD</div>
+    <div class="so-ask-line" *ngFor="let request of state.requests; trackBy: trackFriend">
+      <div class="so-avatar small">
+        <img *ngIf="(avatars$ | async)?.[request.id] as url" [src]="url" alt="" />
+      </div>
+      <div class="so-name">{{ request.name }}</div>
+    </div>
+    <div class="so-hint" *ngIf="state.key">Press <span class="so-key">{{ state.key }}</span> to let them in or refuse</div>
+  </div>
+</ng-container>
